@@ -7,6 +7,7 @@ export class CreateLinhaPesquisa20260709000400 implements MigrationInterface {
       CREATE TABLE public.linha_pesquisa (
         id          INTEGER NOT NULL,
         nome        VARCHAR NOT NULL,
+        sigla       VARCHAR,
         ativa       BOOLEAN,
         "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

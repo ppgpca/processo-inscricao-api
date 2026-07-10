@@ -17,6 +17,9 @@ export class LinhaPesquisa {
 	@Column({ type: 'varchar', nullable: false })
 	nome: string;
 
+	@Column({ type: 'varchar', nullable: true })
+	sigla: string | null;
+
 	@Column({ type: 'boolean', nullable: true })
 	ativa: boolean | null;
 

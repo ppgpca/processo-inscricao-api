@@ -8,9 +8,15 @@ export class SeedLinhaPesquisa20260709000002 implements Seeder {
 			{
 				id: 1,
 				nome: 'Inteligência Artificial e Ciência de Dados',
+				sigla: 'IA',
 				ativa: true,
 			},
-			{ id: 2, nome: 'Sistemas Computacionais Aplicados', ativa: true },
+			{
+				id: 2,
+				nome: 'Sistemas Computacionais Aplicados',
+				sigla: 'Sistemas',
+				ativa: true,
+			},
 		]);
 	}
 
