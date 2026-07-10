@@ -6,11 +6,11 @@ dotenv.config();
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  port: parseInt(process.env.DB_PORT ?? '5432'),
-  username: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASS || 'postgres',
-  database: process.env.DB_NAME || 'processo_inscricao',
+  host: process.env.DBHOST || 'localhost',
+  port: parseInt(process.env.DBPORT ?? '5432'),
+  username: process.env.DBUSER || 'postgres',
+  password: process.env.DBPASS || 'postgres',
+  database: process.env.DBNAME || 'processo_inscricao',
   schema: 'public',
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/migrations/*{.ts,.js}'],

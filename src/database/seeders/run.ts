@@ -12,6 +12,7 @@ import { SeedPermissao20260709000009 } from './20260709000009-seed-permissao';
 import { SeedUsuario20260709000010 } from './20260709000010-seed-usuario';
 import { SeedGrupoPermissao20260709000011 } from './20260709000011-seed-grupo-permissao';
 import { SeedUsuarioGrupo20260709000012 } from './20260709000012-seed-usuario-grupo';
+import { SeedDocenteEdital20260709000013 } from './20260709000013-seed-docente-edital';
 import { Seeder } from './seeder.interface';
 
 const seeders: Array<new () => Seeder> = [
@@ -27,10 +28,29 @@ const seeders: Array<new () => Seeder> = [
   SeedUsuario20260709000010,
   SeedGrupoPermissao20260709000011,
   SeedUsuarioGrupo20260709000012,
+  SeedDocenteEdital20260709000013,
 ];
 
-async function runUp(): Promise<void> {
-  for (const SeederClass of seeders) {
+function filterSeeders(target?: string): Array<new () => Seeder> {
+  if (!target) return seeders;
+
+  const matched = seeders.filter((SeederClass) =>
+    SeederClass.name.toLowerCase().includes(target.toLowerCase()),
+  );
+
+  if (matched.length === 0) {
+    console.error(`No seeder matched: "${target}"`);
+    console.error('Available seeders:');
+    seeders.forEach((s) => console.error(`  - ${s.name}`));
+    process.exit(1);
+  }
+
+  return matched;
+}
+
+async function runUp(target?: string): Promise<void> {
+  const targets = filterSeeders(target);
+  for (const SeederClass of targets) {
     const seeder = new SeederClass();
     console.log(`Running seeder: ${SeederClass.name}`);
     await seeder.up(dataSource);
@@ -38,8 +58,9 @@ async function runUp(): Promise<void> {
   }
 }
 
-async function runDown(): Promise<void> {
-  for (const SeederClass of [...seeders].reverse()) {
+async function runDown(target?: string): Promise<void> {
+  const targets = [...filterSeeders(target)].reverse();
+  for (const SeederClass of targets) {
     const seeder = new SeederClass();
     console.log(`Reverting seeder: ${SeederClass.name}`);
     await seeder.down(dataSource);
@@ -49,20 +70,31 @@ async function runDown(): Promise<void> {
 
 async function main(): Promise<void> {
   const direction = process.argv[2];
+  const target = process.argv[3];
 
   if (direction !== 'up' && direction !== 'down') {
-    console.error('Usage: ts-node run.ts <up|down>');
+    console.error('Usage: ts-node run.ts <up|down> [seeder-name]');
+    console.error('');
+    console.error('Examples:');
+    console.error('  ts-node run.ts up');
+    console.error('  ts-node run.ts up SeedDocente');
+    console.error('  ts-node run.ts up 000001');
     process.exit(1);
   }
 
   try {
     await dataSource.initialize();
-    console.log(`Running seeders (${direction})...`);
+
+    if (target) {
+      console.log(`Running seeder "${target}" (${direction})...`);
+    } else {
+      console.log(`Running all seeders (${direction})...`);
+    }
 
     if (direction === 'up') {
-      await runUp();
+      await runUp(target);
     } else {
-      await runDown();
+      await runDown(target);
     }
 
     console.log('Done.');
