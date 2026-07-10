@@ -18,9 +18,11 @@ import { LdapStrategy } from './strategies/ldap.strategy';
 @Module({
 	imports: [
 		PassportModule.register({ defaultStrategy: 'jwt' }),
-		JwtModule.register({
-			secret: process.env.JWT_SECRET || 'sua-chave-secreta-padrao',
-			signOptions: { algorithm: 'HS256' },
+		JwtModule.registerAsync({
+			useFactory: () => ({
+				secret: process.env.JWT_SECRET || 'sua-chave-secreta-padrao',
+				signOptions: { algorithm: 'HS256' },
+			}),
 		}),
 		TypeOrmModule.forFeature([
 			Usuario,

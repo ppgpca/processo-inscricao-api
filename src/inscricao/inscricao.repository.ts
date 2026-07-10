@@ -83,4 +83,76 @@ export class InscricaoRepository {
 	async desativar(id: number): Promise<void> {
 		await this.repo.update({ id }, { ativa: false });
 	}
+
+	async obterInscricoesPorDia(
+		idEdital?: number,
+	): Promise<{ data: string; quantidade: number }[]> {
+		const qb = this.repo
+			.createQueryBuilder('i')
+			.select('DATE(i."createdAt")', 'data')
+			.addSelect('COUNT(*)', 'quantidade')
+			.where('i.ativa = true')
+			.groupBy('DATE(i."createdAt")')
+			.orderBy('DATE(i."createdAt")', 'ASC');
+
+		if (idEdital) {
+			qb.andWhere('i.id_edital = :idEdital', { idEdital });
+		}
+
+		const rows = await qb.getRawMany<{ data: string; quantidade: string }>();
+		return rows.map((r) => ({ data: r.data, quantidade: Number(r.quantidade) }));
+	}
+
+	async obterInscritosPorLinhaPesquisa(
+		idEdital?: number,
+	): Promise<{ linhaPesquisa: string; quantidade: number }[]> {
+		const qb = this.repo
+			.createQueryBuilder('i')
+			.leftJoin('i.linhaPesquisa', 'lp')
+			.select("COALESCE(lp.nome, 'Sem linha')", 'linhaPesquisa')
+			.addSelect('COUNT(*)', 'quantidade')
+			.where('i.ativa = true')
+			.groupBy('lp.nome')
+			.orderBy('lp.nome', 'ASC', 'NULLS LAST');
+
+		if (idEdital) {
+			qb.andWhere('i.id_edital = :idEdital', { idEdital });
+		}
+
+		const rows = await qb.getRawMany<{
+			linhaPesquisa: string;
+			quantidade: string;
+		}>();
+		return rows.map((r) => ({
+			linhaPesquisa: r.linhaPesquisa,
+			quantidade: Number(r.quantidade),
+		}));
+	}
+
+	async obterListaInscritos(idEdital?: number): Promise<
+		{
+			cpf: string;
+			linhaPesquisa: string;
+			anteprojeto: string;
+		}[]
+	> {
+		const qb = this.repo
+			.createQueryBuilder('i')
+			.leftJoin('i.linhaPesquisa', 'lp')
+			.select('i.cpf', 'cpf')
+			.addSelect("COALESCE(lp.nome, '')", 'linhaPesquisa')
+			.addSelect("COALESCE(i.projeto_pesquisa, '')", 'anteprojeto')
+			.where('i.ativa = true')
+			.orderBy('lp.nome', 'ASC', 'NULLS LAST');
+
+		if (idEdital) {
+			qb.andWhere('i.id_edital = :idEdital', { idEdital });
+		}
+
+		return qb.getRawMany<{
+			cpf: string;
+			linhaPesquisa: string;
+			anteprojeto: string;
+		}>();
+	}
 }

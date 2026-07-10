@@ -55,4 +55,15 @@ export class InscricaoService {
 	async desativar(id: number): Promise<void> {
 		await this.inscricaoRepository.desativar(id);
 	}
+
+	async obterDadosDashboard(idEdital?: number) {
+		const [inscricoesPorDia, inscritosPorLinhaPesquisa, inscritos] =
+			await Promise.all([
+				this.inscricaoRepository.obterInscricoesPorDia(idEdital),
+				this.inscricaoRepository.obterInscritosPorLinhaPesquisa(idEdital),
+				this.inscricaoRepository.obterListaInscritos(idEdital),
+			]);
+
+		return { inscricoesPorDia, inscritosPorLinhaPesquisa, inscritos };
+	}
 }
