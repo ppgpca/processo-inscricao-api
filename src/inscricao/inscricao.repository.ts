@@ -168,26 +168,46 @@ export class InscricaoRepository {
 		{
 			cpf: string;
 			linhaPesquisa: string;
+			siglaLinhaPesquisa: string;
 			anteprojeto: string;
+			palavrasChave: string[];
 		}[]
 	> {
 		const qb = this.repo
 			.createQueryBuilder('i')
 			.leftJoin('i.linhaPesquisa', 'lp')
+			.leftJoin('i.inscricoesPalavraChave', 'ipc')
+			.leftJoin('ipc.palavraChave', 'pc')
 			.select('i.cpf', 'cpf')
 			.addSelect("COALESCE(lp.nome, '')", 'linhaPesquisa')
+			.addSelect("COALESCE(lp.sigla, '')", 'siglaLinhaPesquisa')
 			.addSelect("COALESCE(i.projeto_pesquisa, '')", 'anteprojeto')
+			.addSelect(
+				"COALESCE(STRING_AGG(pc.palavra, ',' ORDER BY pc.palavra), '')",
+				'palavrasChave',
+			)
 			.where('i.ativa = true')
+			.groupBy('i.cpf')
+			.addGroupBy('lp.nome')
+			.addGroupBy('lp.sigla')
+			.addGroupBy('i.projeto_pesquisa')
 			.orderBy('lp.nome', 'ASC', 'NULLS LAST');
 
 		if (idEdital) {
 			qb.andWhere('i.id_edital = :idEdital', { idEdital });
 		}
 
-		return qb.getRawMany<{
+		const rows = await qb.getRawMany<{
 			cpf: string;
 			linhaPesquisa: string;
+			siglaLinhaPesquisa: string;
 			anteprojeto: string;
+			palavrasChave: string;
 		}>();
+
+		return rows.map((r) => ({
+			...r,
+			palavrasChave: r.palavrasChave ? r.palavrasChave.split(',') : [],
+		}));
 	}
 }
