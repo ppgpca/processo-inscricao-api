@@ -24,6 +24,6 @@ lerna-debug.log*
 .tmp
 src/public/*
 !src/public/.gitkeep
-src/uploads/*
-!src/uploads/.gitkeep
+/uploads/*
+!uploads/.gitkeep
 .vscode
