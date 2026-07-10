@@ -33,6 +33,10 @@ export class SeedDocenteEdital20260709000013 implements Seeder {
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(DocenteEdital).delete({});
+		await dataSource
+			.getRepository(DocenteEdital)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

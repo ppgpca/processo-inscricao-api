@@ -15,6 +15,10 @@ export class SeedLinhaPesquisa20260709000002 implements Seeder {
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(LinhaPesquisa).delete({});
+		await dataSource
+			.getRepository(LinhaPesquisa)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

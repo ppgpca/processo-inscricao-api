@@ -28,6 +28,10 @@ export class SeedEdital20260709000003 implements Seeder {
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(Edital).delete({});
+		await dataSource
+			.getRepository(Edital)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

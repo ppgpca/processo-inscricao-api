@@ -10,7 +10,40 @@ export class SeedGrupoPermissao20260709000011 implements Seeder {
 			(_, i) => ({ idGrupo: 1, idPermissao: i + 1 }),
 		);
 
-		// Docente (grupo 2): leitura de editais, todas as inscrições,
+		// Coordenador (grupo 2): gestão do processo sem permissões de exclusão.
+		const coordenadorPermissoesIds = [
+			1,
+			2,
+			3,
+			4, // EDITAL: visualizar, visualizar todos, criar, editar
+			6,
+			7,
+			8,
+			9, // INSCRICAO: visualizar, visualizar todas, criar, editar
+			11,
+			12,
+			13,
+			14, // CANDIDATO: visualizar, visualizar todos, criar, editar
+			16,
+			17,
+			18,
+			19, // DOCUMENTO: visualizar, visualizar todos, criar, editar
+			21,
+			22,
+			23,
+			24, // LINHA_PESQUISA: visualizar, visualizar todas, criar, editar
+			26,
+			27,
+			28,
+			29, // DOCENTE: visualizar, visualizar todos, criar, editar
+		];
+		const coordenadorPermissoes: DeepPartial<GrupoPermissao>[] =
+			coordenadorPermissoesIds.map((id) => ({
+				idGrupo: 2,
+				idPermissao: id,
+			}));
+
+		// Docente (grupo 3): leitura de editais, todas as inscrições,
 		// todos os candidatos, todos os documentos, linhas de pesquisa e docentes.
 		const docentePermissoesIds = [
 			1,
@@ -25,9 +58,9 @@ export class SeedGrupoPermissao20260709000011 implements Seeder {
 			29, // DOCENTE: visualizar, visualizar todos, editar
 		];
 		const docentePermissoes: DeepPartial<GrupoPermissao>[] =
-			docentePermissoesIds.map((id) => ({ idGrupo: 2, idPermissao: id }));
+			docentePermissoesIds.map((id) => ({ idGrupo: 3, idPermissao: id }));
 
-		// Candidato (grupo 3): gerenciar a própria inscrição e documentos.
+		// Candidato (grupo 4): gerenciar a própria inscrição e documentos.
 		const candidatoPermissoesIds = [
 			1, // EDITAL: visualizar
 			6,
@@ -43,18 +76,23 @@ export class SeedGrupoPermissao20260709000011 implements Seeder {
 		];
 		const candidatoPermissoes: DeepPartial<GrupoPermissao>[] =
 			candidatoPermissoesIds.map((id) => ({
-				idGrupo: 3,
+				idGrupo: 4,
 				idPermissao: id,
 			}));
 
 		await dataSource.manager.save(GrupoPermissao, [
 			...adminPermissoes,
+			...coordenadorPermissoes,
 			...docentePermissoes,
 			...candidatoPermissoes,
 		]);
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(GrupoPermissao).delete({});
+		await dataSource
+			.getRepository(GrupoPermissao)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

@@ -1,8 +1,9 @@
 export const Permissoes = {
 	GRUPOS: {
 		ADMIN: 1,
-		DOCENTE: 2,
-		CANDIDATO: 3,
+		COORDENADOR: 2,
+		DOCENTE: 3,
+		CANDIDATO: 4,
 	},
 
 	EDITAL: {

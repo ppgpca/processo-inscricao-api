@@ -24,6 +24,10 @@ export class SeedCategoriaPermissao20260709000008 implements Seeder {
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(CategoriaPermissao).delete({});
+		await dataSource
+			.getRepository(CategoriaPermissao)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

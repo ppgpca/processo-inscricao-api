@@ -1,32 +1,21 @@
 import { DataSource } from 'typeorm';
-import { Grupo } from '../entities/grupo.entity';
 import { Seeder } from './seeder.interface';
 
 export class SeedGrupo20260709000007 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(Grupo).insert([
-			{
-				id: 1,
-				nome: 'admin',
-				descricao: 'Administrador do sistema.',
-				sistema: 2,
-			},
-			{
-				id: 2,
-				nome: 'docente',
-				descricao: 'Docente orientador do processo de seleção.',
-				sistema: 2,
-			},
-			{
-				id: 3,
-				nome: 'candidato',
-				descricao: 'Candidato ao processo de seleção.',
-				sistema: 2,
-			},
-		]);
+		await dataSource.query(`
+			INSERT INTO public.grupo (id, nome, descricao, sistema)
+			VALUES
+				(1, 'admin', 'Administrador do sistema.', 2),
+				(2, 'coordenador', 'Coordenador do processo de seleção.', 2),
+				(3, 'docente', 'Docente orientador do processo de seleção.', 2),
+				(4, 'candidato', 'Candidato ao processo de seleção.', 2)
+		`);
+		await dataSource.query(`SELECT setval('grupo_id_seq', 4, true)`);
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(Grupo).delete({});
+		await dataSource.query(`DELETE FROM public.grupo`);
+		await dataSource.query(`SELECT setval('grupo_id_seq', 1, false)`);
 	}
 }

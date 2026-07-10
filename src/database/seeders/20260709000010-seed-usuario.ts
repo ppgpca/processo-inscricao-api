@@ -50,6 +50,10 @@ export class SeedUsuario20260709000010 implements Seeder {
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(Usuario).delete({});
+		await dataSource
+			.getRepository(Usuario)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

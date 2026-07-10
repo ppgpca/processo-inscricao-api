@@ -76,6 +76,10 @@ export class SeedTipoDocumentoEdital20260709000005 implements Seeder {
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(TipoDocumentoEdital).delete({});
+		await dataSource
+			.getRepository(TipoDocumentoEdital)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }

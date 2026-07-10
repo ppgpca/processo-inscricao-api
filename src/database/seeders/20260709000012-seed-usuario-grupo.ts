@@ -12,7 +12,6 @@ const docentesIds = [
 	'guilherme.dalbianco',
 	'lcaimi',
 	'marco.spohn',
-	'samuel.feitosa',
 	'jose.grzybowski',
 ];
 
@@ -20,10 +19,14 @@ export class SeedUsuarioGrupo20260709000012 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const docenteGrupo: DeepPartial<UsuarioGrupo>[] = docentesIds.map(
 			(id) => ({
-				idGrupo: 2,
+				idGrupo: 3,
 				idUsuario: id,
 			}),
 		);
+
+		const coordenadorGrupo: DeepPartial<UsuarioGrupo>[] = [
+			{ idGrupo: 2, idUsuario: 'samuel.feitosa' },
+		];
 
 		const adminGrupo: DeepPartial<UsuarioGrupo>[] = [
 			{ idGrupo: 1, idUsuario: 'gian' },
@@ -31,11 +34,16 @@ export class SeedUsuarioGrupo20260709000012 implements Seeder {
 
 		await dataSource.manager.save(UsuarioGrupo, [
 			...adminGrupo,
+			...coordenadorGrupo,
 			...docenteGrupo,
 		]);
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.getRepository(UsuarioGrupo).delete({});
+		await dataSource
+			.getRepository(UsuarioGrupo)
+			.createQueryBuilder()
+			.delete()
+			.execute();
 	}
 }
