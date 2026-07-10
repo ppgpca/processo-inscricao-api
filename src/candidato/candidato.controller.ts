@@ -5,15 +5,12 @@ import {
   Param,
   Post,
   Put,
-  UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CandidatoService } from './candidato.service';
 import { CreateCandidatoDto } from './dto/create-candidato.dto';
 import { UpdateCandidatoDto } from './dto/update-candidato.dto';
 
 @Controller('candidatos')
-@UseGuards(JwtAuthGuard)
 export class CandidatoController {
   constructor(private readonly candidatoService: CandidatoService) {}
 
