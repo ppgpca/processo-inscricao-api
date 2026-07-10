@@ -166,6 +166,7 @@ export class InscricaoRepository {
 
 	async obterListaInscritos(idEdital?: number): Promise<
 		{
+			idInscricao: number;
 			nome: string;
 			cpf: string;
 			linhaPesquisa: string;
@@ -173,6 +174,7 @@ export class InscricaoRepository {
 			anteprojeto: string;
 			palavrasChave: string[];
 			dataInscricao: string;
+			deferida: boolean | null;
 		}[]
 	> {
 		const qb = this.repo
@@ -182,6 +184,7 @@ export class InscricaoRepository {
 			.leftJoin('i.inscricoesPalavraChave', 'ipc')
 			.leftJoin('ipc.palavraChave', 'pc')
 			.select('i.cpf', 'cpf')
+			.addSelect('MIN(i.id)', 'idInscricao')
 			.addSelect("COALESCE(c.nome, '')", 'nome')
 			.addSelect("COALESCE(lp.nome, '')", 'linhaPesquisa')
 			.addSelect("COALESCE(lp.sigla, '')", 'siglaLinhaPesquisa')
@@ -191,6 +194,7 @@ export class InscricaoRepository {
 				'palavrasChave',
 			)
 			.addSelect('MIN(i."createdAt")', 'dataInscricao')
+			.addSelect('MAX(i.deferida::int)::boolean', 'deferida')
 			.where('i.ativa = true')
 			.groupBy('i.cpf')
 			.addGroupBy('c.nome')
@@ -204,6 +208,7 @@ export class InscricaoRepository {
 		}
 
 		const rows = await qb.getRawMany<{
+			idInscricao: number;
 			nome: string;
 			cpf: string;
 			linhaPesquisa: string;
@@ -211,6 +216,7 @@ export class InscricaoRepository {
 			anteprojeto: string;
 			palavrasChave: string;
 			dataInscricao: string;
+			deferida: boolean | null;
 		}>();
 
 		return rows.map((r) => ({
