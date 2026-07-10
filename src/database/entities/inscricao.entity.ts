@@ -47,8 +47,8 @@ export class Inscricao {
 	@Column({ name: 'dados_complementares', type: 'jsonb', nullable: true })
 	dadosComplementares: Record<string, unknown> | null;
 
-	@Column({ name: 'data_envio', type: 'timestamptz', nullable: true })
-	dataEnvio: Date | null;
+	@Column({ type: 'boolean', nullable: true, default: null })
+	deferida: boolean | null;
 
 	@Column({ name: 'nota_final', type: 'decimal', nullable: true })
 	notaFinal: number | null;

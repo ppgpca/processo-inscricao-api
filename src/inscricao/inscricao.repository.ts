@@ -166,19 +166,23 @@ export class InscricaoRepository {
 
 	async obterListaInscritos(idEdital?: number): Promise<
 		{
+			nome: string;
 			cpf: string;
 			linhaPesquisa: string;
 			siglaLinhaPesquisa: string;
 			anteprojeto: string;
 			palavrasChave: string[];
+			dataInscricao: string;
 		}[]
 	> {
 		const qb = this.repo
 			.createQueryBuilder('i')
+			.leftJoin('i.candidato', 'c')
 			.leftJoin('i.linhaPesquisa', 'lp')
 			.leftJoin('i.inscricoesPalavraChave', 'ipc')
 			.leftJoin('ipc.palavraChave', 'pc')
 			.select('i.cpf', 'cpf')
+			.addSelect("COALESCE(c.nome, '')", 'nome')
 			.addSelect("COALESCE(lp.nome, '')", 'linhaPesquisa')
 			.addSelect("COALESCE(lp.sigla, '')", 'siglaLinhaPesquisa')
 			.addSelect("COALESCE(i.projeto_pesquisa, '')", 'anteprojeto')
@@ -186,23 +190,27 @@ export class InscricaoRepository {
 				"COALESCE(STRING_AGG(pc.palavra, ',' ORDER BY pc.palavra), '')",
 				'palavrasChave',
 			)
+			.addSelect('MIN(i."createdAt")', 'dataInscricao')
 			.where('i.ativa = true')
 			.groupBy('i.cpf')
+			.addGroupBy('c.nome')
 			.addGroupBy('lp.nome')
 			.addGroupBy('lp.sigla')
 			.addGroupBy('i.projeto_pesquisa')
-			.orderBy('lp.nome', 'ASC', 'NULLS LAST');
+			.orderBy('c.nome', 'ASC', 'NULLS LAST');
 
 		if (idEdital) {
 			qb.andWhere('i.id_edital = :idEdital', { idEdital });
 		}
 
 		const rows = await qb.getRawMany<{
+			nome: string;
 			cpf: string;
 			linhaPesquisa: string;
 			siglaLinhaPesquisa: string;
 			anteprojeto: string;
 			palavrasChave: string;
+			dataInscricao: string;
 		}>();
 
 		return rows.map((r) => ({
