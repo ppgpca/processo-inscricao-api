@@ -14,6 +14,7 @@ import { Candidato } from './candidato.entity';
 import { DistribuicaoAvaliacao } from './distribuicao-avaliacao.entity';
 import { Documento } from './documento.entity';
 import { Edital } from './edital.entity';
+import { InscricaoPalavraChave } from './inscricao-palavra-chave.entity';
 import { LinhaPesquisa } from './linha-pesquisa.entity';
 import { PreferenciaOrientador } from './preferencia-orientador.entity';
 
@@ -96,4 +97,7 @@ export class Inscricao {
 
 	@OneToOne(() => AlocacaoOrientador, (ao) => ao.inscricao)
 	alocacaoOrientador: AlocacaoOrientador;
+
+	@OneToMany(() => InscricaoPalavraChave, (ipk) => ipk.inscricao)
+	inscricoesPalavraChave: InscricaoPalavraChave[];
 }

@@ -1,4 +1,7 @@
 import {
+	ArrayMaxSize,
+	ArrayMinSize,
+	IsArray,
 	IsBoolean,
 	IsInt,
 	IsNotEmpty,
@@ -46,4 +49,11 @@ export class CreateInscricaoDto {
 	@IsString()
 	@IsOptional()
 	projetoPesquisa?: string | null;
+
+	@IsArray()
+	@IsInt({ each: true })
+	@ArrayMinSize(1)
+	@ArrayMaxSize(5)
+	@IsOptional()
+	idsPalavrasChave?: number[];
 }

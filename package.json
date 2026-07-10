@@ -24,7 +24,9 @@
     "migration:revert": "typeorm-ts-node-commonjs migration:revert -d src/database/data-source.ts",
     "migration:show": "typeorm-ts-node-commonjs migration:show -d src/database/data-source.ts",
     "seed:up": "ts-node -r tsconfig-paths/register src/database/seeders/run.ts up",
-    "seed:down": "ts-node -r tsconfig-paths/register src/database/seeders/run.ts down"
+    "seed:down": "ts-node -r tsconfig-paths/register src/database/seeders/run.ts down",
+    "seed:pending": "ts-node -r tsconfig-paths/register src/database/seeders/run.ts pending",
+    "seed:show": "ts-node -r tsconfig-paths/register src/database/seeders/run.ts show"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

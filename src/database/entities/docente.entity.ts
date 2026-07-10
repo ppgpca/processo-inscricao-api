@@ -10,6 +10,7 @@ import { AlocacaoOrientador } from './alocacao-orientador.entity';
 import { DistribuicaoAvaliacao } from './distribuicao-avaliacao.entity';
 import { DocenteEdital } from './docente-edital.entity';
 import { DocenteLinhaPesquisa } from './docente-linha-pesquisa.entity';
+import { DocentePalavraChave } from './docente-palavra-chave.entity';
 import { PreferenciaOrientador } from './preferencia-orientador.entity';
 
 @Entity({ name: 'docente', schema: 'public' })
@@ -58,4 +59,7 @@ export class Docente {
 
 	@OneToMany(() => AlocacaoOrientador, (ao) => ao.docente)
 	alocacoesOrientador: AlocacaoOrientador[];
+
+	@OneToMany(() => DocentePalavraChave, (dpk) => dpk.docente)
+	docentesPalavraChave: DocentePalavraChave[];
 }

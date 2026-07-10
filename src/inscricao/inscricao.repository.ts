@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { InscricaoPalavraChave } from '../database/entities/inscricao-palavra-chave.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
 import { CreateInscricaoDto } from './dto/create-inscricao.dto';
 import { UpdateInscricaoDto } from './dto/update-inscricao.dto';
@@ -10,6 +11,8 @@ export class InscricaoRepository {
 	constructor(
 		@InjectRepository(Inscricao)
 		private readonly repo: Repository<Inscricao>,
+		@InjectRepository(InscricaoPalavraChave)
+		private readonly inscricaoPalavraChaveRepo: Repository<InscricaoPalavraChave>,
 	) {}
 
 	async obterPorCpfEdital(
@@ -21,6 +24,7 @@ export class InscricaoRepository {
 			relations: {
 				linhaPesquisa: true,
 				documentos: { tipoDocumentoEdital: true },
+				inscricoesPalavraChave: { palavraChave: true },
 			},
 		});
 	}
@@ -32,6 +36,7 @@ export class InscricaoRepository {
 				candidato: true,
 				linhaPesquisa: true,
 				documentos: { tipoDocumentoEdital: true },
+				inscricoesPalavraChave: { palavraChave: true },
 			},
 		});
 	}
@@ -62,15 +67,45 @@ export class InscricaoRepository {
 			areaConcentracao: dados.areaConcentracao ?? null,
 			projetoPesquisa: dados.projetoPesquisa ?? null,
 		});
-		return this.repo.save(inscricao);
+		const inscricaoSalva = await this.repo.save(inscricao);
+
+		if (dados.idsPalavrasChave?.length) {
+			await this.sincronizarPalavrasChave(
+				inscricaoSalva.id,
+				dados.idsPalavrasChave,
+			);
+		}
+
+		return (await this.obterPorId(inscricaoSalva.id)) ?? inscricaoSalva;
 	}
 
 	async atualizar(
 		inscricao: Inscricao,
 		dados: UpdateInscricaoDto,
 	): Promise<Inscricao> {
-		Object.assign(inscricao, dados);
-		return this.repo.save(inscricao);
+		const { idsPalavrasChave, ...dadosSemPalavrasChave } = dados;
+		Object.assign(inscricao, dadosSemPalavrasChave);
+		const inscricaoSalva = await this.repo.save(inscricao);
+
+		if (idsPalavrasChave !== undefined) {
+			await this.sincronizarPalavrasChave(inscricaoSalva.id, idsPalavrasChave);
+		}
+
+		return (await this.obterPorId(inscricaoSalva.id)) ?? inscricaoSalva;
+	}
+
+	private async sincronizarPalavrasChave(
+		idInscricao: number,
+		idsPalavrasChave: number[],
+	): Promise<void> {
+		await this.inscricaoPalavraChaveRepo.delete({ idInscricao });
+
+		if (idsPalavrasChave.length > 0) {
+			const registros = idsPalavrasChave.map((idPalavraChave) =>
+				this.inscricaoPalavraChaveRepo.create({ idInscricao, idPalavraChave }),
+			);
+			await this.inscricaoPalavraChaveRepo.save(registros);
+		}
 	}
 
 	async obterMaisRecentePorCpf(cpf: string): Promise<Inscricao | null> {

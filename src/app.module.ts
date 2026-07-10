@@ -9,6 +9,7 @@ import { DocumentoModule } from './documento/documento.module';
 import { EditalModule } from './edital/edital.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
 import { LinhaPesquisaModule } from './linha-pesquisa/linha-pesquisa.module';
+import { PalavraChaveModule } from './palavra-chave/palavra-chave.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { LinhaPesquisaModule } from './linha-pesquisa/linha-pesquisa.module';
 		InscricaoModule,
 		LinhaPesquisaModule,
 		DocumentoModule,
+		PalavraChaveModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],
