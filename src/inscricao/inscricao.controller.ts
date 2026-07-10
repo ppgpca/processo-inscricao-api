@@ -9,15 +9,12 @@ import {
   Post,
   Put,
   Query,
-  UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { CreateInscricaoDto } from './dto/create-inscricao.dto';
 import { UpdateInscricaoDto } from './dto/update-inscricao.dto';
 import { InscricaoService } from './inscricao.service';
 
 @Controller('inscricoes')
-@UseGuards(JwtAuthGuard)
 export class InscricaoController {
   constructor(private readonly inscricaoService: InscricaoService) {}
 

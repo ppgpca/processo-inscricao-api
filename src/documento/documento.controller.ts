@@ -10,18 +10,15 @@ import {
   Post,
   Res,
   UploadedFile,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import type { Response } from 'express';
 import { diskStorage } from 'multer';
 import * as path from 'path';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { DocumentoService } from './documento.service';
 
 @Controller('documentos')
-@UseGuards(JwtAuthGuard)
 export class DocumentoController {
   constructor(private readonly documentoService: DocumentoService) {}
 

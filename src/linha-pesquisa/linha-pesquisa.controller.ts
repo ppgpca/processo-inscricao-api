@@ -3,13 +3,10 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { LinhaPesquisaService } from './linha-pesquisa.service';
 
 @Controller('linhas-pesquisa')
-@UseGuards(JwtAuthGuard)
 export class LinhaPesquisaController {
   constructor(private readonly linhaPesquisaService: LinhaPesquisaService) {}
 

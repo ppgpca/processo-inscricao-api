@@ -3,13 +3,10 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { EditalService } from './edital.service';
 
 @Controller('editais')
-@UseGuards(JwtAuthGuard)
 export class EditalController {
   constructor(private readonly editalService: EditalService) {}
 
