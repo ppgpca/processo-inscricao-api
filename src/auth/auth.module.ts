@@ -16,23 +16,29 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { LdapStrategy } from './strategies/ldap.strategy';
 
 @Module({
-  imports: [
-    PassportModule.register({ defaultStrategy: 'jwt' }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'sua-chave-secreta-padrao',
-      signOptions: { algorithm: 'HS256' },
-    }),
-    TypeOrmModule.forFeature([Usuario, Grupo, Permissao, GrupoPermissao, UsuarioGrupo]),
-  ],
-  controllers: [AuthController],
-  providers: [
-    AuthService,
-    AuthRepository,
-    PermissoesService,
-    PermissoesRepository,
-    JwtStrategy,
-    LdapStrategy,
-  ],
-  exports: [AuthService, PermissoesService, JwtStrategy],
+	imports: [
+		PassportModule.register({ defaultStrategy: 'jwt' }),
+		JwtModule.register({
+			secret: process.env.JWT_SECRET || 'sua-chave-secreta-padrao',
+			signOptions: { algorithm: 'HS256' },
+		}),
+		TypeOrmModule.forFeature([
+			Usuario,
+			Grupo,
+			Permissao,
+			GrupoPermissao,
+			UsuarioGrupo,
+		]),
+	],
+	controllers: [AuthController],
+	providers: [
+		AuthService,
+		AuthRepository,
+		PermissoesService,
+		PermissoesRepository,
+		JwtStrategy,
+		LdapStrategy,
+	],
+	exports: [AuthService, PermissoesService, JwtStrategy],
 })
 export class AuthModule {}

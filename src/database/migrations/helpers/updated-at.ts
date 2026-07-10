@@ -1,9 +1,9 @@
 import { QueryRunner } from 'typeorm';
 
 export async function ensureUpdatedAtFunction(
-  queryRunner: QueryRunner,
+	queryRunner: QueryRunner,
 ): Promise<void> {
-  await queryRunner.query(`
+	await queryRunner.query(`
     DO $$
     BEGIN
       IF NOT EXISTS (
@@ -24,11 +24,11 @@ export async function ensureUpdatedAtFunction(
 }
 
 export async function ensureUpdatedAtTrigger(
-  queryRunner: QueryRunner,
-  tableName: string,
-  triggerName: string,
+	queryRunner: QueryRunner,
+	tableName: string,
+	triggerName: string,
 ): Promise<void> {
-  await queryRunner.query(`
+	await queryRunner.query(`
     DROP TRIGGER IF EXISTS ${triggerName} ON public.${tableName};
     CREATE TRIGGER ${triggerName}
     BEFORE UPDATE ON public.${tableName}

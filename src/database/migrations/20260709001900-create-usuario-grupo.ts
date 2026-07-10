@@ -2,8 +2,8 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
 export class CreateUsuarioGrupo20260709001900 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.usuario_grupo (
         id_grupo    INTEGER NOT NULL
           REFERENCES public.grupo (id)
@@ -17,18 +17,18 @@ export class CreateUsuarioGrupo20260709001900 implements MigrationInterface {
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'usuario_grupo',
-      'update_usuario_grupo_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'usuario_grupo',
+			'update_usuario_grupo_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_usuario_grupo_updated_at ON public.usuario_grupo;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.usuario_grupo`);
-  }
+		await queryRunner.query(`DROP TABLE IF EXISTS public.usuario_grupo`);
+	}
 }

@@ -6,9 +6,9 @@ import { InscricaoRepository } from './inscricao.repository';
 import { InscricaoService } from './inscricao.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Inscricao])],
-  controllers: [InscricaoController],
-  providers: [InscricaoService, InscricaoRepository],
-  exports: [InscricaoService, InscricaoRepository],
+	imports: [TypeOrmModule.forFeature([Inscricao])],
+	controllers: [InscricaoController],
+	providers: [InscricaoService, InscricaoRepository],
+	exports: [InscricaoService, InscricaoRepository],
 })
 export class InscricaoModule {}

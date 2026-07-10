@@ -1,9 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
-export class CreatePreferenciaOrientador20260709001300 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+export class CreatePreferenciaOrientador20260709001300
+	implements MigrationInterface
+{
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.preferencia_orientador (
         id_inscricao   INTEGER NOT NULL
           REFERENCES public.inscricao (id)
@@ -18,18 +20,20 @@ export class CreatePreferenciaOrientador20260709001300 implements MigrationInter
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'preferencia_orientador',
-      'update_preferencia_orientador_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'preferencia_orientador',
+			'update_preferencia_orientador_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_preferencia_orientador_updated_at ON public.preferencia_orientador;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.preferencia_orientador`);
-  }
+		await queryRunner.query(
+			`DROP TABLE IF EXISTS public.preferencia_orientador`,
+		);
+	}
 }

@@ -3,28 +3,154 @@ import { Docente } from '../entities/docente.entity';
 import { Seeder } from './seeder.interface';
 
 const docentes: DeepPartial<Docente>[] = [
-  { codigo: 'braulio',             nome: 'Braulio Adriano de Mello',          email: 'braulio@uffs.edu.br',             usuarioLdap: 'braulio',             senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'claunir.pavan',       nome: 'Claunir Pavan',                     email: 'claunir.pavan@uffs.edu.br',       usuarioLdap: 'claunir.pavan',       senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'duarte',              nome: 'Denio Duarte',                      email: 'duarte@uffs.edu.br',              usuarioLdap: 'duarte',              senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'felipegrando',        nome: 'Felipe Grando',                     email: 'grando@uffs.edu.br',              usuarioLdap: 'felipegrando',        senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'fernando.bevilacqua', nome: 'Fernando Bevilacqua',               email: 'fernando.bevilacqua@uffs.edu.br', usuarioLdap: null,                  senha: null, externo: true,  instituicao: 'Optidata',                             ativo: true },
-  { codigo: 'gschreiner',          nome: 'Geomar Schreiner',                  email: 'schreiner.geomar@uffs.edu.br',    usuarioLdap: 'gschreiner',          senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'gian',                nome: 'Giancarlo Salton',                  email: 'gian@uffs.edu.br',                usuarioLdap: 'gian',                senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'graziela.tonin',      nome: 'Graziela Simone Tonin',             email: 'graziela.tonin@uffs.edu.br',      usuarioLdap: null,                  senha: null, externo: true,  instituicao: '',                                     ativo: true },
-  { codigo: 'guilherme.dalbianco', nome: 'Guilherme Dal Bianco',              email: 'guilherme.dalbianco@uffs.edu.br', usuarioLdap: 'guilherme.dalbianco', senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'lcaimi',              nome: 'Luciano Lores Caimi',               email: 'lcaimi@uffs.edu.br',              usuarioLdap: 'lcaimi',              senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'marco.spohn',         nome: 'Marco Aurelio Spohn',               email: 'marco.spohn@uffs.edu.br',         usuarioLdap: 'marco.spohn',         senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'samuel.feitosa',      nome: 'Samuel Feitosa',                    email: 'samuelfeitosa@uffs.edu.br',       usuarioLdap: 'samuel.feitosa',      senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'jose.grzybowski',     nome: 'Jose Mario Vicensi Grzybowski',     email: 'jose.grzybowski@uffs.edu.br',     usuarioLdap: 'jose.grzybowski',     senha: null, externo: false, instituicao: 'Universidade Federal da Fronteira Sul', ativo: true },
-  { codigo: 'tiago.zonta',         nome: 'Tiago Zonta',                       email: 'tiago.zonta@unoesc.edu.br',       usuarioLdap: null,                  senha: null, externo: true,  instituicao: 'Unoesc',                               ativo: true },
+	{
+		codigo: 'braulio',
+		nome: 'Braulio Adriano de Mello',
+		email: 'braulio@uffs.edu.br',
+		usuarioLdap: 'braulio',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'claunir.pavan',
+		nome: 'Claunir Pavan',
+		email: 'claunir.pavan@uffs.edu.br',
+		usuarioLdap: 'claunir.pavan',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'duarte',
+		nome: 'Denio Duarte',
+		email: 'duarte@uffs.edu.br',
+		usuarioLdap: 'duarte',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'felipegrando',
+		nome: 'Felipe Grando',
+		email: 'grando@uffs.edu.br',
+		usuarioLdap: 'felipegrando',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'fernando.bevilacqua',
+		nome: 'Fernando Bevilacqua',
+		email: 'fernando.bevilacqua@uffs.edu.br',
+		usuarioLdap: null,
+		senha: null,
+		externo: true,
+		instituicao: 'Optidata',
+		ativo: true,
+	},
+	{
+		codigo: 'gschreiner',
+		nome: 'Geomar Schreiner',
+		email: 'schreiner.geomar@uffs.edu.br',
+		usuarioLdap: 'gschreiner',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'gian',
+		nome: 'Giancarlo Salton',
+		email: 'gian@uffs.edu.br',
+		usuarioLdap: 'gian',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'graziela.tonin',
+		nome: 'Graziela Simone Tonin',
+		email: 'graziela.tonin@uffs.edu.br',
+		usuarioLdap: null,
+		senha: null,
+		externo: true,
+		instituicao: '',
+		ativo: true,
+	},
+	{
+		codigo: 'guilherme.dalbianco',
+		nome: 'Guilherme Dal Bianco',
+		email: 'guilherme.dalbianco@uffs.edu.br',
+		usuarioLdap: 'guilherme.dalbianco',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'lcaimi',
+		nome: 'Luciano Lores Caimi',
+		email: 'lcaimi@uffs.edu.br',
+		usuarioLdap: 'lcaimi',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'marco.spohn',
+		nome: 'Marco Aurelio Spohn',
+		email: 'marco.spohn@uffs.edu.br',
+		usuarioLdap: 'marco.spohn',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'samuel.feitosa',
+		nome: 'Samuel Feitosa',
+		email: 'samuelfeitosa@uffs.edu.br',
+		usuarioLdap: 'samuel.feitosa',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'jose.grzybowski',
+		nome: 'Jose Mario Vicensi Grzybowski',
+		email: 'jose.grzybowski@uffs.edu.br',
+		usuarioLdap: 'jose.grzybowski',
+		senha: null,
+		externo: false,
+		instituicao: 'Universidade Federal da Fronteira Sul',
+		ativo: true,
+	},
+	{
+		codigo: 'tiago.zonta',
+		nome: 'Tiago Zonta',
+		email: 'tiago.zonta@unoesc.edu.br',
+		usuarioLdap: null,
+		senha: null,
+		externo: true,
+		instituicao: 'Unoesc',
+		ativo: true,
+	},
 ];
 
 export class SeedDocente20260709000001 implements Seeder {
-  async up(dataSource: DataSource): Promise<void> {
-    await dataSource.manager.save(Docente, docentes);
-  }
+	async up(dataSource: DataSource): Promise<void> {
+		await dataSource.manager.save(Docente, docentes);
+	}
 
-  async down(dataSource: DataSource): Promise<void> {
-    await dataSource.getRepository(Docente).delete({});
-  }
+	async down(dataSource: DataSource): Promise<void> {
+		await dataSource.getRepository(Docente).delete({});
+	}
 }

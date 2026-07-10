@@ -2,8 +2,8 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
 export class CreatePermissao20260709001800 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.permissao (
         id                        SERIAL NOT NULL,
         codigo                    VARCHAR NOT NULL,
@@ -17,18 +17,18 @@ export class CreatePermissao20260709001800 implements MigrationInterface {
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'permissao',
-      'update_permissao_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'permissao',
+			'update_permissao_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_permissao_updated_at ON public.permissao;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.permissao`);
-  }
+		await queryRunner.query(`DROP TABLE IF EXISTS public.permissao`);
+	}
 }

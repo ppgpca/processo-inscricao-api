@@ -8,11 +8,11 @@ import { DocumentoRepository } from './documento.repository';
 import { DocumentoService } from './documento.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Documento, TipoDocumentoEdital]),
-    InscricaoModule,
-  ],
-  controllers: [DocumentoController],
-  providers: [DocumentoService, DocumentoRepository],
+	imports: [
+		TypeOrmModule.forFeature([Documento, TipoDocumentoEdital]),
+		InscricaoModule,
+	],
+	controllers: [DocumentoController],
+	providers: [DocumentoService, DocumentoRepository],
 })
 export class DocumentoModule {}

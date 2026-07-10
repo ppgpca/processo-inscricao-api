@@ -6,9 +6,9 @@ import { CandidatoRepository } from './candidato.repository';
 import { CandidatoService } from './candidato.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Candidato])],
-  controllers: [CandidatoController],
-  providers: [CandidatoService, CandidatoRepository],
-  exports: [CandidatoService],
+	imports: [TypeOrmModule.forFeature([Candidato])],
+	controllers: [CandidatoController],
+	providers: [CandidatoService, CandidatoRepository],
+	exports: [CandidatoService],
 })
 export class CandidatoModule {}

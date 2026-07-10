@@ -6,9 +6,9 @@ import { LinhaPesquisaRepository } from './linha-pesquisa.repository';
 import { LinhaPesquisaService } from './linha-pesquisa.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([LinhaPesquisa])],
-  controllers: [LinhaPesquisaController],
-  providers: [LinhaPesquisaService, LinhaPesquisaRepository],
-  exports: [LinhaPesquisaService],
+	imports: [TypeOrmModule.forFeature([LinhaPesquisa])],
+	controllers: [LinhaPesquisaController],
+	providers: [LinhaPesquisaService, LinhaPesquisaRepository],
+	exports: [LinhaPesquisaService],
 })
 export class LinhaPesquisaModule {}

@@ -2,8 +2,8 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
 export class CreateUsuario20260709001500 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.usuario (
         id          VARCHAR NOT NULL,
         nome        VARCHAR,
@@ -14,18 +14,18 @@ export class CreateUsuario20260709001500 implements MigrationInterface {
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'usuario',
-      'update_usuario_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'usuario',
+			'update_usuario_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_usuario_updated_at ON public.usuario;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.usuario`);
-  }
+		await queryRunner.query(`DROP TABLE IF EXISTS public.usuario`);
+	}
 }

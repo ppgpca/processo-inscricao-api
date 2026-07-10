@@ -1,9 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
-export class CreateTipoDocumentoEdital20260709000600 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+export class CreateTipoDocumentoEdital20260709000600
+	implements MigrationInterface
+{
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.tipo_documento_edital (
         id          SERIAL NOT NULL,
         id_edital   INTEGER NOT NULL
@@ -21,18 +23,20 @@ export class CreateTipoDocumentoEdital20260709000600 implements MigrationInterfa
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'tipo_documento_edital',
-      'update_tipo_documento_edital_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'tipo_documento_edital',
+			'update_tipo_documento_edital_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_tipo_documento_edital_updated_at ON public.tipo_documento_edital;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.tipo_documento_edital`);
-  }
+		await queryRunner.query(
+			`DROP TABLE IF EXISTS public.tipo_documento_edital`,
+		);
+	}
 }

@@ -1,13 +1,13 @@
 import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  OneToMany,
-  OneToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToMany,
+	OneToOne,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from 'typeorm';
 import { AlocacaoOrientador } from './alocacao-orientador.entity';
 import { Candidato } from './candidato.entity';
@@ -19,81 +19,81 @@ import { PreferenciaOrientador } from './preferencia-orientador.entity';
 
 @Entity({ name: 'inscricao', schema: 'public' })
 export class Inscricao {
-  @PrimaryGeneratedColumn()
-  id: number;
+	@PrimaryGeneratedColumn()
+	id: number;
 
-  @Column({ type: 'varchar', nullable: false })
-  cpf: string;
+	@Column({ type: 'varchar', nullable: false })
+	cpf: string;
 
-  @Column({ name: 'id_edital', type: 'int', nullable: false })
-  idEdital: number;
+	@Column({ name: 'id_edital', type: 'int', nullable: false })
+	idEdital: number;
 
-  @Column({ type: 'varchar', nullable: false, default: 'rascunho' })
-  status: string;
+	@Column({ type: 'varchar', nullable: false, default: 'rascunho' })
+	status: string;
 
-  @Column({ name: 'id_linha_pesquisa', type: 'int', nullable: true })
-  idLinhaPesquisa: number | null;
+	@Column({ name: 'id_linha_pesquisa', type: 'int', nullable: true })
+	idLinhaPesquisa: number | null;
 
-  @Column({ type: 'boolean', nullable: false, default: true })
-  ativa: boolean;
+	@Column({ type: 'boolean', nullable: false, default: true })
+	ativa: boolean;
 
-  @Column({ name: 'area_concentracao', type: 'varchar', nullable: true })
-  areaConcentracao: string | null;
+	@Column({ name: 'area_concentracao', type: 'varchar', nullable: true })
+	areaConcentracao: string | null;
 
-  @Column({ name: 'projeto_pesquisa', type: 'text', nullable: true })
-  projetoPesquisa: string | null;
+	@Column({ name: 'projeto_pesquisa', type: 'text', nullable: true })
+	projetoPesquisa: string | null;
 
-  @Column({ name: 'dados_complementares', type: 'jsonb', nullable: true })
-  dadosComplementares: Record<string, unknown> | null;
+	@Column({ name: 'dados_complementares', type: 'jsonb', nullable: true })
+	dadosComplementares: Record<string, unknown> | null;
 
-  @Column({ name: 'data_envio', type: 'timestamptz', nullable: true })
-  dataEnvio: Date | null;
+	@Column({ name: 'data_envio', type: 'timestamptz', nullable: true })
+	dataEnvio: Date | null;
 
-  @Column({ name: 'nota_final', type: 'decimal', nullable: true })
-  notaFinal: number | null;
+	@Column({ name: 'nota_final', type: 'decimal', nullable: true })
+	notaFinal: number | null;
 
-  @Column({ name: 'posicao_ranking', type: 'int', nullable: true })
-  posicaoRanking: number | null;
+	@Column({ name: 'posicao_ranking', type: 'int', nullable: true })
+	posicaoRanking: number | null;
 
-  @Column({ type: 'boolean', nullable: true })
-  deficiente: boolean | null;
+	@Column({ type: 'boolean', nullable: true })
+	deficiente: boolean | null;
 
-  @Column({ type: 'boolean', nullable: true })
-  indigena: boolean | null;
+	@Column({ type: 'boolean', nullable: true })
+	indigena: boolean | null;
 
-  @Column({ name: 'preto_pardo', type: 'boolean', nullable: true })
-  pretoPardo: boolean | null;
+	@Column({ name: 'preto_pardo', type: 'boolean', nullable: true })
+	pretoPardo: boolean | null;
 
-  @Column({ type: 'int', nullable: true })
-  etapa: number | null;
+	@Column({ type: 'int', nullable: true })
+	etapa: number | null;
 
-  @CreateDateColumn({ nullable: false })
-  createdAt: Date;
+	@CreateDateColumn({ nullable: false })
+	createdAt: Date;
 
-  @UpdateDateColumn({ nullable: false })
-  updatedAt: Date;
+	@UpdateDateColumn({ nullable: false })
+	updatedAt: Date;
 
-  @ManyToOne(() => Candidato, (candidato) => candidato.inscricoes)
-  @JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
-  candidato: Candidato;
+	@ManyToOne(() => Candidato, (candidato) => candidato.inscricoes)
+	@JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
+	candidato: Candidato;
 
-  @ManyToOne(() => Edital, (edital) => edital.inscricoes)
-  @JoinColumn({ name: 'id_edital' })
-  edital: Edital;
+	@ManyToOne(() => Edital, (edital) => edital.inscricoes)
+	@JoinColumn({ name: 'id_edital' })
+	edital: Edital;
 
-  @ManyToOne(() => LinhaPesquisa, (lp) => lp.inscricoes, { nullable: true })
-  @JoinColumn({ name: 'id_linha_pesquisa' })
-  linhaPesquisa: LinhaPesquisa | null;
+	@ManyToOne(() => LinhaPesquisa, (lp) => lp.inscricoes, { nullable: true })
+	@JoinColumn({ name: 'id_linha_pesquisa' })
+	linhaPesquisa: LinhaPesquisa | null;
 
-  @OneToMany(() => Documento, (doc) => doc.inscricao)
-  documentos: Documento[];
+	@OneToMany(() => Documento, (doc) => doc.inscricao)
+	documentos: Documento[];
 
-  @OneToMany(() => DistribuicaoAvaliacao, (da) => da.inscricao)
-  distribuicoesAvaliacao: DistribuicaoAvaliacao[];
+	@OneToMany(() => DistribuicaoAvaliacao, (da) => da.inscricao)
+	distribuicoesAvaliacao: DistribuicaoAvaliacao[];
 
-  @OneToMany(() => PreferenciaOrientador, (po) => po.inscricao)
-  preferenciasOrientador: PreferenciaOrientador[];
+	@OneToMany(() => PreferenciaOrientador, (po) => po.inscricao)
+	preferenciasOrientador: PreferenciaOrientador[];
 
-  @OneToOne(() => AlocacaoOrientador, (ao) => ao.inscricao)
-  alocacaoOrientador: AlocacaoOrientador;
+	@OneToOne(() => AlocacaoOrientador, (ao) => ao.inscricao)
+	alocacaoOrientador: AlocacaoOrientador;
 }

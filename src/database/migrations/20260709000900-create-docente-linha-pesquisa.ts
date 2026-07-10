@@ -1,9 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
-export class CreateDocenteLinhaPesquisa20260709000900 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+export class CreateDocenteLinhaPesquisa20260709000900
+	implements MigrationInterface
+{
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.docente_linha_pesquisa (
         codigo_docente   VARCHAR NOT NULL
           REFERENCES public.docente (codigo)
@@ -17,18 +19,20 @@ export class CreateDocenteLinhaPesquisa20260709000900 implements MigrationInterf
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'docente_linha_pesquisa',
-      'update_docente_linha_pesquisa_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'docente_linha_pesquisa',
+			'update_docente_linha_pesquisa_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_docente_linha_pesquisa_updated_at ON public.docente_linha_pesquisa;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.docente_linha_pesquisa`);
-  }
+		await queryRunner.query(
+			`DROP TABLE IF EXISTS public.docente_linha_pesquisa`,
+		);
+	}
 }

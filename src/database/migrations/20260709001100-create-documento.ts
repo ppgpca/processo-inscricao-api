@@ -2,8 +2,8 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
 export class CreateDocumento20260709001100 implements MigrationInterface {
-  async up(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async up(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       CREATE TABLE public.documento (
         id_inscricao           INTEGER NOT NULL
           REFERENCES public.inscricao (id)
@@ -25,18 +25,18 @@ export class CreateDocumento20260709001100 implements MigrationInterface {
       )
     `);
 
-    await ensureUpdatedAtTrigger(
-      queryRunner,
-      'documento',
-      'update_documento_updated_at',
-    );
-  }
+		await ensureUpdatedAtTrigger(
+			queryRunner,
+			'documento',
+			'update_documento_updated_at',
+		);
+	}
 
-  async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`
+	async down(queryRunner: QueryRunner): Promise<void> {
+		await queryRunner.query(`
       DROP TRIGGER IF EXISTS update_documento_updated_at ON public.documento;
     `);
 
-    await queryRunner.query(`DROP TABLE IF EXISTS public.documento`);
-  }
+		await queryRunner.query(`DROP TABLE IF EXISTS public.documento`);
+	}
 }

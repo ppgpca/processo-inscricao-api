@@ -11,16 +11,16 @@ import { InscricaoModule } from './inscricao/inscricao.module';
 import { LinhaPesquisaModule } from './linha-pesquisa/linha-pesquisa.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot(dataSourceOptions),
-    AuthModule,
-    CandidatoModule,
-    EditalModule,
-    InscricaoModule,
-    LinhaPesquisaModule,
-    DocumentoModule,
-  ],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		TypeOrmModule.forRoot(dataSourceOptions),
+		AuthModule,
+		CandidatoModule,
+		EditalModule,
+		InscricaoModule,
+		LinhaPesquisaModule,
+		DocumentoModule,
+	],
+	controllers: [AppController],
+	providers: [AppService],
 })
 export class AppModule {}

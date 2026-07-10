@@ -16,94 +16,94 @@ import { SeedDocenteEdital20260709000013 } from './20260709000013-seed-docente-e
 import { Seeder } from './seeder.interface';
 
 const seeders: Array<new () => Seeder> = [
-  SeedDocente20260709000001,
-  SeedLinhaPesquisa20260709000002,
-  SeedEdital20260709000003,
-  SeedDocenteLinhaPesquisa20260709000004,
-  SeedTipoDocumentoEdital20260709000005,
-  SeedInscricaoSequence20260709000006,
-  SeedGrupo20260709000007,
-  SeedCategoriaPermissao20260709000008,
-  SeedPermissao20260709000009,
-  SeedUsuario20260709000010,
-  SeedGrupoPermissao20260709000011,
-  SeedUsuarioGrupo20260709000012,
-  SeedDocenteEdital20260709000013,
+	SeedDocente20260709000001,
+	SeedLinhaPesquisa20260709000002,
+	SeedEdital20260709000003,
+	SeedDocenteLinhaPesquisa20260709000004,
+	SeedTipoDocumentoEdital20260709000005,
+	SeedInscricaoSequence20260709000006,
+	SeedGrupo20260709000007,
+	SeedCategoriaPermissao20260709000008,
+	SeedPermissao20260709000009,
+	SeedUsuario20260709000010,
+	SeedGrupoPermissao20260709000011,
+	SeedUsuarioGrupo20260709000012,
+	SeedDocenteEdital20260709000013,
 ];
 
 function filterSeeders(target?: string): Array<new () => Seeder> {
-  if (!target) return seeders;
+	if (!target) return seeders;
 
-  const matched = seeders.filter((SeederClass) =>
-    SeederClass.name.toLowerCase().includes(target.toLowerCase()),
-  );
+	const matched = seeders.filter((SeederClass) =>
+		SeederClass.name.toLowerCase().includes(target.toLowerCase()),
+	);
 
-  if (matched.length === 0) {
-    console.error(`No seeder matched: "${target}"`);
-    console.error('Available seeders:');
-    seeders.forEach((s) => console.error(`  - ${s.name}`));
-    process.exit(1);
-  }
+	if (matched.length === 0) {
+		console.error(`No seeder matched: "${target}"`);
+		console.error('Available seeders:');
+		seeders.forEach((s) => console.error(`  - ${s.name}`));
+		process.exit(1);
+	}
 
-  return matched;
+	return matched;
 }
 
 async function runUp(target?: string): Promise<void> {
-  const targets = filterSeeders(target);
-  for (const SeederClass of targets) {
-    const seeder = new SeederClass();
-    console.log(`Running seeder: ${SeederClass.name}`);
-    await seeder.up(dataSource);
-    console.log(`  ✓ ${SeederClass.name}`);
-  }
+	const targets = filterSeeders(target);
+	for (const SeederClass of targets) {
+		const seeder = new SeederClass();
+		console.log(`Running seeder: ${SeederClass.name}`);
+		await seeder.up(dataSource);
+		console.log(`  ✓ ${SeederClass.name}`);
+	}
 }
 
 async function runDown(target?: string): Promise<void> {
-  const targets = [...filterSeeders(target)].reverse();
-  for (const SeederClass of targets) {
-    const seeder = new SeederClass();
-    console.log(`Reverting seeder: ${SeederClass.name}`);
-    await seeder.down(dataSource);
-    console.log(`  ✓ ${SeederClass.name}`);
-  }
+	const targets = [...filterSeeders(target)].reverse();
+	for (const SeederClass of targets) {
+		const seeder = new SeederClass();
+		console.log(`Reverting seeder: ${SeederClass.name}`);
+		await seeder.down(dataSource);
+		console.log(`  ✓ ${SeederClass.name}`);
+	}
 }
 
 async function main(): Promise<void> {
-  const direction = process.argv[2];
-  const target = process.argv[3];
+	const direction = process.argv[2];
+	const target = process.argv[3];
 
-  if (direction !== 'up' && direction !== 'down') {
-    console.error('Usage: ts-node run.ts <up|down> [seeder-name]');
-    console.error('');
-    console.error('Examples:');
-    console.error('  ts-node run.ts up');
-    console.error('  ts-node run.ts up SeedDocente');
-    console.error('  ts-node run.ts up 000001');
-    process.exit(1);
-  }
+	if (direction !== 'up' && direction !== 'down') {
+		console.error('Usage: ts-node run.ts <up|down> [seeder-name]');
+		console.error('');
+		console.error('Examples:');
+		console.error('  ts-node run.ts up');
+		console.error('  ts-node run.ts up SeedDocente');
+		console.error('  ts-node run.ts up 000001');
+		process.exit(1);
+	}
 
-  try {
-    await dataSource.initialize();
+	try {
+		await dataSource.initialize();
 
-    if (target) {
-      console.log(`Running seeder "${target}" (${direction})...`);
-    } else {
-      console.log(`Running all seeders (${direction})...`);
-    }
+		if (target) {
+			console.log(`Running seeder "${target}" (${direction})...`);
+		} else {
+			console.log(`Running all seeders (${direction})...`);
+		}
 
-    if (direction === 'up') {
-      await runUp(target);
-    } else {
-      await runDown(target);
-    }
+		if (direction === 'up') {
+			await runUp(target);
+		} else {
+			await runDown(target);
+		}
 
-    console.log('Done.');
-  } catch (err) {
-    console.error('Seeder error:', err);
-    process.exit(1);
-  } finally {
-    await dataSource.destroy();
-  }
+		console.log('Done.');
+	} catch (err) {
+		console.error('Seeder error:', err);
+		process.exit(1);
+	} finally {
+		await dataSource.destroy();
+	}
 }
 
 void main();
