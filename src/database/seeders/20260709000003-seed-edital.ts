@@ -19,7 +19,6 @@ export class SeedEdital20260709000003 implements Seeder {
 				dataInicioPreferenciaOrientador: null,
 				dataFimPreferenciaOrientador: null,
 				vagasTotal: 15,
-				status: 'rascunho',
 				urlEditalPdf:
 					'https://www.uffs.edu.br/uffs/profissional-em-computacao-aplicada/apresentacao',
 				ativo: true,

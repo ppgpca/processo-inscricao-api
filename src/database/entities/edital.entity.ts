@@ -1,11 +1,4 @@
-import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	OneToMany,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CriterioAvaliacao } from './criterio-avaliacao.entity';
 import { DocenteEdital } from './docente-edital.entity';
 import { Inscricao } from './inscricao.entity';
@@ -76,20 +69,11 @@ export class Edital {
 	@Column({ name: 'vagas_total', type: 'int', nullable: false })
 	vagasTotal: number;
 
-	@Column({ type: 'varchar', nullable: false, default: 'rascunho' })
-	status: string;
-
 	@Column({ name: 'url_edital_pdf', type: 'varchar', nullable: true })
 	urlEditalPdf: string | null;
 
 	@Column({ type: 'boolean', nullable: false })
 	ativo: boolean;
-
-	@CreateDateColumn({ nullable: false })
-	createdAt: Date;
-
-	@UpdateDateColumn({ nullable: false })
-	updatedAt: Date;
 
 	@OneToMany(() => CriterioAvaliacao, (criterio) => criterio.edital)
 	criteriosAvaliacao: CriterioAvaliacao[];

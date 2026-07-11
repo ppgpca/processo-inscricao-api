@@ -1,16 +1,9 @@
-import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	OneToMany,
-	PrimaryColumn,
-	UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
 import { AlocacaoOrientador } from './alocacao-orientador.entity';
-import { DistribuicaoAvaliacao } from './distribuicao-avaliacao.entity';
 import { DocenteEdital } from './docente-edital.entity';
 import { DocenteLinhaPesquisa } from './docente-linha-pesquisa.entity';
 import { DocentePalavraChave } from './docente-palavra-chave.entity';
+import { NotaCriterio } from './nota-criterio.entity';
 import { PreferenciaOrientador } from './preferencia-orientador.entity';
 
 @Entity({ name: 'docente', schema: 'public' })
@@ -39,20 +32,11 @@ export class Docente {
 	@Column({ type: 'boolean', nullable: false })
 	ativo: boolean;
 
-	@CreateDateColumn({ nullable: false })
-	createdAt: Date;
-
-	@UpdateDateColumn({ nullable: false })
-	updatedAt: Date;
-
 	@OneToMany(() => DocenteEdital, (de) => de.docente)
 	docentesEdital: DocenteEdital[];
 
 	@OneToMany(() => DocenteLinhaPesquisa, (dlp) => dlp.docente)
 	linhasPesquisa: DocenteLinhaPesquisa[];
-
-	@OneToMany(() => DistribuicaoAvaliacao, (da) => da.docente)
-	distribuicoesAvaliacao: DistribuicaoAvaliacao[];
 
 	@OneToMany(() => PreferenciaOrientador, (po) => po.docente)
 	preferenciasOrientador: PreferenciaOrientador[];
@@ -62,4 +46,7 @@ export class Docente {
 
 	@OneToMany(() => DocentePalavraChave, (dpk) => dpk.docente)
 	docentesPalavraChave: DocentePalavraChave[];
+
+	@OneToMany(() => NotaCriterio, (nc) => nc.docente)
+	notasCriterio: NotaCriterio[];
 }

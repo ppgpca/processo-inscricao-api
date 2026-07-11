@@ -1,12 +1,10 @@
 import {
 	Column,
-	CreateDateColumn,
 	Entity,
 	JoinColumn,
 	ManyToOne,
 	OneToMany,
 	PrimaryGeneratedColumn,
-	UpdateDateColumn,
 } from 'typeorm';
 import { Edital } from './edital.entity';
 import { NotaCriterio } from './nota-criterio.entity';
@@ -18,6 +16,9 @@ export class CriterioAvaliacao {
 
 	@Column({ name: 'id_edital', type: 'int', nullable: false })
 	idEdital: number;
+
+	@Column({ name: 'id_criterio_pai', type: 'int', nullable: true })
+	idCriterioPai: number | null;
 
 	@Column({ type: 'varchar', nullable: false })
 	nome: string;
@@ -34,15 +35,16 @@ export class CriterioAvaliacao {
 	@Column({ type: 'int', nullable: false })
 	ordem: number;
 
-	@CreateDateColumn({ nullable: false })
-	createdAt: Date;
-
-	@UpdateDateColumn({ nullable: false })
-	updatedAt: Date;
-
 	@ManyToOne(() => Edital, (edital) => edital.criteriosAvaliacao)
 	@JoinColumn({ name: 'id_edital' })
 	edital: Edital;
+
+	@ManyToOne(() => CriterioAvaliacao, (c) => c.subCriterios, { nullable: true })
+	@JoinColumn({ name: 'id_criterio_pai' })
+	criterioPai: CriterioAvaliacao | null;
+
+	@OneToMany(() => CriterioAvaliacao, (c) => c.criterioPai)
+	subCriterios: CriterioAvaliacao[];
 
 	@OneToMany(() => NotaCriterio, (nc) => nc.criterioAvaliacao)
 	notasCriterio: NotaCriterio[];

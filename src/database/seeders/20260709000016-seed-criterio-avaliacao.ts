@@ -4,30 +4,6 @@ import { Seeder } from './seeder.interface';
 
 const NUMERO_EDITAL = 'XXX/PPG PCA CH/UFFS/2026';
 
-const criterios = [
-	{
-		nome: 'Anteprojeto',
-		descricao: 'Avaliação do anteprojeto de pesquisa submetido pelo candidato.',
-		notaMaxima: 10,
-		peso: 0.3,
-		ordem: 1,
-	},
-	{
-		nome: 'Entrevista',
-		descricao: 'Avaliação do desempenho do candidato na entrevista.',
-		notaMaxima: 10,
-		peso: 0.4,
-		ordem: 2,
-	},
-	{
-		nome: 'Currículo',
-		descricao: 'Avaliação do currículo e dos documentos comprobatórios do candidato.',
-		notaMaxima: 10,
-		peso: 0.3,
-		ordem: 3,
-	},
-];
-
 export class SeedCriterioAvaliacao20260709000016 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const editalRepo = dataSource.getRepository('edital');
@@ -43,16 +19,92 @@ export class SeedCriterioAvaliacao20260709000016 implements Seeder {
 			);
 		}
 
-		await dataSource
-			.getRepository(CriterioAvaliacao)
-			.insert(criterios.map((c) => ({ ...c, idEdital: edital.id })));
+		const repo = dataSource.getRepository(CriterioAvaliacao);
+
+		const anteprojeto = await repo.save({
+			idEdital: edital.id,
+			idCriterioPai: null,
+			nome: 'Anteprojeto',
+			descricao:
+				'Avaliado, sem identificação do candidato, por dois professores do corpo docente do PPGPCA.',
+			notaMaxima: 10,
+			peso: 0.3,
+			ordem: 1,
+		});
+
+		await repo.insert([
+			{
+				idEdital: edital.id,
+				idCriterioPai: anteprojeto.id,
+				nome: 'Sistematização',
+				descricao: 'Organização do texto.',
+				notaMaxima: 3,
+				peso: 1,
+				ordem: 1,
+			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: anteprojeto.id,
+				nome: 'Síntese',
+				descricao:
+					'Clareza, objetividade, precisão, coerência, criatividade e adequação do texto aos objetivos do projeto.',
+				notaMaxima: 3,
+				peso: 1,
+				ordem: 2,
+			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: anteprojeto.id,
+				nome: 'Capacidade Argumentativa / Domínio do tema',
+				descricao: 'Conhecimento específico.',
+				notaMaxima: 3,
+				peso: 1,
+				ordem: 3,
+			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: anteprojeto.id,
+				nome: 'Qualidade da linguagem',
+				descricao: 'Gramática e domínio do vocabulário técnico.',
+				notaMaxima: 1,
+				peso: 1,
+				ordem: 4,
+			},
+		]);
+
+		await repo.insert([
+			{
+				idEdital: edital.id,
+				idCriterioPai: null,
+				nome: 'Entrevista',
+				descricao: 'Avaliação do desempenho do candidato na entrevista.',
+				notaMaxima: 10,
+				peso: 0.4,
+				ordem: 2,
+			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: null,
+				nome: 'Currículo',
+				descricao:
+					'Avaliação do currículo e dos documentos comprobatórios do candidato.',
+				notaMaxima: 10,
+				peso: 0.3,
+				ordem: 3,
+			},
+		]);
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource
-			.getRepository(CriterioAvaliacao)
+		const repo = dataSource.getRepository(CriterioAvaliacao);
+
+		// Remove sub-critérios antes dos critérios pai para respeitar a FK
+		await repo
 			.createQueryBuilder()
 			.delete()
+			.where('id_criterio_pai IS NOT NULL')
 			.execute();
+
+		await repo.createQueryBuilder().delete().execute();
 	}
 }

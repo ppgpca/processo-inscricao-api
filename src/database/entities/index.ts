@@ -2,7 +2,6 @@ export { AlocacaoOrientador } from './alocacao-orientador.entity';
 export { Candidato } from './candidato.entity';
 export { CategoriaPermissao } from './categoria-permissao.entity';
 export { CriterioAvaliacao } from './criterio-avaliacao.entity';
-export { DistribuicaoAvaliacao } from './distribuicao-avaliacao.entity';
 export { DocenteEdital } from './docente-edital.entity';
 export { DocenteLinhaPesquisa } from './docente-linha-pesquisa.entity';
 export { DocentePalavraChave } from './docente-palavra-chave.entity';

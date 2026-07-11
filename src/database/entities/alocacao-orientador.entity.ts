@@ -1,12 +1,4 @@
-import {
-	CreateDateColumn,
-	Entity,
-	JoinColumn,
-	ManyToOne,
-	OneToOne,
-	PrimaryColumn,
-	UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
 import { Docente } from './docente.entity';
 import { Inscricao } from './inscricao.entity';
 
@@ -18,11 +10,8 @@ export class AlocacaoOrientador {
 	@PrimaryColumn({ name: 'codigo_docente', type: 'varchar' })
 	codigoDocente: string;
 
-	@CreateDateColumn({ nullable: false })
-	createdAt: Date;
-
-	@UpdateDateColumn({ nullable: false })
-	updatedAt: Date;
+	@Column({ name: 'data_alocacao', type: 'timestamptz', nullable: false })
+	dataAlocacao: Date;
 
 	@OneToOne(() => Inscricao, (inscricao) => inscricao.alocacaoOrientador)
 	@JoinColumn({ name: 'id_inscricao' })

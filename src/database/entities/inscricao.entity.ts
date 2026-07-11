@@ -1,21 +1,11 @@
-import {
-	Column,
-	CreateDateColumn,
-	Entity,
-	JoinColumn,
-	ManyToOne,
-	OneToMany,
-	OneToOne,
-	PrimaryGeneratedColumn,
-	UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { AlocacaoOrientador } from './alocacao-orientador.entity';
 import { Candidato } from './candidato.entity';
-import { DistribuicaoAvaliacao } from './distribuicao-avaliacao.entity';
 import { Documento } from './documento.entity';
 import { Edital } from './edital.entity';
 import { InscricaoPalavraChave } from './inscricao-palavra-chave.entity';
 import { LinhaPesquisa } from './linha-pesquisa.entity';
+import { NotaCriterio } from './nota-criterio.entity';
 import { PreferenciaOrientador } from './preferencia-orientador.entity';
 
 @Entity({ name: 'inscricao', schema: 'public' })
@@ -29,11 +19,8 @@ export class Inscricao {
 	@Column({ name: 'id_edital', type: 'int', nullable: false })
 	idEdital: number;
 
-	@Column({ type: 'varchar', nullable: false, default: 'rascunho' })
-	status: string;
-
-	@Column({ name: 'id_linha_pesquisa', type: 'int', nullable: true })
-	idLinhaPesquisa: number | null;
+	@Column({ name: 'id_linha_pesquisa', type: 'int', nullable: false })
+	idLinhaPesquisa: number;
 
 	@Column({ type: 'boolean', nullable: false, default: true })
 	ativa: boolean;
@@ -46,9 +33,6 @@ export class Inscricao {
 
 	@Column({ name: 'dados_complementares', type: 'jsonb', nullable: true })
 	dadosComplementares: Record<string, unknown> | null;
-
-	@Column({ type: 'boolean', nullable: true, default: null })
-	deferida: boolean | null;
 
 	@Column({ name: 'nota_final', type: 'decimal', nullable: true })
 	notaFinal: number | null;
@@ -68,12 +52,6 @@ export class Inscricao {
 	@Column({ type: 'int', nullable: true })
 	etapa: number | null;
 
-	@CreateDateColumn({ nullable: false })
-	createdAt: Date;
-
-	@UpdateDateColumn({ nullable: false })
-	updatedAt: Date;
-
 	@ManyToOne(() => Candidato, (candidato) => candidato.inscricoes)
 	@JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
 	candidato: Candidato;
@@ -82,15 +60,12 @@ export class Inscricao {
 	@JoinColumn({ name: 'id_edital' })
 	edital: Edital;
 
-	@ManyToOne(() => LinhaPesquisa, (lp) => lp.inscricoes, { nullable: true })
+	@ManyToOne(() => LinhaPesquisa, (lp) => lp.inscricoes)
 	@JoinColumn({ name: 'id_linha_pesquisa' })
-	linhaPesquisa: LinhaPesquisa | null;
+	linhaPesquisa: LinhaPesquisa;
 
 	@OneToMany(() => Documento, (doc) => doc.inscricao)
 	documentos: Documento[];
-
-	@OneToMany(() => DistribuicaoAvaliacao, (da) => da.inscricao)
-	distribuicoesAvaliacao: DistribuicaoAvaliacao[];
 
 	@OneToMany(() => PreferenciaOrientador, (po) => po.inscricao)
 	preferenciasOrientador: PreferenciaOrientador[];
@@ -100,4 +75,7 @@ export class Inscricao {
 
 	@OneToMany(() => InscricaoPalavraChave, (ipk) => ipk.inscricao)
 	inscricoesPalavraChave: InscricaoPalavraChave[];
+
+	@OneToMany(() => NotaCriterio, (nc) => nc.inscricao)
+	notasCriterio: NotaCriterio[];
 }
