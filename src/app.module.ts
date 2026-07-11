@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CandidatoModule } from './candidato/candidato.module';
 import { dataSourceOptions } from './database/data-source';
+import { DocenteModule } from './docente/docente.module';
 import { DocumentoModule } from './documento/documento.module';
 import { EditalModule } from './edital/edital.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
@@ -16,6 +17,7 @@ import { PalavraChaveModule } from './palavra-chave/palavra-chave.module';
 		TypeOrmModule.forRoot(dataSourceOptions),
 		AuthModule,
 		CandidatoModule,
+		DocenteModule,
 		EditalModule,
 		InscricaoModule,
 		LinhaPesquisaModule,

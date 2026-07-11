@@ -56,8 +56,7 @@ export class InscricaoRepository {
 		const inscricao = this.repo.create({
 			cpf: dados.cpf,
 			idEdital: dados.idEdital,
-			status: 'rascunho',
-			idLinhaPesquisa: dados.idLinhaPesquisa ?? null,
+			idLinhaPesquisa: dados.idLinhaPesquisa ?? undefined,
 			etapa: dados.etapa ?? 1,
 			ativa: true,
 			dadosComplementares: dados.dadosComplementares ?? null,
@@ -111,7 +110,7 @@ export class InscricaoRepository {
 	async obterMaisRecentePorCpf(cpf: string): Promise<Inscricao | null> {
 		return this.repo.findOne({
 			where: { cpf },
-			order: { createdAt: 'DESC' },
+			order: { id: 'DESC' },
 		});
 	}
 
