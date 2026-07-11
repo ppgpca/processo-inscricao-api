@@ -42,6 +42,21 @@ const usuarios: DeepPartial<Usuario>[] = [
 		nome: 'Jose Mario Vicensi Grzybowski',
 		email: 'jose.grzybowski@uffs.edu.br',
 	},
+	{
+		id: 'tiago.zonta',
+		nome: 'Tiago Zonta',
+		email: 'tiago.zonta',
+	},
+	{
+		id: 'fernando.bevilacqua',
+		nome: 'Fernando Bevilacqua',
+		email: 'fernando.bevilacqua',
+	},
+	{
+		id: 'graziela.tonin',
+		nome: 'Graziela Tonin',
+		email: 'graziela.tonin',
+	},
 ];
 
 export class SeedUsuario20260709000010 implements Seeder {

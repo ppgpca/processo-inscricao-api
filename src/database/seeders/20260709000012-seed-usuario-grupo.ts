@@ -13,6 +13,9 @@ const docentesIds = [
 	'lcaimi',
 	'marco.spohn',
 	'jose.grzybowski',
+	'tiago.zonta',
+	'fernando.bevilacqua',
+	'graziela.tonin',
 ];
 
 export class SeedUsuarioGrupo20260709000012 implements Seeder {
