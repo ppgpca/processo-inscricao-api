@@ -1,4 +1,14 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToMany,
+	OneToOne,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn,
+} from 'typeorm';
 import { AlocacaoOrientador } from './alocacao-orientador.entity';
 import { Candidato } from './candidato.entity';
 import { Documento } from './documento.entity';
@@ -51,6 +61,12 @@ export class Inscricao {
 
 	@Column({ type: 'int', nullable: true })
 	etapa: number | null;
+
+	@CreateDateColumn({ nullable: false })
+	createdAt: Date;
+
+	@UpdateDateColumn({ nullable: false })
+	updatedAt: Date;
 
 	@ManyToOne(() => Candidato, (candidato) => candidato.inscricoes)
 	@JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })

@@ -1,4 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	OneToOne,
+	PrimaryColumn,
+	UpdateDateColumn,
+} from 'typeorm';
 import { Docente } from './docente.entity';
 import { Inscricao } from './inscricao.entity';
 
@@ -12,6 +21,12 @@ export class AlocacaoOrientador {
 
 	@Column({ name: 'data_alocacao', type: 'timestamptz', nullable: false })
 	dataAlocacao: Date;
+
+	@CreateDateColumn({ nullable: false })
+	createdAt: Date;
+
+	@UpdateDateColumn({ nullable: false })
+	updatedAt: Date;
 
 	@OneToOne(() => Inscricao, (inscricao) => inscricao.alocacaoOrientador)
 	@JoinColumn({ name: 'id_inscricao' })

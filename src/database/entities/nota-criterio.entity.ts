@@ -1,4 +1,12 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryColumn,
+	UpdateDateColumn,
+} from 'typeorm';
 import { CriterioAvaliacao } from './criterio-avaliacao.entity';
 import { Docente } from './docente.entity';
 import { Inscricao } from './inscricao.entity';
@@ -19,6 +27,12 @@ export class NotaCriterio {
 
 	@Column({ type: 'decimal', nullable: false })
 	nota: number;
+
+	@CreateDateColumn({ nullable: false })
+	createdAt: Date;
+
+	@UpdateDateColumn({ nullable: false })
+	updatedAt: Date;
 
 	@ManyToOne(() => Inscricao, (inscricao) => inscricao.notasCriterio)
 	@JoinColumn({ name: 'id_inscricao' })

@@ -1,10 +1,12 @@
 import {
 	Column,
+	CreateDateColumn,
 	Entity,
 	JoinColumn,
 	ManyToOne,
 	OneToMany,
 	PrimaryGeneratedColumn,
+	UpdateDateColumn,
 } from 'typeorm';
 import { Edital } from './edital.entity';
 import { NotaCriterio } from './nota-criterio.entity';
@@ -34,6 +36,12 @@ export class CriterioAvaliacao {
 
 	@Column({ type: 'int', nullable: false })
 	ordem: number;
+
+	@CreateDateColumn({ nullable: false })
+	createdAt: Date;
+
+	@UpdateDateColumn({ nullable: false })
+	updatedAt: Date;
 
 	@ManyToOne(() => Edital, (edital) => edital.criteriosAvaliacao)
 	@JoinColumn({ name: 'id_edital' })
