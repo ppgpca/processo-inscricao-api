@@ -72,16 +72,58 @@ export class SeedCriterioAvaliacao20260709000016 implements Seeder {
 			},
 		]);
 
+		const entrevista = await repo.save({
+			idEdital: edital.id,
+			idCriterioPai: null,
+			nome: 'Entrevista',
+			descricao: 'Avaliação do desempenho do candidato na entrevista.',
+			notaMaxima: 10,
+			peso: 0.4,
+			ordem: 2,
+		});
+
 		await repo.insert([
 			{
 				idEdital: edital.id,
-				idCriterioPai: null,
-				nome: 'Entrevista',
-				descricao: 'Avaliação do desempenho do candidato na entrevista.',
-				notaMaxima: 10,
-				peso: 0.4,
+				idCriterioPai: entrevista.id,
+				nome: 'Motivação para participar do programa',
+				descricao: 'Motivação para participar do programa.',
+				notaMaxima: 1,
+				peso: 1,
+				ordem: 1,
+			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: entrevista.id,
+				nome: 'Clareza da comunicação, linguagem e capacidade de resposta',
+				descricao:
+					'Clareza da comunicação, linguagem e capacidade de resposta.',
+				notaMaxima: 3,
+				peso: 1,
 				ordem: 2,
 			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: entrevista.id,
+				nome: 'Sustentação da proposta e conhecimento de temas correlatos',
+				descricao:
+					'Sustentação da proposta e conhecimento de temas correlatos.',
+				notaMaxima: 3,
+				peso: 1,
+				ordem: 3,
+			},
+			{
+				idEdital: edital.id,
+				idCriterioPai: entrevista.id,
+				nome: 'Perfil e disponibilidade do candidato para a vaga',
+				descricao: 'Perfil e disponibilidade do candidato para a vaga.',
+				notaMaxima: 3,
+				peso: 1,
+				ordem: 4,
+			},
+		]);
+
+		await repo.insert([
 			{
 				idEdital: edital.id,
 				idCriterioPai: null,
