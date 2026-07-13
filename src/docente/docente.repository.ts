@@ -80,4 +80,25 @@ export class DocenteRepository {
 			},
 		});
 	}
+
+	async obterNotasPorInscricaoECriterio(
+		codigoDocente: string,
+		idInscricao: number,
+		idCriterio: number,
+	): Promise<NotaCriterio[]> {
+		const subCriterios = await this.criterioRepo.find({
+			where: { idCriterioPai: idCriterio },
+			select: { id: true },
+		});
+		const idsCriterio = [idCriterio, ...subCriterios.map((c) => c.id)];
+
+		return this.notaCriterioRepo
+			.createQueryBuilder('nc')
+			.where('nc.codigoDocente = :codigoDocente', { codigoDocente })
+			.andWhere('nc.idInscricao = :idInscricao', { idInscricao })
+			.andWhere('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
+				idsCriterio,
+			})
+			.getMany();
+	}
 }

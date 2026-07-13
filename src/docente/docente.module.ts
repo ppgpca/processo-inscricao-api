@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from '../auth/auth.module';
 import { CriterioAvaliacao } from '../database/entities/criterio-avaliacao.entity';
 import { DocenteEdital } from '../database/entities/docente-edital.entity';
 import { NotaCriterio } from '../database/entities/nota-criterio.entity';
@@ -10,6 +11,7 @@ import { DocenteService } from './docente.service';
 @Module({
 	imports: [
 		TypeOrmModule.forFeature([DocenteEdital, CriterioAvaliacao, NotaCriterio]),
+		AuthModule,
 	],
 	controllers: [DocenteController],
 	providers: [DocenteService, DocenteRepository],

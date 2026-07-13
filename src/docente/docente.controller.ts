@@ -37,7 +37,11 @@ export class DocenteController {
 		@Request() req: { user: { id: string } },
 		@Body() dto: SalvarNotasDto,
 	) {
-		return this.docenteService.salvarNotas(req.user.id, dto.notas);
+		return this.docenteService.salvarNotas(
+			req.user.id,
+			dto.notas,
+			dto.codigoDocente,
+		);
 	}
 
 	@Get('me/subcriterios')
@@ -55,6 +59,21 @@ export class DocenteController {
 		return this.docenteService.obterCandidatosParaAvaliar(
 			req.user.id,
 			idCriterio,
+		);
+	}
+
+	@Get('me/notas')
+	obterNotasPorInscricaoECriterio(
+		@Request() req: { user: { id: string } },
+		@Query('idInscricao', ParseIntPipe) idInscricao: number,
+		@Query('idCriterio', ParseIntPipe) idCriterio: number,
+		@Query('codigoDocente') codigoDocente?: string,
+	) {
+		return this.docenteService.obterNotasPorInscricaoECriterio(
+			req.user.id,
+			idInscricao,
+			idCriterio,
+			codigoDocente,
 		);
 	}
 }
