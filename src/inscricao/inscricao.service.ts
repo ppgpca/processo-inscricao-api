@@ -49,6 +49,18 @@ export class InscricaoService {
 		if (!inscricao) {
 			throw new NotFoundException(`Inscrição ${id} não encontrada.`);
 		}
+
+		// Ao finalizar a inscrição (etapa 5), mover automaticamente para HOMOLOGACAO
+		if (dto.etapa === 5 && dto.idEtapaAtual === undefined) {
+			const etapaHomologacao =
+				await this.inscricaoRepository.obterEtapaHomologacao(
+					inscricao.idEdital,
+				);
+			if (etapaHomologacao) {
+				dto = { ...dto, idEtapaAtual: etapaHomologacao.id };
+			}
+		}
+
 		return this.inscricaoRepository.atualizar(inscricao, dto);
 	}
 

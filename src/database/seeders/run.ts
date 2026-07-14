@@ -16,6 +16,7 @@ import { SeedDocenteEdital20260709000013 } from './20260709000013-seed-docente-e
 import { SeedPalavraChave20260709000014 } from './20260709000014-seed-palavra-chave';
 import { SeedDocentePalavraChave20260709000015 } from './20260709000015-seed-docente-palavra-chave';
 import { SeedCriterioAvaliacao20260709000016 } from './20260709000016-seed-criterio-avaliacao';
+import { SeedEtapaEdital20260713000017 } from './20260713000017-seed-etapa-edital';
 import { Seeder } from './seeder.interface';
 
 const HISTORY_TABLE = 'public.seed_history';
@@ -37,6 +38,7 @@ const seeders: Array<new () => Seeder> = [
 	SeedPalavraChave20260709000014,
 	SeedDocentePalavraChave20260709000015,
 	SeedCriterioAvaliacao20260709000016,
+	SeedEtapaEdital20260713000017,
 ];
 
 function filterSeeders(target?: string): Array<new () => Seeder> {

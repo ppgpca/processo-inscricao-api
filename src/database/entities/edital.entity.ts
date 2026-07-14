@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { CriterioAvaliacao } from './criterio-avaliacao.entity';
 import { DocenteEdital } from './docente-edital.entity';
+import { EtapaEdital } from './etapa-edital.entity';
 import { Inscricao } from './inscricao.entity';
 import { TipoDocumentoEdital } from './tipo-documento-edital.entity';
 
@@ -99,4 +100,7 @@ export class Edital {
 
 	@OneToMany(() => DocenteEdital, (docenteEdital) => docenteEdital.edital)
 	docentesEdital: DocenteEdital[];
+
+	@OneToMany(() => EtapaEdital, (etapa) => etapa.edital)
+	etapas: EtapaEdital[];
 }

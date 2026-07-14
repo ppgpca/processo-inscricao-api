@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { CriterioAvaliacao } from '../database/entities/criterio-avaliacao.entity';
+import {
+	EtapaEdital,
+	TipoEtapa,
+} from '../database/entities/etapa-edital.entity';
 import { InscricaoPalavraChave } from '../database/entities/inscricao-palavra-chave.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
 import { NotaCriterio } from '../database/entities/nota-criterio.entity';
@@ -36,7 +40,18 @@ export class InscricaoRepository {
 		private readonly criterioRepo: Repository<CriterioAvaliacao>,
 		@InjectRepository(NotaCriterio)
 		private readonly notaCriterioRepo: Repository<NotaCriterio>,
+		@InjectRepository(EtapaEdital)
+		private readonly etapaEditalRepo: Repository<EtapaEdital>,
 	) {}
+
+	async obterEtapaHomologacao(
+		idEdital: number,
+	): Promise<EtapaEdital | null> {
+		return this.etapaEditalRepo.findOne({
+			where: { idEdital, tipo: TipoEtapa.HOMOLOGACAO },
+			order: { ordem: 'ASC' },
+		});
+	}
 
 	async obterPorCpfEdital(
 		cpf: string,

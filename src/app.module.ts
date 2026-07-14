@@ -8,6 +8,7 @@ import { dataSourceOptions } from './database/data-source';
 import { DocenteModule } from './docente/docente.module';
 import { DocumentoModule } from './documento/documento.module';
 import { EditalModule } from './edital/edital.module';
+import { EtapaEditalModule } from './etapa-edital/etapa-edital.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
 import { LinhaPesquisaModule } from './linha-pesquisa/linha-pesquisa.module';
 import { PalavraChaveModule } from './palavra-chave/palavra-chave.module';
@@ -19,6 +20,7 @@ import { PalavraChaveModule } from './palavra-chave/palavra-chave.module';
 		CandidatoModule,
 		DocenteModule,
 		EditalModule,
+		EtapaEditalModule,
 		InscricaoModule,
 		LinhaPesquisaModule,
 		DocumentoModule,

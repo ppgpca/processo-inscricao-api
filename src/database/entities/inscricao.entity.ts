@@ -13,6 +13,7 @@ import { AlocacaoOrientador } from './alocacao-orientador.entity';
 import { Candidato } from './candidato.entity';
 import { Documento } from './documento.entity';
 import { Edital } from './edital.entity';
+import { EtapaEdital } from './etapa-edital.entity';
 import { InscricaoPalavraChave } from './inscricao-palavra-chave.entity';
 import { LinhaPesquisa } from './linha-pesquisa.entity';
 import { NotaCriterio } from './nota-criterio.entity';
@@ -62,6 +63,12 @@ export class Inscricao {
 	@Column({ type: 'int', nullable: true })
 	etapa: number | null;
 
+	@Column({ name: 'id_etapa_atual', type: 'int', nullable: true })
+	idEtapaAtual: number | null;
+
+	@Column({ type: 'boolean', nullable: true, default: null })
+	deferida: boolean | null;
+
 	@CreateDateColumn({ nullable: false })
 	createdAt: Date;
 
@@ -79,6 +86,10 @@ export class Inscricao {
 	@ManyToOne(() => LinhaPesquisa, (lp) => lp.inscricoes)
 	@JoinColumn({ name: 'id_linha_pesquisa' })
 	linhaPesquisa: LinhaPesquisa;
+
+	@ManyToOne(() => EtapaEdital, { nullable: true, eager: false })
+	@JoinColumn({ name: 'id_etapa_atual' })
+	etapaAtual: EtapaEdital | null;
 
 	@OneToMany(() => Documento, (doc) => doc.inscricao)
 	documentos: Documento[];

@@ -4,6 +4,7 @@ export { CategoriaPermissao } from './categoria-permissao.entity';
 export { CriterioAvaliacao } from './criterio-avaliacao.entity';
 export { DocenteEdital } from './docente-edital.entity';
 export { DocenteLinhaPesquisa } from './docente-linha-pesquisa.entity';
+export { EtapaEdital, TipoEtapa } from './etapa-edital.entity';
 export { DocentePalavraChave } from './docente-palavra-chave.entity';
 export { Docente } from './docente.entity';
 export { Documento } from './documento.entity';

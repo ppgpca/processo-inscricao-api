@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CriterioAvaliacao } from '../database/entities/criterio-avaliacao.entity';
+import { EtapaEdital } from '../database/entities/etapa-edital.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
 import { InscricaoPalavraChave } from '../database/entities/inscricao-palavra-chave.entity';
 import { NotaCriterio } from '../database/entities/nota-criterio.entity';
@@ -15,6 +16,7 @@ import { InscricaoService } from './inscricao.service';
 			InscricaoPalavraChave,
 			CriterioAvaliacao,
 			NotaCriterio,
+			EtapaEdital,
 		]),
 	],
 	controllers: [InscricaoController],

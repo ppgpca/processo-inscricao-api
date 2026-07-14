@@ -28,6 +28,7 @@ export class EditalRepository {
 				dataFimInscricao: MoreThanOrEqual(now),
 			},
 			order: { id: 'DESC' },
+			relations: { etapas: true },
 		});
 	}
 
@@ -40,7 +41,11 @@ export class EditalRepository {
 	}
 
 	async obterPorId(id: number): Promise<Edital | null> {
-		return this.repo.findOne({ where: { id } });
+		return this.repo.findOne({
+			where: { id },
+			relations: { etapas: true },
+			order: { etapas: { ordem: 'ASC' } },
+		});
 	}
 
 	async obterComTiposDocumento(id: number): Promise<Edital | null> {
