@@ -32,25 +32,25 @@ const ETAPAS: Omit<EtapaEdital, 'id' | 'idEdital' | 'edital' | 'createdAt' | 'up
 		dataFim: new Date('2026-10-21T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.ANALISE_CURRICULO,
-		nome: 'Análise de currículo',
-		ordem: 3,
-		dataInicio: new Date('2026-10-22T00:00:00'),
-		dataFim: new Date('2026-11-11T23:59:59'),
-	},
-	{
 		tipo: TipoEtapa.ANTEPROJETO,
 		nome: 'Avaliação de anteprojeto',
-		ordem: 4,
+		ordem: 3,
 		dataInicio: new Date('2026-11-12T00:00:00'),
 		dataFim: new Date('2026-11-25T23:59:59'),
 	},
 	{
 		tipo: TipoEtapa.ENTREVISTA,
 		nome: 'Entrevistas',
-		ordem: 5,
+		ordem: 4,
 		dataInicio: new Date('2026-11-26T00:00:00'),
 		dataFim: new Date('2026-12-03T23:59:59'),
+	},
+	{
+		tipo: TipoEtapa.ANALISE_CURRICULO,
+		nome: 'Análise de currículo',
+		ordem: 5,
+		dataInicio: new Date('2026-10-22T00:00:00'),
+		dataFim: new Date('2026-11-11T23:59:59'),
 	},
 	{
 		tipo: TipoEtapa.RESULTADO_PARCIAL,
@@ -75,7 +75,7 @@ const ETAPAS: Omit<EtapaEdital, 'id' | 'idEdital' | 'edital' | 'createdAt' | 'up
 	},
 ];
 
-export class SeedEtapaEdital20260713000017 implements Seeder {
+export class SeedEtapaEdital20260709000004 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const editalRepo = dataSource.getRepository('edital');
 		const edital = await editalRepo

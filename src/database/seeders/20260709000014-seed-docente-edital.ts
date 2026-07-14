@@ -4,7 +4,7 @@ import { DocenteEdital } from '../entities/docente-edital.entity';
 import { Edital } from '../entities/edital.entity';
 import { Seeder } from './seeder.interface';
 
-export class SeedDocenteEdital20260709000013 implements Seeder {
+export class SeedDocenteEdital20260709000014 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const [edital] = await dataSource.getRepository(Edital).find({
 			order: { id: 'DESC' },

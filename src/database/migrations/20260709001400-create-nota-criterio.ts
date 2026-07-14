@@ -9,26 +9,19 @@ export class CreateNotaCriterio20260709001400 implements MigrationInterface {
         id_criterio_avaliacao INTEGER NOT NULL
           REFERENCES public.criterio_avaliacao (id)
           ON UPDATE CASCADE ON DELETE CASCADE,
-        id_inscricao          INTEGER NOT NULL,
-        codigo_docente        VARCHAR NOT NULL,
+        id_inscricao          INTEGER NOT NULL
+          REFERENCES public.inscricao (id)
+          ON UPDATE CASCADE ON DELETE CASCADE,
+        codigo_docente        VARCHAR NOT NULL
+          REFERENCES public.docente (codigo)
+          ON UPDATE CASCADE ON DELETE RESTRICT,
         nota                  DECIMAL,
+        comentario            TEXT,
         "createdAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT nota_criterio_pkey PRIMARY KEY (id_criterio_avaliacao, id_inscricao, codigo_docente)
       )
     `);
-
-		await ensureForeignKey(
-			queryRunner,
-			'fk_nota_criterio_to_distribuicao_avaliacao',
-			`
-      ALTER TABLE public.nota_criterio
-      ADD CONSTRAINT fk_nota_criterio_to_distribuicao_avaliacao
-      FOREIGN KEY (id_inscricao, codigo_docente)
-      REFERENCES public.distribuicao_avaliacao (id_inscricao, codigo_docente)
-      ON UPDATE CASCADE ON DELETE CASCADE
-      `,
-		);
 
 		await ensureUpdatedAtTrigger(
 			queryRunner,

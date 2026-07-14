@@ -3,20 +3,20 @@ import dataSource from '../data-source';
 import { SeedDocente20260709000001 } from './20260709000001-seed-docente';
 import { SeedLinhaPesquisa20260709000002 } from './20260709000002-seed-linha-pesquisa';
 import { SeedEdital20260709000003 } from './20260709000003-seed-edital';
-import { SeedDocenteLinhaPesquisa20260709000004 } from './20260709000004-seed-docente-linha-pesquisa';
-import { SeedTipoDocumentoEdital20260709000005 } from './20260709000005-seed-tipo-documento-edital';
-import { SeedInscricaoSequence20260709000006 } from './20260709000006-seed-inscricao-sequence';
-import { SeedGrupo20260709000007 } from './20260709000007-seed-grupo';
-import { SeedCategoriaPermissao20260709000008 } from './20260709000008-seed-categoria-permissao';
-import { SeedPermissao20260709000009 } from './20260709000009-seed-permissao';
-import { SeedUsuario20260709000010 } from './20260709000010-seed-usuario';
-import { SeedGrupoPermissao20260709000011 } from './20260709000011-seed-grupo-permissao';
-import { SeedUsuarioGrupo20260709000012 } from './20260709000012-seed-usuario-grupo';
-import { SeedDocenteEdital20260709000013 } from './20260709000013-seed-docente-edital';
-import { SeedPalavraChave20260709000014 } from './20260709000014-seed-palavra-chave';
-import { SeedDocentePalavraChave20260709000015 } from './20260709000015-seed-docente-palavra-chave';
-import { SeedCriterioAvaliacao20260709000016 } from './20260709000016-seed-criterio-avaliacao';
-import { SeedEtapaEdital20260713000017 } from './20260713000017-seed-etapa-edital';
+import { SeedEtapaEdital20260709000004 } from './20260709000004-seed-etapa-edital';
+import { SeedDocenteLinhaPesquisa20260709000005 } from './20260709000005-seed-docente-linha-pesquisa';
+import { SeedTipoDocumentoEdital20260709000006 } from './20260709000006-seed-tipo-documento-edital';
+import { SeedInscricaoSequence20260709000007 } from './20260709000007-seed-inscricao-sequence';
+import { SeedGrupo20260709000008 } from './20260709000008-seed-grupo';
+import { SeedCategoriaPermissao20260709000009 } from './20260709000009-seed-categoria-permissao';
+import { SeedPermissao20260709000010 } from './20260709000010-seed-permissao';
+import { SeedUsuario20260709000011 } from './20260709000011-seed-usuario';
+import { SeedGrupoPermissao20260709000012 } from './20260709000012-seed-grupo-permissao';
+import { SeedUsuarioGrupo20260709000013 } from './20260709000013-seed-usuario-grupo';
+import { SeedDocenteEdital20260709000014 } from './20260709000014-seed-docente-edital';
+import { SeedPalavraChave20260709000015 } from './20260709000015-seed-palavra-chave';
+import { SeedDocentePalavraChave20260709000016 } from './20260709000016-seed-docente-palavra-chave';
+import { SeedCriterioAvaliacao20260709000017 } from './20260709000017-seed-criterio-avaliacao';
 import { Seeder } from './seeder.interface';
 
 const HISTORY_TABLE = 'public.seed_history';
@@ -25,20 +25,20 @@ const seeders: Array<new () => Seeder> = [
 	SeedDocente20260709000001,
 	SeedLinhaPesquisa20260709000002,
 	SeedEdital20260709000003,
-	SeedDocenteLinhaPesquisa20260709000004,
-	SeedTipoDocumentoEdital20260709000005,
-	SeedInscricaoSequence20260709000006,
-	SeedGrupo20260709000007,
-	SeedCategoriaPermissao20260709000008,
-	SeedPermissao20260709000009,
-	SeedUsuario20260709000010,
-	SeedGrupoPermissao20260709000011,
-	SeedUsuarioGrupo20260709000012,
-	SeedDocenteEdital20260709000013,
-	SeedPalavraChave20260709000014,
-	SeedDocentePalavraChave20260709000015,
-	SeedCriterioAvaliacao20260709000016,
-	SeedEtapaEdital20260713000017,
+	SeedEtapaEdital20260709000004,
+	SeedDocenteLinhaPesquisa20260709000005,
+	SeedTipoDocumentoEdital20260709000006,
+	SeedInscricaoSequence20260709000007,
+	SeedGrupo20260709000008,
+	SeedCategoriaPermissao20260709000009,
+	SeedPermissao20260709000010,
+	SeedUsuario20260709000011,
+	SeedGrupoPermissao20260709000012,
+	SeedUsuarioGrupo20260709000013,
+	SeedDocenteEdital20260709000014,
+	SeedPalavraChave20260709000015,
+	SeedDocentePalavraChave20260709000016,
+	SeedCriterioAvaliacao20260709000017,
 ];
 
 function filterSeeders(target?: string): Array<new () => Seeder> {

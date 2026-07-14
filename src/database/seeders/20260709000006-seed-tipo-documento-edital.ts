@@ -55,7 +55,7 @@ const tiposDocumento = [
 	},
 ];
 
-export class SeedTipoDocumentoEdital20260709000005 implements Seeder {
+export class SeedTipoDocumentoEdital20260709000006 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const editalRepo = dataSource.getRepository('edital');
 		const edital = await editalRepo

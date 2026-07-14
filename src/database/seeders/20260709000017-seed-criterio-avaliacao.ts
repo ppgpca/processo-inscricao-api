@@ -4,7 +4,7 @@ import { Seeder } from './seeder.interface';
 
 const NUMERO_EDITAL = 'XXX/PPG PCA CH/UFFS/2026';
 
-export class SeedCriterioAvaliacao20260709000016 implements Seeder {
+export class SeedCriterioAvaliacao20260709000017 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const editalRepo = dataSource.getRepository('edital');
 		const edital = await editalRepo

@@ -19,7 +19,7 @@ const palavras = [
 	'Teste de Software',
 ];
 
-export class SeedPalavraChave20260709000014 implements Seeder {
+export class SeedPalavraChave20260709000015 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		await dataSource
 			.getRepository(PalavraChave)

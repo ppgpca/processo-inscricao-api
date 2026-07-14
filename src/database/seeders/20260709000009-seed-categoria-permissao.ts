@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 import { CategoriaPermissao } from '../entities/categoria-permissao.entity';
 import { Seeder } from './seeder.interface';
 
-export class SeedCategoriaPermissao20260709000008 implements Seeder {
+export class SeedCategoriaPermissao20260709000009 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		await dataSource.getRepository(CategoriaPermissao).insert([
 			{

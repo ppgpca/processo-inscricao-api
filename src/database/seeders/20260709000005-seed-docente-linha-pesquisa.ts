@@ -19,7 +19,7 @@ const vinculos: DeepPartial<DocenteLinhaPesquisa>[] = [
 	{ codigoDocente: 'tiago.zonta', idLinhaPesquisa: 1 },
 ];
 
-export class SeedDocenteLinhaPesquisa20260709000004 implements Seeder {
+export class SeedDocenteLinhaPesquisa20260709000005 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		await dataSource.manager.save(DocenteLinhaPesquisa, vinculos);
 	}

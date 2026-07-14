@@ -11,6 +11,9 @@ export class CreateCriterioAvaliacao20260709000500
         id_edital   INTEGER NOT NULL
           REFERENCES public.edital (id)
           ON UPDATE CASCADE ON DELETE CASCADE,
+        id_criterio_pai INTEGER DEFAULT NULL
+          REFERENCES public.criterio_avaliacao (id)
+          ON UPDATE CASCADE ON DELETE SET NULL,
         nome        VARCHAR NOT NULL,
         descricao   TEXT,
         nota_maxima DECIMAL NOT NULL,

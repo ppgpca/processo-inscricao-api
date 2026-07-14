@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { CriterioAvaliacao } from './criterio-avaliacao.entity';
 import { DocenteEdital } from './docente-edital.entity';
-import { EtapaEdital } from './etapa-edital.entity';
+import { EtapaEdital, TipoEtapa } from './etapa-edital.entity';
 import { Inscricao } from './inscricao.entity';
 import { TipoDocumentoEdital } from './tipo-documento-edital.entity';
 
@@ -29,53 +29,18 @@ export class Edital {
 	@Column({ type: 'int', nullable: false })
 	ano: number;
 
-	@Column({
-		name: 'data_inicio_inscricao',
-		type: 'timestamptz',
-		nullable: false,
-	})
-	dataInicioInscricao: Date;
-
-	@Column({
-		name: 'data_fim_inscricao',
-		type: 'timestamptz',
-		nullable: false,
-	})
-	dataFimInscricao: Date;
-
-	@Column({
-		name: 'data_inicio_avaliacao',
-		type: 'timestamptz',
-		nullable: true,
-	})
-	dataInicioAvaliacao: Date | null;
-
-	@Column({ name: 'data_fim_avaliacao', type: 'timestamptz', nullable: true })
-	dataFimAvaliacao: Date | null;
-
-	@Column({
-		name: 'data_divulgacao_resultado',
-		type: 'timestamptz',
-		nullable: true,
-	})
-	dataDivulgacaoResultado: Date | null;
-
-	@Column({
-		name: 'data_inicio_preferencia_orientador',
-		type: 'timestamptz',
-		nullable: true,
-	})
-	dataInicioPreferenciaOrientador: Date | null;
-
-	@Column({
-		name: 'data_fim_preferencia_orientador',
-		type: 'timestamptz',
-		nullable: true,
-	})
-	dataFimPreferenciaOrientador: Date | null;
-
 	@Column({ name: 'vagas_total', type: 'int', nullable: false })
 	vagasTotal: number;
+
+	/** Derivado da etapa INSCRICAO: início da etapa de inscrições. */
+	get dataInicioInscricao(): Date | null {
+		return this.etapas?.find((e) => e.tipo === TipoEtapa.INSCRICAO)?.dataInicio ?? null;
+	}
+
+	/** Derivado da etapa INSCRICAO: fim da etapa de inscrições. */
+	get dataFimInscricao(): Date | null {
+		return this.etapas?.find((e) => e.tipo === TipoEtapa.INSCRICAO)?.dataFim ?? null;
+	}
 
 	@Column({ name: 'url_edital_pdf', type: 'varchar', nullable: true })
 	urlEditalPdf: string | null;

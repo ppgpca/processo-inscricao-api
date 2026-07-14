@@ -59,7 +59,7 @@ const usuarios: DeepPartial<Usuario>[] = [
 	},
 ];
 
-export class SeedUsuario20260709000010 implements Seeder {
+export class SeedUsuario20260709000011 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		await dataSource.manager.save(Usuario, usuarios);
 	}

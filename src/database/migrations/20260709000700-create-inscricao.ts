@@ -22,13 +22,16 @@ export class CreateInscricao20260709000700 implements MigrationInterface {
         area_concentracao   VARCHAR,
         projeto_pesquisa    TEXT,
         dados_complementares JSONB,
-        data_envio          TIMESTAMPTZ,
+        deferida            BOOLEAN DEFAULT NULL,
         nota_final          DECIMAL,
         posicao_ranking     INTEGER,
         deficiente          BOOLEAN,
         indigena            BOOLEAN,
         preto_pardo         BOOLEAN,
         etapa               INTEGER,
+        id_etapa_atual      INTEGER
+          REFERENCES public.etapa_edital (id)
+          ON UPDATE CASCADE ON DELETE SET NULL,
         "createdAt"         TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"         TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT inscricao_pkey PRIMARY KEY (id)

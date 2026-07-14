@@ -13,6 +13,7 @@ export class CreateAlocacaoOrientador20260709001200
         codigo_docente VARCHAR NOT NULL
           REFERENCES public.docente (codigo)
           ON UPDATE CASCADE ON DELETE RESTRICT,
+        data_alocacao  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "createdAt"    TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"    TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT alocacao_orientador_pkey PRIMARY KEY (id_inscricao, codigo_docente)

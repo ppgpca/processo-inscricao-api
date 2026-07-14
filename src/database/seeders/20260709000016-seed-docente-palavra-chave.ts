@@ -24,7 +24,7 @@ const vinculos: Record<string, string[]> = {
 	'tiago.zonta': ['Inteligência Artificial', 'Machine Learning'],
 };
 
-export class SeedDocentePalavraChave20260709000015 implements Seeder {
+export class SeedDocentePalavraChave20260709000016 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const todasPalavras = await dataSource
 			.getRepository(PalavraChave)

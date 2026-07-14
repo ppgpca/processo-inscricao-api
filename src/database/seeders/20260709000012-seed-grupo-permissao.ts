@@ -2,7 +2,7 @@ import { DataSource, DeepPartial } from 'typeorm';
 import { GrupoPermissao } from '../entities/grupo-permissao.entity';
 import { Seeder } from './seeder.interface';
 
-export class SeedGrupoPermissao20260709000011 implements Seeder {
+export class SeedGrupoPermissao20260709000012 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		// Admin (grupo 1): todas as permissões (1–30)
 		const adminPermissoes: DeepPartial<GrupoPermissao>[] = Array.from(

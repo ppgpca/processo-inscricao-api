@@ -18,7 +18,7 @@ const docentesIds = [
 	'graziela.tonin',
 ];
 
-export class SeedUsuarioGrupo20260709000012 implements Seeder {
+export class SeedUsuarioGrupo20260709000013 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		const docenteGrupo: DeepPartial<UsuarioGrupo>[] = docentesIds.map(
 			(id) => ({

@@ -1,7 +1,7 @@
 import { DataSource } from 'typeorm';
 import { Seeder } from './seeder.interface';
 
-export class SeedGrupo20260709000007 implements Seeder {
+export class SeedGrupo20260709000008 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		await dataSource.query(`
 			INSERT INTO public.grupo (id, nome, descricao, sistema)
