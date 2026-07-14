@@ -4,7 +4,7 @@ import { Seeder } from './seeder.interface';
 export class SeedPermissao20260709000010 implements Seeder {
 	async up(dataSource: DataSource): Promise<void> {
 		await dataSource.query(`
-			INSERT INTO public.permissao (id, codigo, descricao, codigo_categoria_permissao)
+			INSERT INTO public.permissoes (id, nome, descricao, codigo_categoria_permissao)
 			VALUES
 				(1, 'VISUALIZAR_EDITAL', 'Visualizar edital', 'EDITAL'),
 				(2, 'VISUALIZAR_TODOS_EDITAIS', 'Visualizar todos os editais', 'EDITAL'),
@@ -37,11 +37,11 @@ export class SeedPermissao20260709000010 implements Seeder {
 				(29, 'EDITAR_DOCENTE', 'Editar docente', 'DOCENTE'),
 				(30, 'DELETAR_DOCENTE', 'Deletar docente', 'DOCENTE')
 		`);
-		await dataSource.query(`SELECT setval('permissao_id_seq', 30, true)`);
+		await dataSource.query(`SELECT setval('permissoes_id_seq', 30, true)`);
 	}
 
 	async down(dataSource: DataSource): Promise<void> {
-		await dataSource.query(`DELETE FROM public.permissao`);
-		await dataSource.query(`SELECT setval('permissao_id_seq', 1, false)`);
+		await dataSource.query(`DELETE FROM public.permissoes`);
+		await dataSource.query(`SELECT setval('permissoes_id_seq', 1, false)`);
 	}
 }

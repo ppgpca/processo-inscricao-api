@@ -6,10 +6,10 @@ export class SeedGrupo20260709000008 implements Seeder {
 		await dataSource.query(`
 			INSERT INTO public.grupo (id, nome, descricao, sistema)
 			VALUES
-				(1, 'admin', 'Administrador do sistema.', 2),
-				(2, 'coordenador', 'Coordenador do processo de seleção.', 2),
-				(3, 'docente', 'Docente orientador do processo de seleção.', 2),
-				(4, 'candidato', 'Candidato ao processo de seleção.', 2)
+				(1, 'admin', 'Administrador do sistema.', 1),
+				(2, 'coordenador', 'Coordenador do processo de seleção.', 1),
+				(3, 'docente', 'Docente orientador do processo de seleção.', 1),
+				(4, 'candidato', 'Candidato ao processo de seleção.', 1)
 		`);
 		await dataSource.query(`SELECT setval('grupo_id_seq', 4, true)`);
 	}

@@ -8,7 +8,7 @@ export class CreateGrupo20260709001600 implements MigrationInterface {
         id          SERIAL NOT NULL,
         nome        VARCHAR NOT NULL,
         descricao   VARCHAR,
-        sistema     INTEGER NOT NULL DEFAULT 2,
+        sistema     INTEGER NOT NULL DEFAULT 1,
         "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT grupo_pkey PRIMARY KEY (id)

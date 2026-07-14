@@ -20,7 +20,7 @@ export class Grupo {
 	@Column({ type: 'varchar', nullable: true })
 	descricao: string | null;
 
-	@Column({ type: 'int', nullable: false, default: 2 })
+	@Column({ type: 'int', nullable: false, default: 1 })
 	sistema: number;
 
 	@CreateDateColumn({ nullable: false })

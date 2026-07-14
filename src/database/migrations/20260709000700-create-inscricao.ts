@@ -14,10 +14,9 @@ export class CreateInscricao20260709000700 implements MigrationInterface {
         id_edital           INTEGER NOT NULL
           REFERENCES public.edital (id)
           ON UPDATE CASCADE ON DELETE RESTRICT,
-        status              VARCHAR NOT NULL DEFAULT 'rascunho',
-        id_linha_pesquisa   INTEGER
+        id_linha_pesquisa   INTEGER NOT NULL
           REFERENCES public.linha_pesquisa (id)
-          ON UPDATE CASCADE ON DELETE SET NULL,
+          ON UPDATE CASCADE ON DELETE RESTRICT,
         ativa               BOOLEAN NOT NULL DEFAULT TRUE,
         area_concentracao   VARCHAR,
         projeto_pesquisa    TEXT,
@@ -28,10 +27,9 @@ export class CreateInscricao20260709000700 implements MigrationInterface {
         deficiente          BOOLEAN,
         indigena            BOOLEAN,
         preto_pardo         BOOLEAN,
-        etapa               INTEGER,
-        id_etapa_atual      INTEGER
+        id_etapa_atual      INTEGER NOT NULL
           REFERENCES public.etapa_edital (id)
-          ON UPDATE CASCADE ON DELETE SET NULL,
+          ON UPDATE CASCADE ON DELETE RESTRICT,
         "createdAt"         TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"         TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT inscricao_pkey PRIMARY KEY (id)

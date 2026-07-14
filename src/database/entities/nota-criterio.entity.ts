@@ -25,8 +25,8 @@ export class NotaCriterio {
 	@Column({ type: 'text', nullable: true })
 	comentario: string | null;
 
-	@Column({ type: 'decimal', nullable: true })
-	nota: number | null;
+	@Column({ type: 'decimal', nullable: false })
+	nota: number;
 
 	@CreateDateColumn({ nullable: false })
 	createdAt: Date;

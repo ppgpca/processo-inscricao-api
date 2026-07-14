@@ -20,6 +20,11 @@ export class CreateDocenteEdital20260709000800 implements MigrationInterface {
       )
     `);
 
+		await queryRunner.query(`
+      CREATE UNIQUE INDEX uq_docente_edital_codigo_docente_id_edital
+        ON public.docente_edital (codigo_docente ASC, id_edital ASC)
+    `);
+
 		await ensureUpdatedAtTrigger(
 			queryRunner,
 			'docente_edital',
@@ -32,6 +37,9 @@ export class CreateDocenteEdital20260709000800 implements MigrationInterface {
       DROP TRIGGER IF EXISTS update_docente_edital_updated_at ON public.docente_edital;
     `);
 
+		await queryRunner.query(`
+      DROP INDEX IF EXISTS public.uq_docente_edital_codigo_docente_id_edital
+    `);
 		await queryRunner.query(`DROP TABLE IF EXISTS public.docente_edital`);
 	}
 }

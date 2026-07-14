@@ -20,6 +20,16 @@ export class CreatePreferenciaOrientador20260709001300
       )
     `);
 
+		await queryRunner.query(`
+      CREATE UNIQUE INDEX uq_preferencia_orientador_id_inscricao_codigo_docente
+        ON public.preferencia_orientador (id_inscricao ASC, codigo_docente ASC)
+    `);
+
+		await queryRunner.query(`
+      CREATE UNIQUE INDEX uq_preferencia_orientador_id_inscricao_ordem
+        ON public.preferencia_orientador (id_inscricao ASC, ordem ASC)
+    `);
+
 		await ensureUpdatedAtTrigger(
 			queryRunner,
 			'preferencia_orientador',
@@ -32,6 +42,12 @@ export class CreatePreferenciaOrientador20260709001300
       DROP TRIGGER IF EXISTS update_preferencia_orientador_updated_at ON public.preferencia_orientador;
     `);
 
+		await queryRunner.query(`
+      DROP INDEX IF EXISTS public.uq_preferencia_orientador_id_inscricao_ordem
+    `);
+		await queryRunner.query(`
+      DROP INDEX IF EXISTS public.uq_preferencia_orientador_id_inscricao_codigo_docente
+    `);
 		await queryRunner.query(
 			`DROP TABLE IF EXISTS public.preferencia_orientador`,
 		);

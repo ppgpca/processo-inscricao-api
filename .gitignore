@@ -27,3 +27,5 @@ src/public/*
 /uploads/*
 !uploads/.gitkeep
 .vscode
+sql/
+scripts/

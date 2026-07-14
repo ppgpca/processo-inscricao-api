@@ -60,11 +60,8 @@ export class Inscricao {
 	@Column({ name: 'preto_pardo', type: 'boolean', nullable: true })
 	pretoPardo: boolean | null;
 
-	@Column({ type: 'int', nullable: true })
-	etapa: number | null;
-
-	@Column({ name: 'id_etapa_atual', type: 'int', nullable: true })
-	idEtapaAtual: number | null;
+	@Column({ name: 'id_etapa_atual', type: 'int', nullable: false })
+	idEtapaAtual: number;
 
 	@Column({ type: 'boolean', nullable: true, default: null })
 	deferida: boolean | null;
@@ -87,9 +84,9 @@ export class Inscricao {
 	@JoinColumn({ name: 'id_linha_pesquisa' })
 	linhaPesquisa: LinhaPesquisa;
 
-	@ManyToOne(() => EtapaEdital, { nullable: true, eager: false })
+	@ManyToOne(() => EtapaEdital, { nullable: false, eager: false })
 	@JoinColumn({ name: 'id_etapa_atual' })
-	etapaAtual: EtapaEdital | null;
+	etapaAtual: EtapaEdital;
 
 	@OneToMany(() => Documento, (doc) => doc.inscricao)
 	documentos: Documento[];

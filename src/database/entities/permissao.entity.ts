@@ -11,13 +11,13 @@ import {
 import { CategoriaPermissao } from './categoria-permissao.entity';
 import { GrupoPermissao } from './grupo-permissao.entity';
 
-@Entity({ name: 'permissao', schema: 'public' })
+@Entity({ name: 'permissoes', schema: 'public' })
 export class Permissao {
 	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column({ type: 'varchar', nullable: false })
-	codigo: string;
+	nome: string;
 
 	@Column({ type: 'varchar', nullable: true })
 	descricao: string | null;

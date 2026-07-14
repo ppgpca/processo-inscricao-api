@@ -9,10 +9,10 @@ export class CreateEtapaEdital20260709000201 implements MigrationInterface {
         id_edital    INTEGER NOT NULL
           REFERENCES public.edital (id)
           ON UPDATE CASCADE ON DELETE CASCADE,
-        tipo         VARCHAR NOT NULL,
+        sigla        VARCHAR NOT NULL,
         nome         VARCHAR NOT NULL,
         ordem        INTEGER NOT NULL,
-        data_inicio  TIMESTAMPTZ,
+        data_inicio  TIMESTAMPTZ NOT NULL,
         data_fim     TIMESTAMPTZ,
         "createdAt"  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"  TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

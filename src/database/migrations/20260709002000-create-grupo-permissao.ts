@@ -9,7 +9,7 @@ export class CreateGrupoPermissao20260709002000 implements MigrationInterface {
           REFERENCES public.grupo (id)
           ON UPDATE CASCADE ON DELETE CASCADE,
         id_permissao INTEGER NOT NULL
-          REFERENCES public.permissao (id)
+          REFERENCES public.permissoes (id)
           ON UPDATE CASCADE ON DELETE CASCADE,
         "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

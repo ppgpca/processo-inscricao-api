@@ -9,17 +9,6 @@ import {
 } from 'typeorm';
 import { Edital } from './edital.entity';
 
-export enum TipoEtapa {
-	INSCRICAO = 'INSCRICAO',
-	HOMOLOGACAO = 'HOMOLOGACAO',
-	ANALISE_CURRICULO = 'ANALISE_CURRICULO',
-	ANTEPROJETO = 'ANTEPROJETO',
-	ENTREVISTA = 'ENTREVISTA',
-	RESULTADO_PARCIAL = 'RESULTADO_PARCIAL',
-	RECURSO = 'RECURSO',
-	RESULTADO_FINAL = 'RESULTADO_FINAL',
-}
-
 @Entity({ name: 'etapa_edital', schema: 'public' })
 export class EtapaEdital {
 	@PrimaryGeneratedColumn()
@@ -29,7 +18,7 @@ export class EtapaEdital {
 	idEdital: number;
 
 	@Column({ type: 'varchar', nullable: false })
-	tipo: TipoEtapa;
+	sigla: string;
 
 	@Column({ type: 'varchar', nullable: false })
 	nome: string;
@@ -37,8 +26,8 @@ export class EtapaEdital {
 	@Column({ type: 'int', nullable: false })
 	ordem: number;
 
-	@Column({ name: 'data_inicio', type: 'timestamptz', nullable: true })
-	dataInicio: Date | null;
+	@Column({ name: 'data_inicio', type: 'timestamptz', nullable: false })
+	dataInicio: Date;
 
 	@Column({ name: 'data_fim', type: 'timestamptz', nullable: true })
 	dataFim: Date | null;

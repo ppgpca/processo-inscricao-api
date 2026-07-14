@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { CriterioAvaliacao } from './criterio-avaliacao.entity';
 import { DocenteEdital } from './docente-edital.entity';
-import { EtapaEdital, TipoEtapa } from './etapa-edital.entity';
+import { EtapaEdital } from './etapa-edital.entity';
 import { Inscricao } from './inscricao.entity';
 import { TipoDocumentoEdital } from './tipo-documento-edital.entity';
 
@@ -34,12 +34,12 @@ export class Edital {
 
 	/** Derivado da etapa INSCRICAO: início da etapa de inscrições. */
 	get dataInicioInscricao(): Date | null {
-		return this.etapas?.find((e) => e.tipo === TipoEtapa.INSCRICAO)?.dataInicio ?? null;
+		return this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataInicio ?? null;
 	}
 
 	/** Derivado da etapa INSCRICAO: fim da etapa de inscrições. */
 	get dataFimInscricao(): Date | null {
-		return this.etapas?.find((e) => e.tipo === TipoEtapa.INSCRICAO)?.dataFim ?? null;
+		return this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataFim ?? null;
 	}
 
 	@Column({ name: 'url_edital_pdf', type: 'varchar', nullable: true })

@@ -6,8 +6,9 @@ export class CreateUsuario20260709001500 implements MigrationInterface {
 		await queryRunner.query(`
       CREATE TABLE public.usuario (
         id          VARCHAR NOT NULL,
-        nome        VARCHAR,
-        email       VARCHAR,
+        nome        VARCHAR NOT NULL,
+        email       VARCHAR NOT NULL,
+        senha       VARCHAR,
         "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT usuario_pkey PRIMARY KEY (id)

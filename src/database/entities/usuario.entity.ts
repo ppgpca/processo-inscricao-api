@@ -13,11 +13,14 @@ export class Usuario {
 	@PrimaryColumn({ type: 'varchar' })
 	id: string;
 
-	@Column({ type: 'varchar', nullable: true })
-	nome: string | null;
+	@Column({ type: 'varchar', nullable: false })
+	nome: string;
+
+	@Column({ type: 'varchar', nullable: false })
+	email: string;
 
 	@Column({ type: 'varchar', nullable: true })
-	email: string | null;
+	senha: string | null;
 
 	@CreateDateColumn({ nullable: false })
 	createdAt: Date;

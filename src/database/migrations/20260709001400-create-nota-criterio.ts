@@ -15,7 +15,7 @@ export class CreateNotaCriterio20260709001400 implements MigrationInterface {
         codigo_docente        VARCHAR NOT NULL
           REFERENCES public.docente (codigo)
           ON UPDATE CASCADE ON DELETE RESTRICT,
-        nota                  DECIMAL,
+        nota                  DECIMAL NOT NULL,
         comentario            TEXT,
         "createdAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm';
-import { EtapaEdital, TipoEtapa } from '../entities/etapa-edital.entity';
+import { EtapaEdital } from '../entities/etapa-edital.entity';
 import { Seeder } from './seeder.interface';
 
 const NUMERO_EDITAL = 'XXX/PPG PCA CH/UFFS/2026';
@@ -18,56 +18,56 @@ const NUMERO_EDITAL = 'XXX/PPG PCA CH/UFFS/2026';
  */
 const ETAPAS: Omit<EtapaEdital, 'id' | 'idEdital' | 'edital' | 'createdAt' | 'updatedAt'>[] = [
 	{
-		tipo: TipoEtapa.INSCRICAO,
+		sigla: 'INSCRICAO',
 		nome: 'Inscrições',
 		ordem: 1,
 		dataInicio: new Date('2026-09-01T00:00:00'),
 		dataFim: new Date('2026-10-15T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.HOMOLOGACAO,
+		sigla: 'HOMOLOGACAO',
 		nome: 'Homologação das inscrições',
 		ordem: 2,
 		dataInicio: new Date('2026-10-16T00:00:00'),
 		dataFim: new Date('2026-10-21T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.ANTEPROJETO,
+		sigla: 'ANTEPROJETO',
 		nome: 'Avaliação de anteprojeto',
 		ordem: 3,
 		dataInicio: new Date('2026-11-12T00:00:00'),
 		dataFim: new Date('2026-11-25T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.ENTREVISTA,
+		sigla: 'ENTREVISTA',
 		nome: 'Entrevistas',
 		ordem: 4,
 		dataInicio: new Date('2026-11-26T00:00:00'),
 		dataFim: new Date('2026-12-03T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.ANALISE_CURRICULO,
+		sigla: 'ANALISE_CURRICULO',
 		nome: 'Análise de currículo',
 		ordem: 5,
 		dataInicio: new Date('2026-10-22T00:00:00'),
 		dataFim: new Date('2026-11-11T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.RESULTADO_PARCIAL,
+		sigla: 'RESULTADO_PARCIAL',
 		nome: 'Resultado parcial',
 		ordem: 6,
 		dataInicio: new Date('2026-12-04T00:00:00'),
 		dataFim: new Date('2026-12-10T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.RECURSO,
+		sigla: 'RECURSO',
 		nome: 'Período de recursos',
 		ordem: 7,
 		dataInicio: new Date('2026-12-11T00:00:00'),
 		dataFim: new Date('2026-12-13T23:59:59'),
 	},
 	{
-		tipo: TipoEtapa.RESULTADO_FINAL,
+		sigla: 'RESULTADO_FINAL',
 		nome: 'Resultado final',
 		ordem: 8,
 		dataInicio: new Date('2026-12-14T00:00:00'),
