@@ -26,6 +26,10 @@ export class CreateInscricaoDto {
 	@IsOptional()
 	etapa?: number | null;
 
+	@IsInt()
+	@IsOptional()
+	idEtapaAtual?: number | null;
+
 	@IsObject()
 	@IsOptional()
 	dadosComplementares?: Record<string, unknown> | null;

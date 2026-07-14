@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-	LessThanOrEqual,
-	MoreThan,
-	MoreThanOrEqual,
-	Repository,
-} from 'typeorm';
+import { Repository } from 'typeorm';
 import { Edital } from '../database/entities/edital.entity';
+import { TipoEtapa } from '../database/entities/etapa-edital.entity';
 
 @Injectable()
 export class EditalRepository {
@@ -21,23 +17,35 @@ export class EditalRepository {
 
 	async obterVigente(): Promise<Edital | null> {
 		const now = new Date();
-		return this.repo.findOne({
-			where: {
-				ativo: true,
-				dataInicioInscricao: LessThanOrEqual(now),
-				dataFimInscricao: MoreThanOrEqual(now),
-			},
-			order: { id: 'DESC' },
-			relations: { etapas: true },
-		});
+		return this.repo
+			.createQueryBuilder('edital')
+			.innerJoin(
+				'edital.etapas',
+				'etapa',
+				'etapa.tipo = :tipo AND etapa.data_inicio <= :now AND etapa.data_fim >= :now',
+				{ tipo: TipoEtapa.INSCRICAO, now },
+			)
+			.leftJoinAndSelect('edital.etapas', 'todas_etapas')
+			.where('edital.ativo = true')
+			.orderBy('edital.id', 'DESC')
+			.addOrderBy('todas_etapas.ordem', 'ASC')
+			.getOne();
 	}
 
 	async obterProximo(): Promise<Edital | null> {
 		const now = new Date();
-		return this.repo.findOne({
-			where: { dataInicioInscricao: MoreThan(now) },
-			order: { dataInicioInscricao: 'ASC' },
-		});
+		return this.repo
+			.createQueryBuilder('edital')
+			.innerJoin(
+				'edital.etapas',
+				'etapa',
+				'etapa.tipo = :tipo AND etapa.data_inicio > :now',
+				{ tipo: TipoEtapa.INSCRICAO, now },
+			)
+			.leftJoinAndSelect('edital.etapas', 'todas_etapas')
+			.orderBy('etapa.data_inicio', 'ASC')
+			.addOrderBy('todas_etapas.ordem', 'ASC')
+			.getOne();
 	}
 
 	async obterPorId(id: number): Promise<Edital | null> {

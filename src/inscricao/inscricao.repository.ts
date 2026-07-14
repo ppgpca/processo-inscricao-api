@@ -44,6 +44,15 @@ export class InscricaoRepository {
 		private readonly etapaEditalRepo: Repository<EtapaEdital>,
 	) {}
 
+	async obterEtapaPorOrdem(
+		idEdital: number,
+		ordem: number,
+	): Promise<EtapaEdital | null> {
+		return this.etapaEditalRepo.findOne({
+			where: { idEdital, ordem },
+		});
+	}
+
 	async obterEtapaHomologacao(
 		idEdital: number,
 	): Promise<EtapaEdital | null> {
@@ -103,6 +112,7 @@ export class InscricaoRepository {
 			pretoPardo: dados.pretoPardo ?? null,
 			areaConcentracao: dados.areaConcentracao ?? null,
 			projetoPesquisa: dados.projetoPesquisa ?? null,
+			idEtapaAtual: dados.idEtapaAtual ?? null,
 		});
 		const inscricaoSalva = await this.repo.save(inscricao);
 
