@@ -34,12 +34,17 @@ export class Edital {
 
 	/** Derivado da etapa INSCRICAO: início da etapa de inscrições. */
 	get dataInicioInscricao(): Date | null {
-		return this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataInicio ?? null;
+		return (
+			this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataInicio ??
+			null
+		);
 	}
 
 	/** Derivado da etapa INSCRICAO: fim da etapa de inscrições. */
 	get dataFimInscricao(): Date | null {
-		return this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataFim ?? null;
+		return (
+			this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataFim ?? null
+		);
 	}
 
 	@Column({ name: 'url_edital_pdf', type: 'varchar', nullable: true })

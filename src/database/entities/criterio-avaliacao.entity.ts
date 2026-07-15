@@ -48,7 +48,9 @@ export class CriterioAvaliacao {
 	@JoinColumn({ name: 'id_edital' })
 	edital: Relation<Edital>;
 
-	@ManyToOne(() => CriterioAvaliacao, (c) => c.subCriterios, { nullable: true })
+	@ManyToOne(() => CriterioAvaliacao, (c) => c.subCriterios, {
+		nullable: true,
+	})
 	@JoinColumn({ name: 'id_criterio_pai' })
 	criterioPai: Relation<CriterioAvaliacao> | null;
 

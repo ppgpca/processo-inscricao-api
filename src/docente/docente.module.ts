@@ -10,7 +10,11 @@ import { DocenteService } from './docente.service';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([DocenteEdital, CriterioAvaliacao, NotaCriterio]),
+		TypeOrmModule.forFeature([
+			DocenteEdital,
+			CriterioAvaliacao,
+			NotaCriterio,
+		]),
 		AuthModule,
 	],
 	controllers: [DocenteController],

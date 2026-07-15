@@ -33,12 +33,12 @@ export class PermissoesService {
 			for (const gp of grupo?.grupoPermissoes ?? []) {
 				const permissao = gp.permissao as Permissao;
 				if (!consolidadas.has(permissao.id)) {
-				consolidadas.set(permissao.id, {
-					id: permissao.id,
-					nome: permissao.nome,
-					descricao: permissao.descricao,
-					grupos: [],
-				});
+					consolidadas.set(permissao.id, {
+						id: permissao.id,
+						nome: permissao.nome,
+						descricao: permissao.descricao,
+						grupos: [],
+					});
 				}
 				const entry = consolidadas.get(permissao.id)!;
 				if (!entry.grupos.find((g) => g.id === grupo.id)) {

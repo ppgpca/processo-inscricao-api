@@ -47,7 +47,11 @@ export class DocenteRepository {
 
 	async salvarNotas(
 		codigoDocente: string,
-		notas: { idInscricao: number; idCriterioAvaliacao: number; nota: number }[],
+		notas: {
+			idInscricao: number;
+			idCriterioAvaliacao: number;
+			nota: number;
+		}[],
 	): Promise<void> {
 		await this.notaCriterioRepo.upsert(
 			notas.map((n) => ({

@@ -61,7 +61,9 @@ export class InscricaoService {
 		const [inscricoesPorDia, inscritosPorLinhaPesquisa, inscritos] =
 			await Promise.all([
 				this.inscricaoRepository.obterInscricoesPorDia(idEdital),
-				this.inscricaoRepository.obterInscritosPorLinhaPesquisa(idEdital),
+				this.inscricaoRepository.obterInscritosPorLinhaPesquisa(
+					idEdital,
+				),
 				this.inscricaoRepository.obterListaInscritos(idEdital),
 			]);
 

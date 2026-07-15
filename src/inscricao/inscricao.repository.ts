@@ -50,9 +50,7 @@ export class InscricaoRepository {
 		});
 	}
 
-	async obterEtapaHomologacao(
-		idEdital: number,
-	): Promise<EtapaEdital | null> {
+	async obterEtapaHomologacao(idEdital: number): Promise<EtapaEdital | null> {
 		return this.etapaEditalRepo.findOne({
 			where: { idEdital, sigla: 'HOMOLOGACAO' },
 			order: { ordem: 'ASC' },
@@ -110,7 +108,7 @@ export class InscricaoRepository {
 			projetoPesquisa: dados.projetoPesquisa ?? null,
 			idEtapaAtual: dados.idEtapaAtual,
 		});
-		const inscricaoSalva = await this.repo.save(inscricao) as Inscricao;
+		const inscricaoSalva = (await this.repo.save(inscricao)) as Inscricao;
 
 		if (dados.idsPalavrasChave?.length) {
 			await this.sincronizarPalavrasChave(
@@ -128,10 +126,13 @@ export class InscricaoRepository {
 	): Promise<Inscricao> {
 		const { idsPalavrasChave, ...dadosSemPalavrasChave } = dados;
 		Object.assign(inscricao, dadosSemPalavrasChave);
-		const inscricaoSalva = await this.repo.save(inscricao) as Inscricao;
+		const inscricaoSalva = (await this.repo.save(inscricao)) as Inscricao;
 
 		if (idsPalavrasChave !== undefined) {
-			await this.sincronizarPalavrasChave(inscricaoSalva.id, idsPalavrasChave);
+			await this.sincronizarPalavrasChave(
+				inscricaoSalva.id,
+				idsPalavrasChave,
+			);
 		}
 
 		return (await this.obterPorId(inscricaoSalva.id)) ?? inscricaoSalva;
@@ -145,7 +146,10 @@ export class InscricaoRepository {
 
 		if (idsPalavrasChave.length > 0) {
 			const registros = idsPalavrasChave.map((idPalavraChave) =>
-				this.inscricaoPalavraChaveRepo.create({ idInscricao, idPalavraChave }),
+				this.inscricaoPalavraChaveRepo.create({
+					idInscricao,
+					idPalavraChave,
+				}),
 			);
 			await this.inscricaoPalavraChaveRepo.save(registros);
 		}
@@ -177,8 +181,14 @@ export class InscricaoRepository {
 			qb.andWhere('i.id_edital = :idEdital', { idEdital });
 		}
 
-		const rows = await qb.getRawMany<{ data: string; quantidade: string }>();
-		return rows.map((r) => ({ data: r.data, quantidade: Number(r.quantidade) }));
+		const rows = await qb.getRawMany<{
+			data: string;
+			quantidade: string;
+		}>();
+		return rows.map((r) => ({
+			data: r.data,
+			quantidade: Number(r.quantidade),
+		}));
 	}
 
 	async obterInscritosPorLinhaPesquisa(
@@ -283,7 +293,9 @@ export class InscricaoRepository {
 			return {
 				...r,
 				idInscricao,
-				palavrasChave: r.palavrasChave ? r.palavrasChave.split(',') : [],
+				palavrasChave: r.palavrasChave
+					? r.palavrasChave.split(',')
+					: [],
 				avaliacoes: criteriosPai.map((c) => {
 					const dados = notas.get(c.id);
 					return {

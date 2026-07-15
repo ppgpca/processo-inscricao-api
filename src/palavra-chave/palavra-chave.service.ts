@@ -4,7 +4,9 @@ import { PalavraChaveRepository } from './palavra-chave.repository';
 
 @Injectable()
 export class PalavraChaveService {
-	constructor(private readonly palavraChaveRepository: PalavraChaveRepository) {}
+	constructor(
+		private readonly palavraChaveRepository: PalavraChaveRepository,
+	) {}
 
 	async obterTodas(): Promise<PalavraChave[]> {
 		return this.palavraChaveRepository.obterTodas();

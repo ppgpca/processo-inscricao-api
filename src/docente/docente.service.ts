@@ -1,7 +1,4 @@
-import {
-	ForbiddenException,
-	Injectable,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PermissoesService } from '../auth/permissoes.service';
 import { Permissoes } from '../common/enums/permissoes.enum';
 import { DocenteRepository } from './docente.repository';
@@ -23,7 +20,11 @@ export class DocenteService {
 
 	async salvarNotas(
 		codigoDocenteLogado: string,
-		notas: { idInscricao: number; idCriterioAvaliacao: number; nota: number }[],
+		notas: {
+			idInscricao: number;
+			idCriterioAvaliacao: number;
+			nota: number;
+		}[],
 		codigoDocenteAlvo?: string,
 	): Promise<void> {
 		const codigoDocente = await this.resolverCodigoDocenteParaSalvar(
@@ -90,9 +91,10 @@ export class DocenteService {
 			return codigoDocenteLogado;
 		}
 
-		const grupos = await this.permissoesService.buscarGruposDoUsuario(
-			codigoDocenteLogado,
-		);
+		const grupos =
+			await this.permissoesService.buscarGruposDoUsuario(
+				codigoDocenteLogado,
+			);
 		const autorizado = grupos.some(
 			(g) =>
 				g.id === Permissoes.GRUPOS.ADMIN ||

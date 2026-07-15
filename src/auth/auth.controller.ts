@@ -39,9 +39,7 @@ export class AuthController {
 				msg === 'Credenciais inválidas' ||
 				msg === 'Senha incorreta'
 			) {
-				throw new UnauthorizedException(
-					'Credenciais inválidas.',
-				);
+				throw new UnauthorizedException('Credenciais inválidas.');
 			}
 			if (msg === 'Senha é obrigatória') {
 				throw new UnauthorizedException('Senha é obrigatória');

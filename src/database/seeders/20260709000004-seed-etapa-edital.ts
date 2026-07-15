@@ -16,7 +16,10 @@ const NUMERO_EDITAL = 'XXX/PPG PCA CH/UFFS/2026';
  * Recursos:          11/12 → 13/12
  * Resultado final:   14/12 em diante
  */
-const ETAPAS: Omit<EtapaEdital, 'id' | 'idEdital' | 'edital' | 'createdAt' | 'updatedAt'>[] = [
+const ETAPAS: Omit<
+	EtapaEdital,
+	'id' | 'idEdital' | 'edital' | 'createdAt' | 'updatedAt'
+>[] = [
 	{
 		sigla: 'INSCRICAO',
 		nome: 'Inscrições',

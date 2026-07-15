@@ -30,9 +30,7 @@ export class SeedDocentePalavraChave20260709000016 implements Seeder {
 			.getRepository(PalavraChave)
 			.find();
 
-		const mapaId = new Map(
-			todasPalavras.map((pk) => [pk.palavra, pk.id]),
-		);
+		const mapaId = new Map(todasPalavras.map((pk) => [pk.palavra, pk.id]));
 
 		const registros: DeepPartial<DocentePalavraChave>[] = [];
 

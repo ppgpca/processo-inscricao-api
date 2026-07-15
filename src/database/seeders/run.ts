@@ -149,12 +149,20 @@ async function main(): Promise<void> {
 
 	const validDirections = ['up', 'down', 'pending', 'show'];
 	if (!validDirections.includes(direction)) {
-		console.error('Usage: ts-node run.ts <up|down|pending|show> [seeder-name]');
+		console.error(
+			'Usage: ts-node run.ts <up|down|pending|show> [seeder-name]',
+		);
 		console.error('');
 		console.error('Commands:');
-		console.error('  up [name]   Executa todos os seeders (ou um específico)');
-		console.error('  down [name] Reverte todos os seeders (ou um específico)');
-		console.error('  pending     Executa apenas seeders ainda não registrados');
+		console.error(
+			'  up [name]   Executa todos os seeders (ou um específico)',
+		);
+		console.error(
+			'  down [name] Reverte todos os seeders (ou um específico)',
+		);
+		console.error(
+			'  pending     Executa apenas seeders ainda não registrados',
+		);
 		console.error('  show        Exibe o status de cada seeder');
 		console.error('');
 		console.error('Examples:');

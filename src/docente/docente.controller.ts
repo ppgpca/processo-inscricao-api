@@ -25,9 +25,7 @@ export class DocenteController {
 	}
 
 	@Get('me/criterios')
-	obterCriteriosPorEdital(
-		@Query('idEdital', ParseIntPipe) idEdital: number,
-	) {
+	obterCriteriosPorEdital(@Query('idEdital', ParseIntPipe) idEdital: number) {
 		return this.docenteService.obterCriteriosPorEdital(idEdital);
 	}
 
