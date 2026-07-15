@@ -50,18 +50,6 @@ export class InscricaoService {
 			throw new NotFoundException(`Inscrição ${id} não encontrada.`);
 		}
 
-		// Ao finalizar a inscrição (etapa 5), mover para a etapa de ordem 2 (homologação)
-		if (dto.etapa === 5 && dto.idEtapaAtual === undefined) {
-			const etapaHomologacao =
-				await this.inscricaoRepository.obterEtapaPorOrdem(
-					inscricao.idEdital,
-					2,
-				);
-			if (etapaHomologacao) {
-				dto = { ...dto, idEtapaAtual: etapaHomologacao.id };
-			}
-		}
-
 		return this.inscricaoRepository.atualizar(inscricao, dto);
 	}
 

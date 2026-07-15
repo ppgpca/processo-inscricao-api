@@ -5,6 +5,7 @@ import {
 	HttpCode,
 	HttpStatus,
 	InternalServerErrorException,
+	Logger,
 	Post,
 	Request,
 	UnauthorizedException,
@@ -18,6 +19,8 @@ import { ValidateTokenDto } from './dto/validate-token.dto';
 
 @Controller('auth')
 export class AuthController {
+	private readonly logger = new Logger(AuthController.name);
+
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('login')
@@ -37,12 +40,16 @@ export class AuthController {
 				msg === 'Senha incorreta'
 			) {
 				throw new UnauthorizedException(
-					'ID do usuário ou senha incorretos',
+					'Credenciais inválidas.',
 				);
 			}
 			if (msg === 'Senha é obrigatória') {
 				throw new UnauthorizedException('Senha é obrigatória');
 			}
+			this.logger.error(
+				`Falha inesperada ao autenticar o usuário ${dto.userId}: ${msg}`,
+				(error as Error).stack,
+			);
 			throw new InternalServerErrorException('Erro interno do servidor');
 		}
 	}

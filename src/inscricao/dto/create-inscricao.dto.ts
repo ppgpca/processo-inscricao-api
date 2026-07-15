@@ -19,16 +19,10 @@ export class CreateInscricaoDto {
 	idEdital: number;
 
 	@IsInt()
-	@IsOptional()
-	idLinhaPesquisa?: number | null;
+	idLinhaPesquisa: number;
 
 	@IsInt()
-	@IsOptional()
-	etapa?: number | null;
-
-	@IsInt()
-	@IsOptional()
-	idEtapaAtual?: number | null;
+	idEtapaAtual: number;
 
 	@IsObject()
 	@IsOptional()

@@ -7,6 +7,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Docente } from './docente.entity';
 import { Edital } from './edital.entity';
 
@@ -35,9 +36,9 @@ export class DocenteEdital {
 
 	@ManyToOne(() => Docente, (docente) => docente.docentesEdital)
 	@JoinColumn({ name: 'codigo_docente', referencedColumnName: 'codigo' })
-	docente: Docente;
+	docente: Relation<Docente>;
 
 	@ManyToOne(() => Edital, (edital) => edital.docentesEdital)
 	@JoinColumn({ name: 'id_edital' })
-	edital: Edital;
+	edital: Relation<Edital>;
 }

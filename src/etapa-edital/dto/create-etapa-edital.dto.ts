@@ -1,17 +1,16 @@
 import {
 	IsDateString,
-	IsEnum,
 	IsInt,
 	IsNotEmpty,
 	IsOptional,
 	IsString,
 	Min,
 } from 'class-validator';
-import { TipoEtapa } from '../../database/entities/etapa-edital.entity';
 
 export class CreateEtapaEditalDto {
-	@IsEnum(TipoEtapa)
-	tipo: TipoEtapa;
+	@IsString()
+	@IsNotEmpty()
+	sigla: string;
 
 	@IsString()
 	@IsNotEmpty()
@@ -22,8 +21,7 @@ export class CreateEtapaEditalDto {
 	ordem: number;
 
 	@IsDateString()
-	@IsOptional()
-	dataInicio?: string | null;
+	dataInicio: string;
 
 	@IsDateString()
 	@IsOptional()

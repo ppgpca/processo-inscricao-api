@@ -6,6 +6,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Grupo } from './grupo.entity';
 import { Permissao } from './permissao.entity';
 
@@ -25,9 +26,9 @@ export class GrupoPermissao {
 
 	@ManyToOne(() => Grupo, (grupo) => grupo.grupoPermissoes)
 	@JoinColumn({ name: 'id_grupo' })
-	grupo: Grupo;
+	grupo: Relation<Grupo>;
 
 	@ManyToOne(() => Permissao, (permissao) => permissao.grupoPermissoes)
 	@JoinColumn({ name: 'id_permissao' })
-	permissao: Permissao;
+	permissao: Relation<Permissao>;
 }

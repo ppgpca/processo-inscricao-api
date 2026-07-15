@@ -9,6 +9,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { AlocacaoOrientador } from './alocacao-orientador.entity';
 import { Candidato } from './candidato.entity';
 import { Documento } from './documento.entity';
@@ -74,19 +75,19 @@ export class Inscricao {
 
 	@ManyToOne(() => Candidato, (candidato) => candidato.inscricoes)
 	@JoinColumn({ name: 'cpf', referencedColumnName: 'cpf' })
-	candidato: Candidato;
+	candidato: Relation<Candidato>;
 
 	@ManyToOne(() => Edital, (edital) => edital.inscricoes)
 	@JoinColumn({ name: 'id_edital' })
-	edital: Edital;
+	edital: Relation<Edital>;
 
 	@ManyToOne(() => LinhaPesquisa, (lp) => lp.inscricoes)
 	@JoinColumn({ name: 'id_linha_pesquisa' })
-	linhaPesquisa: LinhaPesquisa;
+	linhaPesquisa: Relation<LinhaPesquisa>;
 
 	@ManyToOne(() => EtapaEdital, { nullable: false, eager: false })
 	@JoinColumn({ name: 'id_etapa_atual' })
-	etapaAtual: EtapaEdital;
+	etapaAtual: Relation<EtapaEdital>;
 
 	@OneToMany(() => Documento, (doc) => doc.inscricao)
 	documentos: Documento[];
@@ -95,7 +96,7 @@ export class Inscricao {
 	preferenciasOrientador: PreferenciaOrientador[];
 
 	@OneToOne(() => AlocacaoOrientador, (ao) => ao.inscricao)
-	alocacaoOrientador: AlocacaoOrientador;
+	alocacaoOrientador: Relation<AlocacaoOrientador>;
 
 	@OneToMany(() => InscricaoPalavraChave, (ipk) => ipk.inscricao)
 	inscricoesPalavraChave: InscricaoPalavraChave[];

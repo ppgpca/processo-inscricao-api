@@ -1,8 +1,18 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { TipoEtapa } from '../database/entities/etapa-edital.entity';
 import { CreateEtapaEditalDto } from './dto/create-etapa-edital.dto';
 import { UpdateEtapaEditalDto } from './dto/update-etapa-edital.dto';
 import { EtapaEditalRepository } from './etapa-edital.repository';
+
+const SIGLAS: { sigla: string; label: string }[] = [
+	{ sigla: 'INSCRICAO', label: 'Inscrições' },
+	{ sigla: 'HOMOLOGACAO', label: 'Homologação das inscrições' },
+	{ sigla: 'ANALISE_CURRICULO', label: 'Análise de currículo' },
+	{ sigla: 'ANTEPROJETO', label: 'Entrega de anteprojeto' },
+	{ sigla: 'ENTREVISTA', label: 'Entrevista' },
+	{ sigla: 'RESULTADO_PARCIAL', label: 'Resultado parcial' },
+	{ sigla: 'RECURSO', label: 'Período de recursos' },
+	{ sigla: 'RESULTADO_FINAL', label: 'Resultado final' },
+];
 
 @Injectable()
 export class EtapaEditalService {
@@ -10,21 +20,8 @@ export class EtapaEditalService {
 		private readonly etapaEditalRepository: EtapaEditalRepository,
 	) {}
 
-	obterTipos(): { tipo: TipoEtapa; label: string }[] {
-		const labels: Record<TipoEtapa, string> = {
-			[TipoEtapa.INSCRICAO]: 'Inscrições',
-			[TipoEtapa.HOMOLOGACAO]: 'Homologação das inscrições',
-			[TipoEtapa.ANALISE_CURRICULO]: 'Análise de currículo',
-			[TipoEtapa.ANTEPROJETO]: 'Entrega de anteprojeto',
-			[TipoEtapa.ENTREVISTA]: 'Entrevista',
-			[TipoEtapa.RESULTADO_PARCIAL]: 'Resultado parcial',
-			[TipoEtapa.RECURSO]: 'Período de recursos',
-			[TipoEtapa.RESULTADO_FINAL]: 'Resultado final',
-		};
-		return Object.values(TipoEtapa).map((tipo) => ({
-			tipo,
-			label: labels[tipo],
-		}));
+	obterSiglas(): { sigla: string; label: string }[] {
+		return SIGLAS;
 	}
 
 	async obterPorEdital(idEdital: number) {

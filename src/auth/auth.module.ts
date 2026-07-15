@@ -14,6 +14,7 @@ import { PermissoesRepository } from './permissoes.repository';
 import { PermissoesService } from './permissoes.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LdapStrategy } from './strategies/ldap.strategy';
+import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
 	imports: [
@@ -40,6 +41,7 @@ import { LdapStrategy } from './strategies/ldap.strategy';
 		PermissoesRepository,
 		JwtStrategy,
 		LdapStrategy,
+		LocalStrategy,
 	],
 	exports: [AuthService, PermissoesService, JwtStrategy],
 })

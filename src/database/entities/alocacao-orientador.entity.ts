@@ -8,6 +8,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Docente } from './docente.entity';
 import { Inscricao } from './inscricao.entity';
 
@@ -30,9 +31,9 @@ export class AlocacaoOrientador {
 
 	@OneToOne(() => Inscricao, (inscricao) => inscricao.alocacaoOrientador)
 	@JoinColumn({ name: 'id_inscricao' })
-	inscricao: Inscricao;
+	inscricao: Relation<Inscricao>;
 
 	@ManyToOne(() => Docente, (docente) => docente.alocacoesOrientador)
 	@JoinColumn({ name: 'codigo_docente', referencedColumnName: 'codigo' })
-	docente: Docente;
+	docente: Relation<Docente>;
 }

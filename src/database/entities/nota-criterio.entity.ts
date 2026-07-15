@@ -7,6 +7,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { CriterioAvaliacao } from './criterio-avaliacao.entity';
 import { Docente } from './docente.entity';
 import { Inscricao } from './inscricao.entity';
@@ -36,13 +37,13 @@ export class NotaCriterio {
 
 	@ManyToOne(() => Inscricao, (inscricao) => inscricao.notasCriterio)
 	@JoinColumn({ name: 'id_inscricao' })
-	inscricao: Inscricao;
+	inscricao: Relation<Inscricao>;
 
 	@ManyToOne(() => CriterioAvaliacao, (criterio) => criterio.notasCriterio)
 	@JoinColumn({ name: 'id_criterio_avaliacao' })
-	criterioAvaliacao: CriterioAvaliacao;
+	criterioAvaliacao: Relation<CriterioAvaliacao>;
 
 	@ManyToOne(() => Docente, (docente) => docente.notasCriterio)
 	@JoinColumn({ name: 'codigo_docente', referencedColumnName: 'codigo' })
-	docente: Docente;
+	docente: Relation<Docente>;
 }

@@ -8,6 +8,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { CategoriaPermissao } from './categoria-permissao.entity';
 import { GrupoPermissao } from './grupo-permissao.entity';
 
@@ -40,7 +41,7 @@ export class Permissao {
 		name: 'codigo_categoria_permissao',
 		referencedColumnName: 'codigo',
 	})
-	categoria: CategoriaPermissao;
+	categoria: Relation<CategoriaPermissao>;
 
 	@OneToMany(() => GrupoPermissao, (gp) => gp.permissao)
 	grupoPermissoes: GrupoPermissao[];

@@ -56,11 +56,11 @@ export class EtapaEditalController {
 }
 
 @Controller('etapas')
-export class TipoEtapaController {
+export class EtapaEditalSiglasController {
 	constructor(private readonly etapaEditalService: EtapaEditalService) {}
 
-	@Get('tipos')
-	obterTipos() {
-		return this.etapaEditalService.obterTipos();
+	@Get('siglas')
+	obterSiglas() {
+		return this.etapaEditalService.obterSiglas();
 	}
 }

@@ -5,7 +5,7 @@ import { PermissoesRepository } from './permissoes.repository';
 
 export interface PermissaoConsolidada {
 	id: number;
-	codigo: string;
+	nome: string;
 	descricao: string | null;
 	grupos: Array<{ id: number; nome: string }>;
 }
@@ -33,12 +33,12 @@ export class PermissoesService {
 			for (const gp of grupo?.grupoPermissoes ?? []) {
 				const permissao = gp.permissao as Permissao;
 				if (!consolidadas.has(permissao.id)) {
-					consolidadas.set(permissao.id, {
-						id: permissao.id,
-						codigo: permissao.codigo,
-						descricao: permissao.descricao,
-						grupos: [],
-					});
+				consolidadas.set(permissao.id, {
+					id: permissao.id,
+					nome: permissao.nome,
+					descricao: permissao.descricao,
+					grupos: [],
+				});
 				}
 				const entry = consolidadas.get(permissao.id)!;
 				if (!entry.grupos.find((g) => g.id === grupo.id)) {

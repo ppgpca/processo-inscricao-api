@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Repository } from 'typeorm';
 import { CriterioAvaliacao } from '../database/entities/criterio-avaliacao.entity';
-import {
-	EtapaEdital,
-	TipoEtapa,
-} from '../database/entities/etapa-edital.entity';
+import { EtapaEdital } from '../database/entities/etapa-edital.entity';
 import { InscricaoPalavraChave } from '../database/entities/inscricao-palavra-chave.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
 import { NotaCriterio } from '../database/entities/nota-criterio.entity';
@@ -57,7 +54,7 @@ export class InscricaoRepository {
 		idEdital: number,
 	): Promise<EtapaEdital | null> {
 		return this.etapaEditalRepo.findOne({
-			where: { idEdital, tipo: TipoEtapa.HOMOLOGACAO },
+			where: { idEdital, sigla: 'HOMOLOGACAO' },
 			order: { ordem: 'ASC' },
 		});
 	}
@@ -103,8 +100,7 @@ export class InscricaoRepository {
 		const inscricao = this.repo.create({
 			cpf: dados.cpf,
 			idEdital: dados.idEdital,
-			idLinhaPesquisa: dados.idLinhaPesquisa ?? undefined,
-			etapa: dados.etapa ?? 1,
+			idLinhaPesquisa: dados.idLinhaPesquisa,
 			ativa: true,
 			dadosComplementares: dados.dadosComplementares ?? null,
 			deficiente: dados.deficiente ?? null,
@@ -112,9 +108,9 @@ export class InscricaoRepository {
 			pretoPardo: dados.pretoPardo ?? null,
 			areaConcentracao: dados.areaConcentracao ?? null,
 			projetoPesquisa: dados.projetoPesquisa ?? null,
-			idEtapaAtual: dados.idEtapaAtual ?? null,
+			idEtapaAtual: dados.idEtapaAtual,
 		});
-		const inscricaoSalva = await this.repo.save(inscricao);
+		const inscricaoSalva = await this.repo.save(inscricao) as Inscricao;
 
 		if (dados.idsPalavrasChave?.length) {
 			await this.sincronizarPalavrasChave(
@@ -132,7 +128,7 @@ export class InscricaoRepository {
 	): Promise<Inscricao> {
 		const { idsPalavrasChave, ...dadosSemPalavrasChave } = dados;
 		Object.assign(inscricao, dadosSemPalavrasChave);
-		const inscricaoSalva = await this.repo.save(inscricao);
+		const inscricaoSalva = await this.repo.save(inscricao) as Inscricao;
 
 		if (idsPalavrasChave !== undefined) {
 			await this.sincronizarPalavrasChave(inscricaoSalva.id, idsPalavrasChave);

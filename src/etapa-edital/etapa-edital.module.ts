@@ -3,14 +3,14 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { EtapaEdital } from '../database/entities/etapa-edital.entity';
 import {
 	EtapaEditalController,
-	TipoEtapaController,
+	EtapaEditalSiglasController,
 } from './etapa-edital.controller';
 import { EtapaEditalRepository } from './etapa-edital.repository';
 import { EtapaEditalService } from './etapa-edital.service';
 
 @Module({
 	imports: [TypeOrmModule.forFeature([EtapaEdital])],
-	controllers: [EtapaEditalController, TipoEtapaController],
+	controllers: [EtapaEditalController, EtapaEditalSiglasController],
 	providers: [EtapaEditalService, EtapaEditalRepository],
 	exports: [EtapaEditalService],
 })

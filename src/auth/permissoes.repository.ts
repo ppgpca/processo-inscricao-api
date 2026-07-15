@@ -41,7 +41,7 @@ export class PermissoesRepository {
 	}
 
 	async buscarTodasPermissoes(): Promise<Permissao[]> {
-		return this.permissaoRepo.find({ order: { codigo: 'ASC' } });
+		return this.permissaoRepo.find({ order: { nome: 'ASC' } });
 	}
 
 	async buscarTodosGrupos(): Promise<Grupo[]> {

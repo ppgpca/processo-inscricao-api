@@ -7,6 +7,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Edital } from './edital.entity';
 
 @Entity({ name: 'etapa_edital', schema: 'public' })
@@ -40,5 +41,5 @@ export class EtapaEdital {
 
 	@ManyToOne(() => Edital, (edital) => edital.etapas)
 	@JoinColumn({ name: 'id_edital' })
-	edital: Edital;
+	edital: Relation<Edital>;
 }

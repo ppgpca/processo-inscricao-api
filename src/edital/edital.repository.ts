@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Edital } from '../database/entities/edital.entity';
-import { TipoEtapa } from '../database/entities/etapa-edital.entity';
 
 @Injectable()
 export class EditalRepository {
@@ -22,8 +21,8 @@ export class EditalRepository {
 			.innerJoin(
 				'edital.etapas',
 				'etapa',
-				'etapa.tipo = :tipo AND etapa.data_inicio <= :now AND etapa.data_fim >= :now',
-				{ tipo: TipoEtapa.INSCRICAO, now },
+				'etapa.sigla = :sigla AND etapa.data_inicio <= :now AND etapa.data_fim >= :now',
+				{ sigla: 'INSCRICAO', now },
 			)
 			.leftJoinAndSelect('edital.etapas', 'todas_etapas')
 			.where('edital.ativo = true')
@@ -39,8 +38,8 @@ export class EditalRepository {
 			.innerJoin(
 				'edital.etapas',
 				'etapa',
-				'etapa.tipo = :tipo AND etapa.data_inicio > :now',
-				{ tipo: TipoEtapa.INSCRICAO, now },
+				'etapa.sigla = :sigla AND etapa.data_inicio > :now',
+				{ sigla: 'INSCRICAO', now },
 			)
 			.leftJoinAndSelect('edital.etapas', 'todas_etapas')
 			.orderBy('etapa.data_inicio', 'ASC')

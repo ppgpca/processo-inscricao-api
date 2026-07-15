@@ -1,9 +1,15 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+	Injectable,
+	Logger,
+	OnModuleInit,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import * as passport from 'passport';
+import passport from 'passport';
 import { Usuario } from '../database/entities/usuario.entity';
 import { AuthRepository } from './auth.repository';
 import { PermissoesService } from './permissoes.service';
+import { LocalStrategy } from './strategies/local.strategy';
 
 interface JwtPayload {
 	userId: string;
@@ -18,12 +24,23 @@ interface LdapUser {
 }
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnModuleInit {
+	private readonly logger = new Logger(AuthService.name);
+
 	constructor(
 		private readonly jwtService: JwtService,
 		private readonly authRepository: AuthRepository,
 		private readonly permissoesService: PermissoesService,
+		private readonly localStrategy: LocalStrategy,
 	) {}
+
+	onModuleInit(): void {
+		if (!this.isLdapEnabled()) {
+			this.logger.warn(
+				'LDAP desabilitado: o login será realizado via usuário e senha local.',
+			);
+		}
+	}
 
 	gerarToken(usuario: Usuario): string {
 		const payload: JwtPayload = {
@@ -105,13 +122,9 @@ export class AuthService {
 				},
 			};
 		} else {
-			console.warn(
-				'ATENÇÃO: LDAP desabilitado - autenticação sem validação de senha',
-			);
-			const usuario =
-				await this.authRepository.buscarUsuarioPorId(userId);
+			if (!senha) throw new Error('Senha é obrigatória');
 
-			if (!usuario) throw new Error('Usuário não encontrado');
+			const usuario = await this.localStrategy.validate(userId, senha);
 
 			return {
 				token: this.gerarToken(usuario),

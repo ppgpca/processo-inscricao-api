@@ -7,6 +7,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Inscricao } from './inscricao.entity';
 import { TipoDocumentoEdital } from './tipo-documento-edital.entity';
 
@@ -50,9 +51,9 @@ export class Documento {
 
 	@ManyToOne(() => Inscricao, (inscricao) => inscricao.documentos)
 	@JoinColumn({ name: 'id_inscricao' })
-	inscricao: Inscricao;
+	inscricao: Relation<Inscricao>;
 
 	@ManyToOne(() => TipoDocumentoEdital, (tipo) => tipo.documentos)
 	@JoinColumn({ name: 'id_tipo_documento_edital' })
-	tipoDocumentoEdital: TipoDocumentoEdital;
+	tipoDocumentoEdital: Relation<TipoDocumentoEdital>;
 }

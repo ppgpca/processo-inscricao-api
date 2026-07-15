@@ -8,6 +8,7 @@ import {
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Documento } from './documento.entity';
 import { Edital } from './edital.entity';
 
@@ -45,7 +46,7 @@ export class TipoDocumentoEdital {
 
 	@ManyToOne(() => Edital, (edital) => edital.tiposDocumento)
 	@JoinColumn({ name: 'id_edital' })
-	edital: Edital;
+	edital: Relation<Edital>;
 
 	@OneToMany(() => Documento, (doc) => doc.tipoDocumentoEdital)
 	documentos: Documento[];

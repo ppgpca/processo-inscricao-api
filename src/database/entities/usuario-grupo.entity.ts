@@ -6,6 +6,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Grupo } from './grupo.entity';
 import { Usuario } from './usuario.entity';
 
@@ -25,9 +26,9 @@ export class UsuarioGrupo {
 
 	@ManyToOne(() => Grupo, (grupo) => grupo.usuarioGrupos)
 	@JoinColumn({ name: 'id_grupo' })
-	grupo: Grupo;
+	grupo: Relation<Grupo>;
 
 	@ManyToOne(() => Usuario, (usuario) => usuario.usuarioGrupos)
 	@JoinColumn({ name: 'id_usuario', referencedColumnName: 'id' })
-	usuario: Usuario;
+	usuario: Relation<Usuario>;
 }

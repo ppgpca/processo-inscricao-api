@@ -6,6 +6,7 @@ import {
 	PrimaryColumn,
 	UpdateDateColumn,
 } from 'typeorm';
+import type { Relation } from 'typeorm';
 import { Docente } from './docente.entity';
 import { PalavraChave } from './palavra-chave.entity';
 
@@ -25,9 +26,9 @@ export class DocentePalavraChave {
 
 	@ManyToOne(() => Docente, (docente) => docente.docentesPalavraChave)
 	@JoinColumn({ name: 'codigo_docente', referencedColumnName: 'codigo' })
-	docente: Docente;
+	docente: Relation<Docente>;
 
 	@ManyToOne(() => PalavraChave, (pk) => pk.docentesPalavraChave)
 	@JoinColumn({ name: 'id_palavra_chave' })
-	palavraChave: PalavraChave;
+	palavraChave: Relation<PalavraChave>;
 }

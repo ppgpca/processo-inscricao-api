@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import {
-	EtapaEdital,
-} from '../database/entities/etapa-edital.entity';
+import { EtapaEdital } from '../database/entities/etapa-edital.entity';
 import { CreateEtapaEditalDto } from './dto/create-etapa-edital.dto';
 import { UpdateEtapaEditalDto } from './dto/update-etapa-edital.dto';
 
@@ -28,10 +26,10 @@ export class EtapaEditalRepository {
 	async criar(idEdital: number, dto: CreateEtapaEditalDto): Promise<EtapaEdital> {
 		const etapa = this.repo.create({
 			idEdital,
-			tipo: dto.tipo,
+			sigla: dto.sigla,
 			nome: dto.nome,
 			ordem: dto.ordem,
-			dataInicio: dto.dataInicio ? new Date(dto.dataInicio) : null,
+			dataInicio: new Date(dto.dataInicio),
 			dataFim: dto.dataFim ? new Date(dto.dataFim) : null,
 		});
 		return this.repo.save(etapa);
@@ -41,11 +39,10 @@ export class EtapaEditalRepository {
 		etapa: EtapaEdital,
 		dto: UpdateEtapaEditalDto,
 	): Promise<EtapaEdital> {
-		if (dto.tipo !== undefined) etapa.tipo = dto.tipo;
+		if (dto.sigla !== undefined) etapa.sigla = dto.sigla;
 		if (dto.nome !== undefined) etapa.nome = dto.nome;
 		if (dto.ordem !== undefined) etapa.ordem = dto.ordem;
-		if (dto.dataInicio !== undefined)
-			etapa.dataInicio = dto.dataInicio ? new Date(dto.dataInicio) : null;
+		if (dto.dataInicio !== undefined) etapa.dataInicio = new Date(dto.dataInicio);
 		if (dto.dataFim !== undefined)
 			etapa.dataFim = dto.dataFim ? new Date(dto.dataFim) : null;
 		return this.repo.save(etapa);
