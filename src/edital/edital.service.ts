@@ -10,14 +10,12 @@ export class EditalService {
 		return this.editalRepository.obterTodos();
 	}
 
-	async obterVigente(): Promise<Edital> {
-		const edital = await this.editalRepository.obterVigente();
-		if (!edital) {
-			throw new NotFoundException(
-				'Nenhum edital com inscrições abertas encontrado.',
-			);
-		}
-		return edital;
+	/**
+	 * Retorna null (HTTP 200 com corpo vazio) quando não há edital com
+	 * inscrições abertas, evitando o log de erro 404 no console do navegador.
+	 */
+	async obterVigente(): Promise<Edital | null> {
+		return this.editalRepository.obterVigente();
 	}
 
 	async obterProximo(): Promise<Edital | null> {
