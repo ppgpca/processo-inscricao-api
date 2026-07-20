@@ -11,7 +11,10 @@ export class EditalRepository {
 	) {}
 
 	async obterTodos(): Promise<Edital[]> {
-		return this.repo.find({ order: { ano: 'DESC', id: 'DESC' } });
+		return this.repo.find({
+			relations: { etapas: true },
+			order: { ano: 'DESC', id: 'DESC' },
+		});
 	}
 
 	async obterVigente(): Promise<Edital | null> {

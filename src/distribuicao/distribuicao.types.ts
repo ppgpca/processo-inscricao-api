@@ -1,0 +1,49 @@
+export const ETAPAS_DISTRIBUICAO = [
+	'ANTEPROJETO',
+	'ENTREVISTA',
+	'ANALISE_CURRICULO',
+] as const;
+
+export type EtapaDistribuicaoSigla = (typeof ETAPAS_DISTRIBUICAO)[number];
+
+/** Nome do critério pai em `criterio_avaliacao` para cada etapa de distribuição. */
+export const NOME_CRITERIO_POR_ETAPA: Record<EtapaDistribuicaoSigla, string> = {
+	ANTEPROJETO: 'Anteprojeto',
+	ENTREVISTA: 'Entrevista',
+	ANALISE_CURRICULO: 'Currículo',
+};
+
+export interface DocenteAtribuido {
+	codigoDocente: string;
+	nome: string;
+	temNotaLancada: boolean;
+}
+
+export interface CandidatoDistribuicao {
+	idInscricao: number;
+	cpf: string;
+	nome: string;
+	idLinhaPesquisa: number;
+	linhaPesquisa: string;
+	projetoPesquisa: string;
+	palavrasChave: string[];
+	docentesAtribuidos: DocenteAtribuido[];
+}
+
+export interface DocenteDistribuicao {
+	codigo: string;
+	nome: string;
+	palavrasChave: string[];
+	linhasPesquisa: { id: number; nome: string }[];
+	cargaAtual: number;
+}
+
+export interface AtribuicaoItem {
+	idInscricao: number;
+	codigosDocentes: string[];
+}
+
+export interface ResultadoAtribuicao {
+	sucesso: { idInscricao: number }[];
+	falhas: { idInscricao: number; motivo: string }[];
+}
