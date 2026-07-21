@@ -79,6 +79,7 @@ export class DocenteRepository {
 			where: { codigoDocente, idCriterioAvaliacao: idCriterio },
 			relations: {
 				inscricao: {
+					linhaPesquisa: true,
 					inscricoesPalavraChave: { palavraChave: true },
 				},
 			},

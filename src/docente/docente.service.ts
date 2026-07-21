@@ -52,6 +52,7 @@ export class DocenteService {
 				idInscricao: nc.idInscricao,
 				cpf: nc.inscricao?.cpf ?? '',
 				anteprojeto: nc.inscricao?.projetoPesquisa ?? '',
+				linhaPesquisa: nc.inscricao?.linhaPesquisa?.nome ?? '',
 				palavrasChave:
 					nc.inscricao?.inscricoesPalavraChave?.map(
 						(ipk) => ipk.palavraChave?.palavra ?? '',
