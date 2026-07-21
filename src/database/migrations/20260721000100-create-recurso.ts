@@ -6,7 +6,7 @@ export class CreateRecurso20260721000100 implements MigrationInterface {
 		await queryRunner.query(`
       CREATE TABLE public.recurso (
         id                    SERIAL NOT NULL,
-        texto                 VARCHAR,
+        texto                 VARCHAR NOT NULL,
         id_criterio_avaliacao INTEGER NOT NULL
           REFERENCES public.criterio_avaliacao (id)
           ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -17,6 +17,7 @@ export class CreateRecurso20260721000100 implements MigrationInterface {
           REFERENCES public.inscricao (id)
           ON UPDATE CASCADE ON DELETE CASCADE,
         deferido              BOOLEAN,
+        comentario            VARCHAR,
         "createdAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT recurso_pkey PRIMARY KEY (id)

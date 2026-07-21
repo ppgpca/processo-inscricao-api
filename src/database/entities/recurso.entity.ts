@@ -17,8 +17,8 @@ export class Recurso {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column({ type: 'varchar', nullable: true })
-	texto: string | null;
+	@Column({ type: 'varchar', nullable: false })
+	texto: string;
 
 	@Column({ name: 'id_criterio_avaliacao', type: 'int', nullable: false })
 	idCriterioAvaliacao: number;
@@ -31,6 +31,9 @@ export class Recurso {
 
 	@Column({ type: 'boolean', nullable: true })
 	deferido: boolean | null;
+
+	@Column({ type: 'varchar', nullable: true })
+	comentario: string | null;
 
 	@CreateDateColumn({ nullable: false })
 	createdAt: Date;
