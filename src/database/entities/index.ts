@@ -18,6 +18,7 @@ export { NotaCriterio } from './nota-criterio.entity';
 export { PalavraChave } from './palavra-chave.entity';
 export { Permissao } from './permissao.entity';
 export { PreferenciaOrientador } from './preferencia-orientador.entity';
+export { Recurso } from './recurso.entity';
 export { TipoDocumentoEdital } from './tipo-documento-edital.entity';
 export { UsuarioGrupo } from './usuario-grupo.entity';
 export { Usuario } from './usuario.entity';

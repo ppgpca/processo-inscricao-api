@@ -19,6 +19,7 @@ import { InscricaoPalavraChave } from './inscricao-palavra-chave.entity';
 import { LinhaPesquisa } from './linha-pesquisa.entity';
 import { NotaCriterio } from './nota-criterio.entity';
 import { PreferenciaOrientador } from './preferencia-orientador.entity';
+import { Recurso } from './recurso.entity';
 
 @Entity({ name: 'inscricao', schema: 'public' })
 export class Inscricao {
@@ -103,4 +104,7 @@ export class Inscricao {
 
 	@OneToMany(() => NotaCriterio, (nc) => nc.inscricao)
 	notasCriterio: NotaCriterio[];
+
+	@OneToMany(() => Recurso, (recurso) => recurso.inscricao)
+	recursos: Recurso[];
 }

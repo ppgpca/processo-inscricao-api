@@ -11,6 +11,7 @@ import {
 import type { Relation } from 'typeorm';
 import { Edital } from './edital.entity';
 import { NotaCriterio } from './nota-criterio.entity';
+import { Recurso } from './recurso.entity';
 
 @Entity({ name: 'criterio_avaliacao', schema: 'public' })
 export class CriterioAvaliacao {
@@ -59,4 +60,7 @@ export class CriterioAvaliacao {
 
 	@OneToMany(() => NotaCriterio, (nc) => nc.criterioAvaliacao)
 	notasCriterio: NotaCriterio[];
+
+	@OneToMany(() => Recurso, (recurso) => recurso.criterioAvaliacao)
+	recursos: Recurso[];
 }

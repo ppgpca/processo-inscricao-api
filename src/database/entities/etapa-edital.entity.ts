@@ -4,11 +4,13 @@ import {
 	Entity,
 	JoinColumn,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn,
 } from 'typeorm';
 import type { Relation } from 'typeorm';
 import { Edital } from './edital.entity';
+import { Recurso } from './recurso.entity';
 
 @Entity({ name: 'etapa_edital', schema: 'public' })
 export class EtapaEdital {
@@ -42,4 +44,7 @@ export class EtapaEdital {
 	@ManyToOne(() => Edital, (edital) => edital.etapas)
 	@JoinColumn({ name: 'id_edital' })
 	edital: Relation<Edital>;
+
+	@OneToMany(() => Recurso, (recurso) => recurso.etapaEdital)
+	recursos: Recurso[];
 }
