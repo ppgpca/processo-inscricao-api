@@ -29,6 +29,9 @@ export class NotaCriterio {
 	@Column({ type: 'decimal', nullable: true })
 	nota: number | null;
 
+	@Column({ name: 'data_banca', type: 'timestamptz', nullable: true })
+	dataBanca: Date | null;
+
 	@CreateDateColumn({ nullable: false })
 	createdAt: Date;
 

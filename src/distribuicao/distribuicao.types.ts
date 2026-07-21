@@ -28,6 +28,8 @@ export interface CandidatoDistribuicao {
 	projetoPesquisa: string;
 	palavrasChave: string[];
 	docentesAtribuidos: DocenteAtribuido[];
+	/** Início do slot da banca, quando houver. */
+	dataBanca: string | null;
 }
 
 export interface DocenteDistribuicao {
@@ -41,6 +43,7 @@ export interface DocenteDistribuicao {
 export interface AtribuicaoItem {
 	idInscricao: number;
 	codigosDocentes: string[];
+	dataBanca?: string | null;
 }
 
 export interface ResultadoAtribuicao {

@@ -17,6 +17,7 @@ export class CreateNotaCriterio20260709001400 implements MigrationInterface {
           ON UPDATE CASCADE ON DELETE RESTRICT,
         nota                  DECIMAL,
         comentario            TEXT,
+        data_banca            TIMESTAMPTZ,
         "createdAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         CONSTRAINT nota_criterio_pkey PRIMARY KEY (id_criterio_avaliacao, id_inscricao, codigo_docente)

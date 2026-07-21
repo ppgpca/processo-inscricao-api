@@ -2,7 +2,9 @@ import { Type } from 'class-transformer';
 import {
 	ArrayUnique,
 	IsArray,
+	IsDateString,
 	IsInt,
+	IsOptional,
 	IsString,
 	ValidateNested,
 } from 'class-validator';
@@ -15,6 +17,11 @@ export class AtribuicaoItemDto {
 	@ArrayUnique()
 	@IsString({ each: true })
 	codigosDocentes: string[];
+
+	/** Início do slot da banca (entrevista). */
+	@IsOptional()
+	@IsDateString()
+	dataBanca?: string | null;
 }
 
 export class AtribuirAvaliadoresDto {

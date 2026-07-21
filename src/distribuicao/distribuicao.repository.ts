@@ -1,6 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { DataSource, In, IsNull, Repository } from 'typeorm';
+import {
+	DataSource,
+	EntityManager,
+	In,
+	IsNull,
+	Repository,
+} from 'typeorm';
 import { CriterioAvaliacao } from '../database/entities/criterio-avaliacao.entity';
 import { DocenteEdital } from '../database/entities/docente-edital.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
@@ -105,6 +111,7 @@ export class DistribuicaoRepository {
 			.addSelect('nc.codigoDocente', 'codigoDocente')
 			.addSelect('docente.nome', 'nome')
 			.addSelect('nc.nota', 'nota')
+			.addSelect('nc.dataBanca', 'dataBanca')
 			.where('nc.idInscricao IN (:...idsInscricao)', {
 				idsInscricao: inscricoes.map((i) => i.id),
 			})
@@ -116,9 +123,11 @@ export class DistribuicaoRepository {
 				codigoDocente: string;
 				nome: string;
 				nota: string | null;
+				dataBanca: Date | string | null;
 			}>();
 
 		const porInscricao = new Map<number, Map<string, DocenteAtribuido>>();
+		const dataBancaPorInscricao = new Map<number, string>();
 		for (const row of notas) {
 			if (!porInscricao.has(row.idInscricao)) {
 				porInscricao.set(row.idInscricao, new Map());
@@ -135,6 +144,14 @@ export class DistribuicaoRepository {
 					temNotaLancada: temNota,
 				});
 			}
+			if (row.dataBanca && !dataBancaPorInscricao.has(row.idInscricao)) {
+				dataBancaPorInscricao.set(
+					row.idInscricao,
+					row.dataBanca instanceof Date
+						? row.dataBanca.toISOString()
+						: new Date(row.dataBanca).toISOString(),
+				);
+			}
 		}
 
 		return inscricoes.map((inscricao) => ({
@@ -149,6 +166,7 @@ export class DistribuicaoRepository {
 					(ipk) => ipk.palavraChave?.palavra ?? '',
 				) ?? [],
 			docentesAtribuidos: [...(porInscricao.get(inscricao.id)?.values() ?? [])],
+			dataBanca: dataBancaPorInscricao.get(inscricao.id) ?? null,
 		}));
 	}
 
@@ -253,13 +271,92 @@ export class DistribuicaoRepository {
 			}));
 	}
 
+	/**
+	 * Duração do slot de entrevista (mesma regra do frontend).
+	 * Intervalo half-open: [inicio, inicio + 30min).
+	 */
+	private static readonly DURACAO_SLOT_MS = 30 * 60 * 1000;
+
+	/**
+	 * Detecta se algum avaliador já possui outra inscrição com slot
+	 * cujo intervalo de 30 min cruza o horário proposto.
+	 */
+	async verificarChoqueHorarioAvaliadores(
+		idInscricao: number,
+		idsCriterio: number[],
+		codigosDocentes: string[],
+		inicioSlot: Date,
+		manager?: EntityManager,
+	): Promise<{ ok: true } | { ok: false; motivo: string }> {
+		if (codigosDocentes.length === 0) return { ok: true };
+
+		const inicioMs = inicioSlot.getTime();
+		const fimMs = inicioMs + DistribuicaoRepository.DURACAO_SLOT_MS;
+		const repo = manager
+			? manager.getRepository(NotaCriterio)
+			: this.notaCriterioRepo;
+
+		const rows = await repo
+			.createQueryBuilder('nc')
+			.innerJoin('nc.docente', 'docente')
+			.innerJoin('nc.inscricao', 'inscricao')
+			.innerJoin('inscricao.candidato', 'candidato')
+			.select('nc.codigoDocente', 'codigoDocente')
+			.addSelect('docente.nome', 'nomeDocente')
+			.addSelect('nc.idInscricao', 'idInscricao')
+			.addSelect('candidato.nome', 'nomeCandidato')
+			.addSelect('nc.dataBanca', 'dataBanca')
+			.distinct(true)
+			.where('nc.idCriterioAvaliacao IN (:...idsCriterio)', { idsCriterio })
+			.andWhere('nc.codigoDocente IN (:...codigosDocentes)', {
+				codigosDocentes,
+			})
+			.andWhere('nc.idInscricao <> :idInscricao', { idInscricao })
+			.andWhere('nc.dataBanca IS NOT NULL')
+			// Overlap: startA < endB AND startB < endA
+			.andWhere('nc.dataBanca < :fimMs', { fimMs: new Date(fimMs) })
+			.andWhere(
+				`nc.dataBanca + INTERVAL '30 minutes' > :inicioMs`,
+				{ inicioMs: inicioSlot },
+			)
+			.getRawMany<{
+				codigoDocente: string;
+				nomeDocente: string;
+				idInscricao: number;
+				nomeCandidato: string;
+				dataBanca: Date | string;
+			}>();
+
+		if (rows.length === 0) return { ok: true };
+
+		const choque = rows[0];
+		const data = new Date(choque.dataBanca);
+		const dataFmt = data.toLocaleString('pt-BR', {
+			dateStyle: 'short',
+			timeStyle: 'short',
+		});
+		return {
+			ok: false,
+			motivo:
+				`Choque de horário: ${choque.nomeDocente} já está em entrevista com ` +
+				`${choque.nomeCandidato} em ${dataFmt}.`,
+		};
+	}
+
 	async substituirAtribuicoes(
 		idInscricao: number,
 		idCriterioPai: number,
 		idsSubCriterios: number[],
 		codigosDocentesDesejados: string[],
+		dataBanca?: string | null,
 	): Promise<{ ok: true } | { ok: false; motivo: string }> {
 		const idsCriterio = [idCriterioPai, ...idsSubCriterios];
+		const dataBancaDate =
+			dataBanca === undefined
+				? undefined
+				: dataBanca
+					? new Date(dataBanca)
+					: null;
 
 		return this.dataSource.transaction(async (manager) => {
 			const atuaisRows = await manager
@@ -271,6 +368,38 @@ export class DistribuicaoRepository {
 				})
 				.getRawMany<{ codigoDocente: string }>();
 			const atuais = atuaisRows.map((r) => r.codigoDocente);
+
+			let dataBancaEfetiva = dataBancaDate;
+			if (dataBancaEfetiva === undefined) {
+				const atualSlot = await manager
+					.createQueryBuilder(NotaCriterio, 'nc')
+					.select('nc.dataBanca', 'dataBanca')
+					.where('nc.idInscricao = :idInscricao', { idInscricao })
+					.andWhere('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
+						idsCriterio,
+					})
+					.andWhere('nc.dataBanca IS NOT NULL')
+					.limit(1)
+					.getRawOne<{ dataBanca: Date | string }>();
+				dataBancaEfetiva = atualSlot?.dataBanca
+					? new Date(atualSlot.dataBanca)
+					: null;
+			}
+
+			if (
+				codigosDocentesDesejados.length > 0 &&
+				dataBancaEfetiva instanceof Date &&
+				!Number.isNaN(dataBancaEfetiva.getTime())
+			) {
+				const choque = await this.verificarChoqueHorarioAvaliadores(
+					idInscricao,
+					idsCriterio,
+					codigosDocentesDesejados,
+					dataBancaEfetiva,
+					manager,
+				);
+				if (!choque.ok) return choque;
+			}
 
 			const paraAdicionar = codigosDocentesDesejados.filter(
 				(c) => !atuais.includes(c),
@@ -312,9 +441,39 @@ export class DistribuicaoRepository {
 						idCriterioAvaliacao,
 						codigoDocente,
 						nota: null,
+						dataBanca: dataBancaDate ?? null,
 					})),
 				);
 				await manager.insert(NotaCriterio, linhas);
+			}
+
+			if (dataBancaDate !== undefined) {
+				const restantes = await manager
+					.createQueryBuilder(NotaCriterio, 'nc')
+					.where('nc.idInscricao = :idInscricao', { idInscricao })
+					.andWhere('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
+						idsCriterio,
+					})
+					.getCount();
+
+				if (restantes > 0) {
+					await manager.update(
+						NotaCriterio,
+						{
+							idInscricao,
+							idCriterioAvaliacao: In(idsCriterio),
+						},
+						{ dataBanca: dataBancaDate },
+					);
+				} else if (dataBancaDate !== null) {
+					// Slot sem banca: ainda não há linhas em nota_criterio para gravar.
+					// Mantém a pendência no cliente até haver avaliadores.
+					return {
+						ok: false,
+						motivo:
+							'Não é possível gravar o horário do slot sem avaliadores atribuídos. Atribua a banca e sincronize novamente.',
+					};
+				}
 			}
 
 			return { ok: true };

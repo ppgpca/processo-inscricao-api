@@ -47,17 +47,32 @@ export class DocenteService {
 			idCriterio,
 		);
 
-		return notas.map((nc) => ({
-			idInscricao: nc.idInscricao,
-			cpf: nc.inscricao?.cpf ?? '',
-			anteprojeto: nc.inscricao?.projetoPesquisa ?? '',
-			palavrasChave:
-				nc.inscricao?.inscricoesPalavraChave?.map(
-					(ipk) => ipk.palavraChave?.palavra ?? '',
-				) ?? [],
-			nota: nc.nota,
-			comentario: nc.comentario,
-		}));
+		return notas
+			.map((nc) => ({
+				idInscricao: nc.idInscricao,
+				cpf: nc.inscricao?.cpf ?? '',
+				anteprojeto: nc.inscricao?.projetoPesquisa ?? '',
+				palavrasChave:
+					nc.inscricao?.inscricoesPalavraChave?.map(
+						(ipk) => ipk.palavraChave?.palavra ?? '',
+					) ?? [],
+				nota: nc.nota,
+				comentario: nc.comentario,
+				dataBanca: nc.dataBanca
+					? nc.dataBanca instanceof Date
+						? nc.dataBanca.toISOString()
+						: new Date(nc.dataBanca).toISOString()
+					: null,
+			}))
+			.sort((a, b) => {
+				if (!a.dataBanca && !b.dataBanca) return 0;
+				if (!a.dataBanca) return 1;
+				if (!b.dataBanca) return -1;
+				return (
+					new Date(a.dataBanca).getTime() -
+					new Date(b.dataBanca).getTime()
+				);
+			});
 	}
 
 	async obterNotasPorInscricaoECriterio(

@@ -51,6 +51,7 @@ export class DistribuicaoService {
 				idCriterioPai,
 				idsSubCriterios,
 				item.codigosDocentes,
+				item.dataBanca,
 			);
 			if (resposta.ok) {
 				resultado.sucesso.push({ idInscricao: item.idInscricao });
