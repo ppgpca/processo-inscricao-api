@@ -4,10 +4,10 @@ export const ETAPAS_DISTRIBUICAO = [
 	'ANALISE_CURRICULO',
 ] as const;
 
-export type EtapaDistribuicaoSigla = (typeof ETAPAS_DISTRIBUICAO)[number];
+export type EtapaDistribuicaoNome = (typeof ETAPAS_DISTRIBUICAO)[number];
 
 /** Nome do critério pai em `criterio_avaliacao` para cada etapa de distribuição. */
-export const NOME_CRITERIO_POR_ETAPA: Record<EtapaDistribuicaoSigla, string> = {
+export const NOME_CRITERIO_POR_ETAPA: Record<EtapaDistribuicaoNome, string> = {
 	ANTEPROJETO: 'Anteprojeto',
 	ENTREVISTA: 'Entrevista',
 	ANALISE_CURRICULO: 'Currículo',

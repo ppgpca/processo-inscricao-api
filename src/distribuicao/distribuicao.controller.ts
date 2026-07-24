@@ -23,30 +23,30 @@ import { DistribuicaoService } from './distribuicao.service';
 export class DistribuicaoController {
 	constructor(private readonly distribuicaoService: DistribuicaoService) {}
 
-	@Get(':idEdital/:etapaSigla/candidatos')
+	@Get(':idEdital/:etapaNome/candidatos')
 	listarCandidatos(
 		@Param('idEdital', ParseIntPipe) idEdital: number,
-		@Param('etapaSigla') etapaSigla: string,
+		@Param('etapaNome') etapaNome: string,
 	) {
-		return this.distribuicaoService.listarCandidatos(idEdital, etapaSigla);
+		return this.distribuicaoService.listarCandidatos(idEdital, etapaNome);
 	}
 
-	@Get(':idEdital/:etapaSigla/docentes')
+	@Get(':idEdital/:etapaNome/docentes')
 	listarDocentes(
 		@Param('idEdital', ParseIntPipe) idEdital: number,
-		@Param('etapaSigla') etapaSigla: string,
+		@Param('etapaNome') etapaNome: string,
 	) {
-		return this.distribuicaoService.listarDocentes(idEdital, etapaSigla);
+		return this.distribuicaoService.listarDocentes(idEdital, etapaNome);
 	}
 
-	@Put(':idEdital/:etapaSigla/atribuicoes')
+	@Put(':idEdital/:etapaNome/atribuicoes')
 	@HttpCode(HttpStatus.OK)
 	atribuir(
 		@Param('idEdital', ParseIntPipe) idEdital: number,
-		@Param('etapaSigla') etapaSigla: string,
+		@Param('etapaNome') etapaNome: string,
 		@Body() dto: AtribuirAvaliadoresDto,
 	) {
-		return this.distribuicaoService.atribuir(idEdital, etapaSigla, dto.itens);
+		return this.distribuicaoService.atribuir(idEdital, etapaNome, dto.itens);
 	}
 
 	@Post(':idEdital/anteprojeto/auto')

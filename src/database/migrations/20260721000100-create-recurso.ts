@@ -7,9 +7,6 @@ export class CreateRecurso20260721000100 implements MigrationInterface {
       CREATE TABLE public.recurso (
         id                    SERIAL NOT NULL,
         texto                 VARCHAR NOT NULL,
-        id_criterio_avaliacao INTEGER NOT NULL
-          REFERENCES public.criterio_avaliacao (id)
-          ON UPDATE CASCADE ON DELETE RESTRICT,
         id_etapa_edital       INTEGER NOT NULL
           REFERENCES public.etapa_edital (id)
           ON UPDATE CASCADE ON DELETE RESTRICT,
@@ -20,7 +17,8 @@ export class CreateRecurso20260721000100 implements MigrationInterface {
         comentario            VARCHAR,
         "createdAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt"           TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        CONSTRAINT recurso_pkey PRIMARY KEY (id)
+        CONSTRAINT recurso_pkey PRIMARY KEY (id),
+        CONSTRAINT recurso_unico UNIQUE (id_inscricao, id_etapa_edital)
       )
     `);
 

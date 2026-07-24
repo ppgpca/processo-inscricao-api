@@ -7,74 +7,109 @@ const NUMERO_EDITAL = 'XXX/PPG PCA CH/UFFS/2026';
 /**
  * Etapas do processo seletivo baseadas no calendário do edital:
  *
- * Inscrições:        01/09 → 15/10
- * Homologação:       16/10 → 21/10
- * Análise currículo: 22/10 → 11/11
- * Anteprojeto:       12/11 → 25/11
- * Entrevistas:       26/11 → 03/12
- * Resultado parcial: 04/12 → 10/12
- * Recursos:          11/12 → 13/12
- * Resultado final:   14/12 em diante
+ * Inscrições:                         01/09 → 15/10
+ * Recurso da etapa de inscrições:     16/10
+ * Homologação:                        16/10 → 21/10
+ * Análise currículo:                  22/10 → 11/11
+ * Anteprojeto:                        12/11 → 25/11
+ * Recurso da etapa de anteprojetos:   26/11
+ * Entrevistas:                        26/11 → 03/12
+ * Recurso entrevista/prova títulos:   04/12
+ * Resultado parcial:                  04/12 → 10/12
+ * Recursos:                           11/12 → 13/12
+ * Resultado final:                    14/12 em diante
  */
 const ETAPAS: Omit<
 	EtapaEdital,
-	'id' | 'idEdital' | 'edital' | 'createdAt' | 'updatedAt'
+	'id' | 'idEdital' | 'edital' | 'recursos' | 'createdAt' | 'updatedAt'
 >[] = [
 	{
-		sigla: 'INSCRICAO',
-		nome: 'Inscrições',
+		nome: 'Inscrição',
+		descricao: 'Inscrições dos candidatos',
 		ordem: 1,
 		dataInicio: new Date('2026-09-01T00:00:00'),
 		dataFim: new Date('2026-10-15T23:59:59'),
+		recurso: false,
 	},
 	{
-		sigla: 'HOMOLOGACAO',
-		nome: 'Homologação das inscrições',
+		nome: 'Recurso inscrição',
+		descricao: 'Recurso da etapa de inscrições',
 		ordem: 2,
 		dataInicio: new Date('2026-10-16T00:00:00'),
-		dataFim: new Date('2026-10-21T23:59:59'),
+		dataFim: new Date('2026-10-16T23:59:59'),
+		recurso: true,
 	},
 	{
-		sigla: 'ANTEPROJETO',
-		nome: 'Avaliação de anteprojeto',
+		nome: 'Homologação',
+		descricao: 'Homologação das inscrições',
 		ordem: 3,
-		dataInicio: new Date('2026-11-12T00:00:00'),
-		dataFim: new Date('2026-11-25T23:59:59'),
+		dataInicio: new Date('2026-10-16T00:00:00'),
+		dataFim: new Date('2026-10-21T23:59:59'),
+		recurso: false,
 	},
 	{
-		sigla: 'ENTREVISTA',
-		nome: 'Entrevistas',
+		nome: 'Análise currículo',
+		descricao: 'Análise de currículo',
 		ordem: 4,
-		dataInicio: new Date('2026-11-26T00:00:00'),
-		dataFim: new Date('2026-12-03T23:59:59'),
-	},
-	{
-		sigla: 'ANALISE_CURRICULO',
-		nome: 'Análise de currículo',
-		ordem: 5,
 		dataInicio: new Date('2026-10-22T00:00:00'),
 		dataFim: new Date('2026-11-11T23:59:59'),
+		recurso: false,
 	},
 	{
-		sigla: 'RESULTADO_PARCIAL',
-		nome: 'Resultado parcial',
+		nome: 'Anteprojeto',
+		descricao: 'Avaliação de anteprojeto',
+		ordem: 5,
+		dataInicio: new Date('2026-11-12T00:00:00'),
+		dataFim: new Date('2026-11-25T23:59:59'),
+		recurso: false,
+	},
+	{
+		nome: 'Recurso anteprojeto',
+		descricao: 'Recurso da etapa de anteprojetos',
 		ordem: 6,
+		dataInicio: new Date('2026-11-26T00:00:00'),
+		dataFim: new Date('2026-11-26T23:59:59'),
+		recurso: true,
+	},
+	{
+		nome: 'Entrevista',
+		descricao: 'Entrevistas',
+		ordem: 7,
+		dataInicio: new Date('2026-11-26T00:00:00'),
+		dataFim: new Date('2026-12-03T23:59:59'),
+		recurso: false,
+	},
+	{
+		nome: 'Recurso entrevista/prova de títulos',
+		descricao: 'Recurso da etapa de entrevista e prova de títulos',
+		ordem: 8,
+		dataInicio: new Date('2026-12-04T00:00:00'),
+		dataFim: new Date('2026-12-04T23:59:59'),
+		recurso: true,
+	},
+	{
+		nome: 'Resultado parcial',
+		descricao: 'Resultado parcial',
+		ordem: 9,
 		dataInicio: new Date('2026-12-04T00:00:00'),
 		dataFim: new Date('2026-12-10T23:59:59'),
+		recurso: false,
 	},
 	{
-		sigla: 'RECURSO',
-		nome: 'Período de recursos',
-		ordem: 7,
+		nome: 'Recurso  resultado parcial',
+		descricao: 'Recurso do resultado parcial',
+		ordem: 10,
 		dataInicio: new Date('2026-12-11T00:00:00'),
 		dataFim: new Date('2026-12-13T23:59:59'),
+		recurso: true,
 	},
 	{
-		sigla: 'RESULTADO_FINAL',
 		nome: 'Resultado final',
-		ordem: 8,
+		descricao: 'Resultado final',
+		ordem: 11,
 		dataInicio: new Date('2026-12-14T00:00:00'),
 		dataFim: null,
+		recurso: false,
 	},
 ];
 

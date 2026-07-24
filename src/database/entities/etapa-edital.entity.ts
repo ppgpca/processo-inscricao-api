@@ -21,10 +21,10 @@ export class EtapaEdital {
 	idEdital: number;
 
 	@Column({ type: 'varchar', nullable: false })
-	sigla: string;
+	nome: string;
 
 	@Column({ type: 'varchar', nullable: false })
-	nome: string;
+	descricao: string;
 
 	@Column({ type: 'int', nullable: false })
 	ordem: number;
@@ -34,6 +34,9 @@ export class EtapaEdital {
 
 	@Column({ name: 'data_fim', type: 'timestamptz', nullable: true })
 	dataFim: Date | null;
+
+	@Column({ type: 'boolean', nullable: false, default: false })
+	recurso: boolean;
 
 	@CreateDateColumn({ nullable: false })
 	createdAt: Date;

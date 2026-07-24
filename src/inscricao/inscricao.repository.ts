@@ -52,7 +52,7 @@ export class InscricaoRepository {
 
 	async obterEtapaHomologacao(idEdital: number): Promise<EtapaEdital | null> {
 		return this.etapaEditalRepo.findOne({
-			where: { idEdital, sigla: 'HOMOLOGACAO' },
+			where: { idEdital, nome: 'HOMOLOGACAO' },
 			order: { ordem: 'ASC' },
 		});
 	}

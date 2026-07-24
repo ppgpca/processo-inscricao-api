@@ -7,7 +7,7 @@ import {
 	CandidatoDistribuicao,
 	DocenteDistribuicao,
 	ETAPAS_DISTRIBUICAO,
-	EtapaDistribuicaoSigla,
+	EtapaDistribuicaoNome,
 	ResultadoAtribuicao,
 } from './distribuicao.types';
 
@@ -17,10 +17,10 @@ export class DistribuicaoService {
 
 	async listarCandidatos(
 		idEdital: number,
-		siglaEtapa: string,
+		nomeEtapa: string,
 	): Promise<CandidatoDistribuicao[]> {
 		const { idCriterioPai, idsSubCriterios } =
-			await this.resolverCriterios(idEdital, siglaEtapa);
+			await this.resolverCriterios(idEdital, nomeEtapa);
 		return this.distribuicaoRepository.obterCandidatos(
 			idEdital,
 			idCriterioPai,
@@ -30,19 +30,19 @@ export class DistribuicaoService {
 
 	async listarDocentes(
 		idEdital: number,
-		siglaEtapa: string,
+		nomeEtapa: string,
 	): Promise<DocenteDistribuicao[]> {
-		const { idCriterioPai } = await this.resolverCriterios(idEdital, siglaEtapa);
+		const { idCriterioPai } = await this.resolverCriterios(idEdital, nomeEtapa);
 		return this.distribuicaoRepository.obterDocentes(idEdital, idCriterioPai);
 	}
 
 	async atribuir(
 		idEdital: number,
-		siglaEtapa: string,
+		nomeEtapa: string,
 		itens: AtribuicaoItemDto[],
 	): Promise<ResultadoAtribuicao> {
 		const { idCriterioPai, idsSubCriterios } =
-			await this.resolverCriterios(idEdital, siglaEtapa);
+			await this.resolverCriterios(idEdital, nomeEtapa);
 
 		const resultado: ResultadoAtribuicao = { sucesso: [], falhas: [] };
 		for (const item of itens) {
@@ -99,16 +99,16 @@ export class DistribuicaoService {
 
 	private async resolverCriterios(
 		idEdital: number,
-		siglaEtapa: string,
+		nomeEtapa: string,
 	): Promise<{ idCriterioPai: number; idsSubCriterios: number[] }> {
-		const sigla = this.validarEtapa(siglaEtapa);
+		const nome = this.validarEtapa(nomeEtapa);
 		const criterioPai = await this.distribuicaoRepository.obterCriterioPaiPorEtapa(
 			idEdital,
-			sigla,
+			nome,
 		);
 		if (!criterioPai) {
 			throw new BadRequestException(
-				`Edital ${idEdital} não possui critério de avaliação cadastrado para a etapa ${sigla}.`,
+				`Edital ${idEdital} não possui critério de avaliação cadastrado para a etapa ${nome}.`,
 			);
 		}
 		const subCriterios = await this.distribuicaoRepository.obterSubCriterios(
@@ -120,14 +120,14 @@ export class DistribuicaoService {
 		};
 	}
 
-	private validarEtapa(siglaEtapa: string): EtapaDistribuicaoSigla {
+	private validarEtapa(nomeEtapa: string): EtapaDistribuicaoNome {
 		if (
-			!ETAPAS_DISTRIBUICAO.includes(siglaEtapa as EtapaDistribuicaoSigla)
+			!ETAPAS_DISTRIBUICAO.includes(nomeEtapa as EtapaDistribuicaoNome)
 		) {
 			throw new BadRequestException(
-				`Etapa inválida: ${siglaEtapa}. Valores aceitos: ${ETAPAS_DISTRIBUICAO.join(', ')}.`,
+				`Etapa inválida: ${nomeEtapa}. Valores aceitos: ${ETAPAS_DISTRIBUICAO.join(', ')}.`,
 			);
 		}
-		return siglaEtapa as EtapaDistribuicaoSigla;
+		return nomeEtapa as EtapaDistribuicaoNome;
 	}
 }

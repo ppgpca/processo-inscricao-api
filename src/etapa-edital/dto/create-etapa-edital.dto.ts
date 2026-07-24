@@ -1,4 +1,5 @@
 import {
+	IsBoolean,
 	IsDateString,
 	IsInt,
 	IsNotEmpty,
@@ -10,11 +11,11 @@ import {
 export class CreateEtapaEditalDto {
 	@IsString()
 	@IsNotEmpty()
-	sigla: string;
+	nome: string;
 
 	@IsString()
 	@IsNotEmpty()
-	nome: string;
+	descricao: string;
 
 	@IsInt()
 	@Min(1)
@@ -26,4 +27,8 @@ export class CreateEtapaEditalDto {
 	@IsDateString()
 	@IsOptional()
 	dataFim?: string | null;
+
+	@IsBoolean()
+	@IsOptional()
+	recurso?: boolean;
 }

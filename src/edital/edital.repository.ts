@@ -24,8 +24,8 @@ export class EditalRepository {
 			.innerJoin(
 				'edital.etapas',
 				'etapa',
-				'etapa.sigla = :sigla AND etapa.data_inicio <= :now AND etapa.data_fim >= :now',
-				{ sigla: 'INSCRICAO', now },
+				'etapa.nome = :nome AND etapa.data_inicio <= :now AND etapa.data_fim >= :now',
+				{ nome: 'INSCRICAO', now },
 			)
 			.leftJoinAndSelect('edital.etapas', 'todas_etapas')
 			.where('edital.ativo = true')
@@ -41,8 +41,8 @@ export class EditalRepository {
 			.innerJoin(
 				'edital.etapas',
 				'etapa',
-				'etapa.sigla = :sigla AND etapa.data_inicio > :now',
-				{ sigla: 'INSCRICAO', now },
+				'etapa.nome = :nome AND etapa.data_inicio > :now',
+				{ nome: 'INSCRICAO', now },
 			)
 			.leftJoinAndSelect('edital.etapas', 'todas_etapas')
 			.orderBy('etapa.data_inicio', 'ASC')

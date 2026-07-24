@@ -29,11 +29,12 @@ export class EtapaEditalRepository {
 	): Promise<EtapaEdital> {
 		const etapa = this.repo.create({
 			idEdital,
-			sigla: dto.sigla,
 			nome: dto.nome,
+			descricao: dto.descricao,
 			ordem: dto.ordem,
 			dataInicio: new Date(dto.dataInicio),
 			dataFim: dto.dataFim ? new Date(dto.dataFim) : null,
+			recurso: dto.recurso ?? false,
 		});
 		return this.repo.save(etapa);
 	}
@@ -42,13 +43,14 @@ export class EtapaEditalRepository {
 		etapa: EtapaEdital,
 		dto: UpdateEtapaEditalDto,
 	): Promise<EtapaEdital> {
-		if (dto.sigla !== undefined) etapa.sigla = dto.sigla;
 		if (dto.nome !== undefined) etapa.nome = dto.nome;
+		if (dto.descricao !== undefined) etapa.descricao = dto.descricao;
 		if (dto.ordem !== undefined) etapa.ordem = dto.ordem;
 		if (dto.dataInicio !== undefined)
 			etapa.dataInicio = new Date(dto.dataInicio);
 		if (dto.dataFim !== undefined)
 			etapa.dataFim = dto.dataFim ? new Date(dto.dataFim) : null;
+		if (dto.recurso !== undefined) etapa.recurso = dto.recurso;
 		return this.repo.save(etapa);
 	}
 

@@ -3,15 +3,18 @@ import { CreateEtapaEditalDto } from './dto/create-etapa-edital.dto';
 import { UpdateEtapaEditalDto } from './dto/update-etapa-edital.dto';
 import { EtapaEditalRepository } from './etapa-edital.repository';
 
-const SIGLAS: { sigla: string; label: string }[] = [
-	{ sigla: 'INSCRICAO', label: 'Inscrições' },
-	{ sigla: 'HOMOLOGACAO', label: 'Homologação das inscrições' },
-	{ sigla: 'ANALISE_CURRICULO', label: 'Análise de currículo' },
-	{ sigla: 'ANTEPROJETO', label: 'Entrega de anteprojeto' },
-	{ sigla: 'ENTREVISTA', label: 'Entrevista' },
-	{ sigla: 'RESULTADO_PARCIAL', label: 'Resultado parcial' },
-	{ sigla: 'RECURSO', label: 'Período de recursos' },
-	{ sigla: 'RESULTADO_FINAL', label: 'Resultado final' },
+const NOMES: { nome: string; label: string }[] = [
+	{ nome: 'INSCRICAO', label: 'Inscrições' },
+	{ nome: 'RECURSO_INSCRICAO', label: 'Recurso da etapa de inscrições' },
+	{ nome: 'HOMOLOGACAO', label: 'Homologação das inscrições' },
+	{ nome: 'ANALISE_CURRICULO', label: 'Análise de currículo' },
+	{ nome: 'ANTEPROJETO', label: 'Avaliação de anteprojeto' },
+	{ nome: 'RECURSO_ANTEPROJETO', label: 'Recurso da etapa de anteprojetos' },
+	{ nome: 'ENTREVISTA', label: 'Entrevistas' },
+	{ nome: 'RECURSO_ENTREVISTA', label: 'Recurso da etapa de entrevista e prova de títulos' },
+	{ nome: 'RESULTADO_PARCIAL', label: 'Resultado parcial' },
+	{ nome: 'RECURSO_RESULTADO_PARCIAL', label: 'Recurso do resultado parcial' },
+	{ nome: 'RESULTADO_FINAL', label: 'Resultado final' },
 ];
 
 @Injectable()
@@ -20,8 +23,8 @@ export class EtapaEditalService {
 		private readonly etapaEditalRepository: EtapaEditalRepository,
 	) {}
 
-	obterSiglas(): { sigla: string; label: string }[] {
-		return SIGLAS;
+	obterNomes(): { nome: string; label: string }[] {
+		return NOMES;
 	}
 
 	async obterPorEdital(idEdital: number) {

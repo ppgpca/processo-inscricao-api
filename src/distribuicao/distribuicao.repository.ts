@@ -19,7 +19,7 @@ import {
 	CandidatoDistribuicao,
 	DocenteAtribuido,
 	DocenteDistribuicao,
-	EtapaDistribuicaoSigla,
+	EtapaDistribuicaoNome,
 	NOME_CRITERIO_POR_ETAPA,
 } from './distribuicao.types';
 
@@ -40,12 +40,12 @@ export class DistribuicaoRepository {
 
 	async obterCriterioPaiPorEtapa(
 		idEdital: number,
-		siglaEtapa: EtapaDistribuicaoSigla,
+		nomeEtapa: EtapaDistribuicaoNome,
 	): Promise<CriterioAvaliacao | null> {
 		return this.criterioRepo.findOne({
 			where: {
 				idEdital,
-				nome: NOME_CRITERIO_POR_ETAPA[siglaEtapa],
+				nome: NOME_CRITERIO_POR_ETAPA[nomeEtapa],
 				idCriterioPai: IsNull(),
 			},
 		});

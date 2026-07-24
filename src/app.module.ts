@@ -13,6 +13,7 @@ import { EtapaEditalModule } from './etapa-edital/etapa-edital.module';
 import { InscricaoModule } from './inscricao/inscricao.module';
 import { LinhaPesquisaModule } from './linha-pesquisa/linha-pesquisa.module';
 import { PalavraChaveModule } from './palavra-chave/palavra-chave.module';
+import { RecursoModule } from './recurso/recurso.module';
 
 @Module({
 	imports: [
@@ -27,6 +28,7 @@ import { PalavraChaveModule } from './palavra-chave/palavra-chave.module';
 		LinhaPesquisaModule,
 		DocumentoModule,
 		PalavraChaveModule,
+		RecursoModule,
 	],
 	controllers: [AppController],
 	providers: [AppService],

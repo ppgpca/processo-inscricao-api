@@ -35,7 +35,7 @@ export class Edital {
 	/** Derivado da etapa INSCRICAO: início da etapa de inscrições. */
 	get dataInicioInscricao(): Date | null {
 		return (
-			this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataInicio ??
+			this.etapas?.find((e) => e.nome === 'INSCRICAO')?.dataInicio ??
 			null
 		);
 	}
@@ -43,7 +43,7 @@ export class Edital {
 	/** Derivado da etapa INSCRICAO: fim da etapa de inscrições. */
 	get dataFimInscricao(): Date | null {
 		return (
-			this.etapas?.find((e) => e.sigla === 'INSCRICAO')?.dataFim ?? null
+			this.etapas?.find((e) => e.nome === 'INSCRICAO')?.dataFim ?? null
 		);
 	}
 
