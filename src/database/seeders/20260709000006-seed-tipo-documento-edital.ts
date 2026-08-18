@@ -11,6 +11,7 @@ const tiposDocumento = [
 		obrigatorio: true,
 		ordem: 1,
 		ativo: true,
+		recurso: false,
 		padraoNome: 'identificacao',
 	},
 	{
@@ -19,6 +20,7 @@ const tiposDocumento = [
 		obrigatorio: false,
 		ordem: 2,
 		ativo: true,
+		recurso: false,
 		padraoNome: 'cpf',
 	},
 	{
@@ -27,6 +29,7 @@ const tiposDocumento = [
 		obrigatorio: true,
 		ordem: 3,
 		ativo: true,
+		recurso: false,
 		padraoNome: 'diploma',
 	},
 	{
@@ -35,6 +38,7 @@ const tiposDocumento = [
 		obrigatorio: true,
 		ordem: 4,
 		ativo: true,
+		recurso: false,
 		padraoNome: 'historico',
 	},
 	{
@@ -43,6 +47,7 @@ const tiposDocumento = [
 		obrigatorio: true,
 		ordem: 5,
 		ativo: true,
+		recurso: false,
 		padraoNome: 'anteprojeto',
 	},
 	{
@@ -51,7 +56,53 @@ const tiposDocumento = [
 		obrigatorio: true,
 		ordem: 6,
 		ativo: true,
+		recurso: false,
 		padraoNome: 'curriculo',
+	},
+	{
+		nome: 'Recurso inscrição',
+		descricao: 'Documento com o texto do recurso da etapa de inscrições',
+		obrigatorio: false,
+		ordem: 7,
+		ativo: true,
+		recurso: true,
+		padraoNome: 'recurso_inscricao',
+	},
+	{
+		nome: 'Recurso anteprojeto',
+		descricao: 'Documento com o texto do recurso da etapa de anteprojetos',
+		obrigatorio: false,
+		ordem: 8,
+		ativo: true,
+		recurso: true,
+		padraoNome: 'recurso_anteprojeto',
+	},
+	{
+		nome: 'Recurso entrevista',
+		descricao: 'Documento com o texto do recurso da etapa de entrevista',
+		obrigatorio: false,
+		ordem: 9,
+		ativo: true,
+		recurso: true,
+		padraoNome: 'recurso_entrevista',
+	},
+	{
+		nome: 'Recurso currículo',
+		descricao: 'Documento com o texto do recurso da etapa de currículo',
+		obrigatorio: false,
+		ordem: 10,
+		ativo: true,
+		recurso: true,
+		padraoNome: 'recurso_curriculo',
+	},
+	{
+		nome: 'Recurso resultado parcial',
+		descricao: 'Documento com o texto do recurso do resultado parcial',
+		obrigatorio: false,
+		ordem: 11,
+		ativo: true,
+		recurso: true,
+		padraoNome: 'recurso_resultado_parcial',
 	},
 ];
 

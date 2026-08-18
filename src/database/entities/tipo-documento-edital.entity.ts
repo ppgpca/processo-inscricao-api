@@ -35,6 +35,9 @@ export class TipoDocumentoEdital {
 	@Column({ type: 'boolean', nullable: false })
 	ativo: boolean;
 
+	@Column({ type: 'boolean', nullable: false, default: false })
+	recurso: boolean;
+
 	@Column({ name: 'padrao_nome', type: 'varchar', nullable: false })
 	padraoNome: string;
 

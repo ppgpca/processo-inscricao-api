@@ -1,4 +1,5 @@
 import {
+	BadRequestException,
 	Body,
 	Controller,
 	Delete,
@@ -10,14 +11,20 @@ import {
 	Post,
 	Put,
 	Query,
+	UploadedFile,
 	UseGuards,
+	UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import * as path from 'path';
 import { Grupos } from '../common/decorators/permissoes.decorator';
 import { Permissoes } from '../common/enums/permissoes.enum';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { PermissaoGuard } from '../common/guards/permissao.guard';
 import { CreateRecursoDto } from './dto/create-recurso.dto';
 import { DecisaoRecursoDto } from './dto/decisao-recurso.dto';
+import { UploadDocumentoRecursoDto } from './dto/upload-documento-recurso.dto';
 import { RecursoService } from './recurso.service';
 
 @Controller('recursos')
@@ -35,6 +42,31 @@ export class RecursoController {
 	@Post()
 	criar(@Body() dto: CreateRecursoDto) {
 		return this.recursoService.criar(dto);
+	}
+
+	@Post('documento')
+	@UseInterceptors(
+		FileInterceptor('arquivo', {
+			storage: diskStorage({
+				destination: './uploads',
+				filename: (_req, file, cb) => {
+					const ext = path.extname(file.originalname);
+					const base = path
+						.basename(file.originalname, ext)
+						.replace(/\s+/g, '-');
+					cb(null, `${Date.now()}-${base}${ext}`);
+				},
+			}),
+		}),
+	)
+	uploadDocumento(
+		@Body() dto: UploadDocumentoRecursoDto,
+		@UploadedFile() file: Express.Multer.File,
+	) {
+		if (!file) {
+			throw new BadRequestException('Nenhum arquivo enviado.');
+		}
+		return this.recursoService.uploadDocumento(dto, file);
 	}
 
 	@Get('gestao/:idEdital/:etapaNome')

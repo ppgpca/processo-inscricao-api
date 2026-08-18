@@ -16,6 +16,7 @@ export class CreateTipoDocumentoEdital20260709000600
         obrigatorio BOOLEAN NOT NULL,
         ordem       INTEGER NOT NULL,
         ativo       BOOLEAN NOT NULL,
+        recurso     BOOLEAN NOT NULL DEFAULT FALSE,
         padrao_nome VARCHAR NOT NULL,
         "createdAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
         "updatedAt" TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,

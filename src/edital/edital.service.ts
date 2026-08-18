@@ -35,6 +35,10 @@ export class EditalService {
 		if (!edital) {
 			throw new NotFoundException(`Edital ${id} não encontrado.`);
 		}
+		// Tipos de recurso não entram na etapa de documentos da inscrição.
+		edital.tiposDocumento = (edital.tiposDocumento ?? []).filter(
+			(tipo) => !tipo.recurso,
+		);
 		return edital;
 	}
 }

@@ -1,17 +1,27 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from '../auth/auth.module';
+import { Documento } from '../database/entities/documento.entity';
 import { EtapaEdital } from '../database/entities/etapa-edital.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
 import { Recurso } from '../database/entities/recurso.entity';
+import { TipoDocumentoEdital } from '../database/entities/tipo-documento-edital.entity';
+import { DocumentoModule } from '../documento/documento.module';
 import { RecursoController } from './recurso.controller';
 import { RecursoRepository } from './recurso.repository';
 import { RecursoService } from './recurso.service';
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([Recurso, Inscricao, EtapaEdital]),
+		TypeOrmModule.forFeature([
+			Recurso,
+			Inscricao,
+			EtapaEdital,
+			TipoDocumentoEdital,
+			Documento,
+		]),
 		AuthModule,
+		DocumentoModule,
 	],
 	controllers: [RecursoController],
 	providers: [RecursoService, RecursoRepository],

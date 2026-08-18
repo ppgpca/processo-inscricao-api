@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { Documento } from '../database/entities/documento.entity';
 import { EtapaEdital } from '../database/entities/etapa-edital.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
 import { Recurso } from '../database/entities/recurso.entity';
+import { TipoDocumentoEdital } from '../database/entities/tipo-documento-edital.entity';
 
 @Injectable()
 export class RecursoRepository {
@@ -14,6 +16,10 @@ export class RecursoRepository {
 		private readonly inscricaoRepo: Repository<Inscricao>,
 		@InjectRepository(EtapaEdital)
 		private readonly etapaEditalRepo: Repository<EtapaEdital>,
+		@InjectRepository(TipoDocumentoEdital)
+		private readonly tipoDocumentoRepo: Repository<TipoDocumentoEdital>,
+		@InjectRepository(Documento)
+		private readonly documentoRepo: Repository<Documento>,
 	) {}
 
 	async obterInscricaoPorId(id: number): Promise<Inscricao | null> {
@@ -69,6 +75,73 @@ export class RecursoRepository {
 			.andWhere('etapaEdital.nome = :etapaNome', { etapaNome })
 			.orderBy('recurso.createdAt', 'DESC')
 			.getMany();
+	}
+
+	async obterTiposDocumentoPorPadroes(
+		idEdital: number,
+		padroesNome: string[],
+	): Promise<TipoDocumentoEdital[]> {
+		if (padroesNome.length === 0) return [];
+		return this.tipoDocumentoRepo.find({
+			where: {
+				idEdital,
+				padraoNome: In(padroesNome),
+				ativo: true,
+				recurso: true,
+			},
+		});
+	}
+
+	async obterTipoDocumentoPorPadrao(
+		idEdital: number,
+		padraoNome: string,
+	): Promise<TipoDocumentoEdital | null> {
+		return this.tipoDocumentoRepo.findOne({
+			where: { idEdital, padraoNome, ativo: true, recurso: true },
+		});
+	}
+
+	async obterTipoDocumentoPorId(
+		id: number,
+	): Promise<TipoDocumentoEdital | null> {
+		return this.tipoDocumentoRepo.findOne({ where: { id, ativo: true } });
+	}
+
+	async obterDocumentosAtuais(
+		idInscricao: number,
+		idsTipo: number[],
+	): Promise<Documento[]> {
+		if (idsTipo.length === 0) return [];
+		return this.documentoRepo.find({
+			where: {
+				idInscricao,
+				idTipoDocumentoEdital: In(idsTipo),
+				atual: true,
+			},
+		});
+	}
+
+	async obterDocumentoAtual(
+		idInscricao: number,
+		idTipoDocumentoEdital: number,
+	): Promise<Documento | null> {
+		return this.documentoRepo.findOne({
+			where: { idInscricao, idTipoDocumentoEdital, atual: true },
+		});
+	}
+
+	async obterDocumentosAtuaisPorInscricoes(
+		idsInscricao: number[],
+		idTipoDocumentoEdital: number,
+	): Promise<Documento[]> {
+		if (idsInscricao.length === 0) return [];
+		return this.documentoRepo.find({
+			where: {
+				idInscricao: In(idsInscricao),
+				idTipoDocumentoEdital,
+				atual: true,
+			},
+		});
 	}
 
 	async criar(dados: {
