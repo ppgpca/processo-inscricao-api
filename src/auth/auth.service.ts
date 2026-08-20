@@ -69,18 +69,11 @@ export class AuthService implements OnModuleInit {
 				passport.authenticate(
 					'ldapauth',
 					{ session: false },
-					(
-						err: Error | null,
-						user: { uid: string; cn: string; mail: string } | false,
-					) => {
+					(err: Error | null, user: LdapUser | false) => {
 						if (err) return reject(err);
 						if (!user)
 							return reject(new Error('Credenciais inválidas'));
-						resolve({
-							id: user.uid,
-							nome: user.cn,
-							email: user.mail,
-						});
+						resolve(user);
 					},
 				) as (req: unknown) => void
 			)(fakeReq);

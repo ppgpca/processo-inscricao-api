@@ -24,7 +24,7 @@ const ETAPAS: Omit<
 	'id' | 'idEdital' | 'edital' | 'recursos' | 'createdAt' | 'updatedAt'
 >[] = [
 	{
-		nome: 'Inscrição',
+		nome: 'INSCRICAO',
 		descricao: 'Inscrições dos candidatos',
 		ordem: 1,
 		dataInicio: new Date('2026-09-01T00:00:00'),
@@ -32,7 +32,7 @@ const ETAPAS: Omit<
 		recurso: false,
 	},
 	{
-		nome: 'Recurso inscrição',
+		nome: 'RECURSO_INSCRICAO',
 		descricao: 'Recurso da etapa de inscrições',
 		ordem: 2,
 		dataInicio: new Date('2026-10-16T00:00:00'),
@@ -40,7 +40,7 @@ const ETAPAS: Omit<
 		recurso: true,
 	},
 	{
-		nome: 'Homologação',
+		nome: 'HOMOLOGACAO',
 		descricao: 'Homologação das inscrições',
 		ordem: 3,
 		dataInicio: new Date('2026-10-16T00:00:00'),
@@ -48,7 +48,7 @@ const ETAPAS: Omit<
 		recurso: false,
 	},
 	{
-		nome: 'Análise currículo',
+		nome: 'ANALISE_CURRICULO',
 		descricao: 'Análise de currículo',
 		ordem: 4,
 		dataInicio: new Date('2026-10-22T00:00:00'),
@@ -56,7 +56,7 @@ const ETAPAS: Omit<
 		recurso: false,
 	},
 	{
-		nome: 'Anteprojeto',
+		nome: 'ANTEPROJETO',
 		descricao: 'Avaliação de anteprojeto',
 		ordem: 5,
 		dataInicio: new Date('2026-11-12T00:00:00'),
@@ -64,7 +64,7 @@ const ETAPAS: Omit<
 		recurso: false,
 	},
 	{
-		nome: 'Recurso anteprojeto',
+		nome: 'RECURSO_ANTEPROJETO',
 		descricao: 'Recurso da etapa de anteprojetos',
 		ordem: 6,
 		dataInicio: new Date('2026-11-26T00:00:00'),
@@ -72,7 +72,7 @@ const ETAPAS: Omit<
 		recurso: true,
 	},
 	{
-		nome: 'Entrevista',
+		nome: 'ENTREVISTA',
 		descricao: 'Entrevistas',
 		ordem: 7,
 		dataInicio: new Date('2026-11-26T00:00:00'),
@@ -80,7 +80,7 @@ const ETAPAS: Omit<
 		recurso: false,
 	},
 	{
-		nome: 'Recurso entrevista/prova de títulos',
+		nome: 'RECURSO_ENTREVISTA',
 		descricao: 'Recurso da etapa de entrevista e prova de títulos',
 		ordem: 8,
 		dataInicio: new Date('2026-12-04T00:00:00'),
@@ -88,7 +88,7 @@ const ETAPAS: Omit<
 		recurso: true,
 	},
 	{
-		nome: 'Resultado parcial',
+		nome: 'RESULTADO_PARCIAL',
 		descricao: 'Resultado parcial',
 		ordem: 9,
 		dataInicio: new Date('2026-12-04T00:00:00'),
@@ -96,7 +96,7 @@ const ETAPAS: Omit<
 		recurso: false,
 	},
 	{
-		nome: 'Recurso  resultado parcial',
+		nome: 'RECURSO_RESULTADO_PARCIAL',
 		descricao: 'Recurso do resultado parcial',
 		ordem: 10,
 		dataInicio: new Date('2026-12-11T00:00:00'),
@@ -104,7 +104,7 @@ const ETAPAS: Omit<
 		recurso: true,
 	},
 	{
-		nome: 'Resultado final',
+		nome: 'RESULTADO_FINAL',
 		descricao: 'Resultado final',
 		ordem: 11,
 		dataInicio: new Date('2026-12-14T00:00:00'),
