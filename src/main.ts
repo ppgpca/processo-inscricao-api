@@ -13,8 +13,12 @@ async function bootstrap() {
 		new ValidationPipe({ whitelist: true, transform: true }),
 	);
 
+	const allowedOrigins = process.env.FRONTEND_URL
+		? process.env.FRONTEND_URL.split(',').map((url) => url.trim())
+		: '*';
+
 	app.enableCors({
-		origin: process.env.FRONTEND_URL || '*',
+		origin: allowedOrigins,
 		methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
 		allowedHeaders: ['Content-Type', 'Authorization'],
 	});
