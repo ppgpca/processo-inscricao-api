@@ -6,4 +6,8 @@ export class UpdateInscricaoDto extends PartialType(CreateInscricaoDto) {
 	@IsBoolean()
 	@IsOptional()
 	deferida?: boolean | null;
+
+	@IsBoolean()
+	@IsOptional()
+	finalizada?: boolean;
 }

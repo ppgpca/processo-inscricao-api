@@ -65,6 +65,9 @@ export class Inscricao {
 	@Column({ name: 'id_etapa_atual', type: 'int', nullable: false })
 	idEtapaAtual: number;
 
+	@Column({ type: 'boolean', nullable: false, default: false })
+	finalizada: boolean;
+
 	@Column({ type: 'boolean', nullable: true, default: null })
 	deferida: boolean | null;
 

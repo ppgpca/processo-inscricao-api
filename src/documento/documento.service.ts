@@ -20,8 +20,13 @@ const ALLOWED_MIME_TYPES = [
 	'image/webp',
 ];
 
-function cpfMeio(cpf: string): string {
-	return cpf.replace(/\D/g, '').slice(3, 9);
+/** 5 dígitos intermediários do CPF, no formato ".123.45." (item 3.7.1). */
+function identificacaoCandidato(cpf: string): string {
+	const digitos = cpf.replace(/\D/g, '').slice(3, 8);
+	if (!/^\d{5}$/.test(digitos)) {
+		return '';
+	}
+	return `.${digitos.slice(0, 3)}.${digitos.slice(3)}.`;
 }
 
 @Injectable()
@@ -51,6 +56,7 @@ export class DocumentoService {
 		idInscricao: number,
 		idTipo: number,
 		file: Express.Multer.File,
+		somentePdf = false,
 	): Promise<Documento> {
 		if (file.size > MAX_FILE_SIZE) {
 			fs.unlinkSync(file.path);
@@ -59,10 +65,15 @@ export class DocumentoService {
 			);
 		}
 
-		if (!ALLOWED_MIME_TYPES.includes(file.mimetype)) {
+		const mimeTypes = somentePdf
+			? ['application/pdf']
+			: ALLOWED_MIME_TYPES;
+		const formatos = somentePdf ? 'PDF' : 'PDF, JPG, PNG ou WEBP';
+
+		if (!mimeTypes.includes(file.mimetype)) {
 			fs.unlinkSync(file.path);
 			throw new BadRequestException(
-				`Tipo de arquivo não permitido: ${file.mimetype}. Envie PDF, JPG, PNG ou WEBP.`,
+				`Tipo de arquivo não permitido: ${file.mimetype}. Envie ${formatos}.`,
 			);
 		}
 
@@ -91,10 +102,19 @@ export class DocumentoService {
 			idTipo,
 		);
 
+		const identificacao = identificacaoCandidato(inscricao.cpf);
+		if (!/^\.\d{3}\.\d{2}\.$/.test(identificacao)) {
+			fs.unlinkSync(file.path);
+			throw new BadRequestException(
+				'CPF da inscrição não permite identificar a pasta do candidato.',
+			);
+		}
+
 		const ext = path.extname(file.originalname).toLowerCase();
-		const nomeArquivo = `${cpfMeio(inscricao.cpf)}_${tipo.padraoNome}_v${versao}${ext}`;
-		const dir = path.dirname(file.path);
-		const novoCaminho = path.join(dir, nomeArquivo);
+		const nomeArquivo = `${identificacao}_${tipo.padraoNome}_v${versao}${ext}`;
+		const dirCandidato = path.join(path.dirname(file.path), identificacao);
+		fs.mkdirSync(dirCandidato, { recursive: true });
+		const novoCaminho = path.join(dirCandidato, nomeArquivo);
 
 		fs.renameSync(file.path, novoCaminho);
 

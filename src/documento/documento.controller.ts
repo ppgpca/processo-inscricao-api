@@ -76,7 +76,7 @@ export class DocumentoController {
 		if (!file) {
 			throw new BadRequestException('Nenhum arquivo enviado.');
 		}
-		return this.documentoService.upload(idInscricao, idTipo, file);
+		return this.documentoService.upload(idInscricao, idTipo, file, true);
 	}
 
 	@Delete('inscricao/:idInscricao/tipo/:idTipo')
