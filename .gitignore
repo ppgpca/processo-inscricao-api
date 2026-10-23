@@ -30,3 +30,5 @@ src/public/*
 sql/
 scripts/
 .DS_Store
+# TypeScript incremental build cache
+*.tsbuildinfo
