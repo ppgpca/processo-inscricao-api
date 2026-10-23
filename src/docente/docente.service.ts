@@ -130,7 +130,7 @@ export class DocenteService {
 
 		return this.documentoService.obterArquivoAnteprojetoPorPadraoNome(
 			idInscricao,
-			'anteprojeto',
+			'anteprojeto',  // padraoNome usado também na composição do nomeDownload
 		);
 	}
 

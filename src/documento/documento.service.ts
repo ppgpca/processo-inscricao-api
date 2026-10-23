@@ -221,7 +221,7 @@ export class DocumentoService {
 	async obterArquivoAnteprojetoPorPadraoNome(
 		idInscricao: number,
 		padraoNome: string,
-	): Promise<{ documento: Documento; caminho: string }> {
+	): Promise<{ documento: Documento; caminho: string; nomeDownload: string }> {
 		const inscricao =
 			await this.inscricaoRepository.obterPorIdSimples(idInscricao);
 		if (!inscricao) {
@@ -255,9 +255,18 @@ export class DocumentoService {
 			throw new NotFoundException('Arquivo não encontrado no servidor.');
 		}
 
+		// Calcula o nome de download com os 5 dígitos de identificação do CPF,
+		// independente do nome gravado em disco (que pode ser o formato antigo).
+		const identificacao = identificacaoCandidato(inscricao.cpf);
+		const ext = path.extname(documento.caminhoArmazenamento) || '.pdf';
+		const nomeDownload = identificacao
+			? `${identificacao}_${padraoNome}_v${documento.versao}${ext}`
+			: (documento.nomeArquivo ?? documento.nomeArquivoOriginal);
+
 		return {
 			documento,
 			caminho: path.resolve(documento.caminhoArmazenamento),
+			nomeDownload,
 		};
 	}
 

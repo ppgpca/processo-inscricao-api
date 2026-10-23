@@ -69,14 +69,12 @@ export class DocenteController {
 		@Param('idInscricao', ParseIntPipe) idInscricao: number,
 		@Res() res: Response,
 	) {
-		const { documento, caminho } =
+		const { documento, caminho, nomeDownload } =
 			await this.docenteService.baixarAnteprojeto(
 				req.user.id,
 				idInscricao,
 			);
-		const nomeArquivo =
-			documento.nomeArquivo ?? documento.nomeArquivoOriginal;
-		const encodedName = encodeURIComponent(nomeArquivo);
+		const encodedName = encodeURIComponent(nomeDownload);
 		res.setHeader('Content-Type', documento.mimeType);
 		res.setHeader(
 			'Content-Disposition',
