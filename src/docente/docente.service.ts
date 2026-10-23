@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { PermissoesService } from '../auth/permissoes.service';
 import { Permissoes } from '../common/enums/permissoes.enum';
+import { DocumentoService } from '../documento/documento.service';
 import { DocenteRepository } from './docente.repository';
 
 @Injectable()
@@ -8,6 +9,7 @@ export class DocenteService {
 	constructor(
 		private readonly docenteRepository: DocenteRepository,
 		private readonly permissoesService: PermissoesService,
+		private readonly documentoService: DocumentoService,
 	) {}
 
 	async obterEditaisComoAvaliador(codigoDocente: string) {
@@ -97,6 +99,39 @@ export class DocenteService {
 			nota: nc.nota !== null ? Number(nc.nota) : null,
 			comentario: nc.comentario,
 		}));
+	}
+
+	async baixarAnteprojeto(
+		codigoDocenteLogado: string,
+		idInscricao: number,
+	) {
+		const vinculado =
+			await this.docenteRepository.verificarVinculoComCandidato(
+				codigoDocenteLogado,
+				idInscricao,
+			);
+
+		if (!vinculado) {
+			const grupos =
+				await this.permissoesService.buscarGruposDoUsuario(
+					codigoDocenteLogado,
+				);
+			const autorizado = grupos.some(
+				(g) =>
+					g.id === Permissoes.GRUPOS.ADMIN ||
+					g.id === Permissoes.GRUPOS.COORDENADOR,
+			);
+			if (!autorizado) {
+				throw new ForbiddenException(
+					'Acesso negado ao anteprojeto deste candidato.',
+				);
+			}
+		}
+
+		return this.documentoService.obterArquivoAnteprojetoPorPadraoNome(
+			idInscricao,
+			'anteprojeto',
+		);
 	}
 
 	private async resolverCodigoDocenteParaSalvar(

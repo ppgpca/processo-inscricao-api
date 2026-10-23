@@ -4,12 +4,15 @@ import {
 	Get,
 	HttpCode,
 	HttpStatus,
+	Param,
 	ParseIntPipe,
 	Put,
 	Query,
 	Request,
+	Res,
 	UseGuards,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { SalvarNotasDto } from './dto/salvar-notas.dto';
 import { DocenteService } from './docente.service';
@@ -58,6 +61,28 @@ export class DocenteController {
 			req.user.id,
 			idCriterio,
 		);
+	}
+
+	@Get('me/candidatos/:idInscricao/anteprojeto/download')
+	async baixarAnteprojeto(
+		@Request() req: { user: { id: string } },
+		@Param('idInscricao', ParseIntPipe) idInscricao: number,
+		@Res() res: Response,
+	) {
+		const { documento, caminho } =
+			await this.docenteService.baixarAnteprojeto(
+				req.user.id,
+				idInscricao,
+			);
+		const nomeArquivo =
+			documento.nomeArquivo ?? documento.nomeArquivoOriginal;
+		const encodedName = encodeURIComponent(nomeArquivo);
+		res.setHeader('Content-Type', documento.mimeType);
+		res.setHeader(
+			'Content-Disposition',
+			`attachment; filename*=UTF-8''${encodedName}`,
+		);
+		res.sendFile(caminho);
 	}
 
 	@Get('me/notas')

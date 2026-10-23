@@ -213,6 +213,54 @@ export class DocumentoService {
 		};
 	}
 
+	/**
+	 * Localiza o documento atual de uma inscrição pelo padrãoNome do tipo
+	 * (ex.: 'anteprojeto'), sem depender de CPF. Usado pelo endpoint de
+	 * download restrito a avaliadores.
+	 */
+	async obterArquivoAnteprojetoPorPadraoNome(
+		idInscricao: number,
+		padraoNome: string,
+	): Promise<{ documento: Documento; caminho: string }> {
+		const inscricao =
+			await this.inscricaoRepository.obterPorIdSimples(idInscricao);
+		if (!inscricao) {
+			throw new NotFoundException(
+				`Inscrição ${idInscricao} não encontrada.`,
+			);
+		}
+
+		const tipo = await this.tipoDocumentoRepo.findOne({
+			where: {
+				idEdital: inscricao.idEdital,
+				padraoNome,
+				recurso: false,
+			},
+		});
+		if (!tipo) {
+			throw new NotFoundException(
+				`Tipo de documento '${padraoNome}' não encontrado para o edital.`,
+			);
+		}
+
+		const documento = await this.documentoRepository.obterAtual(
+			idInscricao,
+			tipo.id,
+		);
+		if (!documento) {
+			throw new NotFoundException('Documento não encontrado.');
+		}
+
+		if (!fs.existsSync(documento.caminhoArmazenamento)) {
+			throw new NotFoundException('Arquivo não encontrado no servidor.');
+		}
+
+		return {
+			documento,
+			caminho: path.resolve(documento.caminhoArmazenamento),
+		};
+	}
+
 	async downloadConsulta(
 		cpf: string,
 		idInscricao: number,

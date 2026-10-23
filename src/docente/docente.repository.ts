@@ -86,6 +86,16 @@ export class DocenteRepository {
 		});
 	}
 
+	async verificarVinculoComCandidato(
+		codigoDocente: string,
+		idInscricao: number,
+	): Promise<boolean> {
+		const count = await this.notaCriterioRepo.count({
+			where: { codigoDocente, idInscricao },
+		});
+		return count > 0;
+	}
+
 	async obterNotasPorInscricaoECriterio(
 		codigoDocente: string,
 		idInscricao: number,
