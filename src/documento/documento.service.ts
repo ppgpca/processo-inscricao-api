@@ -1,5 +1,6 @@
 import {
 	BadRequestException,
+	ForbiddenException,
 	Injectable,
 	NotFoundException,
 } from '@nestjs/common';
@@ -11,6 +12,10 @@ import { Documento } from '../database/entities/documento.entity';
 import { TipoDocumentoEdital } from '../database/entities/tipo-documento-edital.entity';
 import { InscricaoRepository } from '../inscricao/inscricao.repository';
 import { DocumentoRepository } from './documento.repository';
+import {
+	ConsultaDocumentosRespostaDto,
+	DocumentoCandidatoDto,
+} from './dto/documento-candidato.dto';
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = [
@@ -86,6 +91,13 @@ export class DocumentoService {
 			);
 		}
 
+		if (inscricao.finalizada) {
+			fs.unlinkSync(file.path);
+			throw new ForbiddenException(
+				'Não é possível enviar documentos em uma inscrição finalizada.',
+			);
+		}
+
 		const tipo = await this.tipoDocumentoRepo.findOne({
 			where: { id: idTipo },
 		});
@@ -155,6 +167,90 @@ export class DocumentoService {
 	}
 
 	async remover(idInscricao: number, idTipo: number): Promise<void> {
+		const inscricao =
+			await this.inscricaoRepository.obterPorIdSimples(idInscricao);
+		if (inscricao?.finalizada) {
+			throw new ForbiddenException(
+				'Não é possível remover documentos de uma inscrição finalizada.',
+			);
+		}
 		await this.documentoRepository.remover(idInscricao, idTipo);
+	}
+
+	async consultar(
+		cpf: string,
+		idInscricao: number,
+	): Promise<ConsultaDocumentosRespostaDto> {
+		const inscricao =
+			await this.inscricaoRepository.obterPorId(idInscricao);
+		if (!inscricao || inscricao.cpf !== cpf) {
+			throw new NotFoundException('Inscrição não encontrada.');
+		}
+
+		const documentos =
+			await this.documentoRepository.obterTodasVersoesSemRecurso(
+				idInscricao,
+			);
+
+		return {
+			id: inscricao.id,
+			idEdital: inscricao.idEdital,
+			linhaPesquisa: inscricao.linhaPesquisa?.nome ?? null,
+			finalizada: inscricao.finalizada,
+			deferida: inscricao.deferida,
+			documentos: documentos.map(
+				(d): DocumentoCandidatoDto => ({
+					idTipoDocumentoEdital: d.idTipoDocumentoEdital,
+					nomeTipo: d.tipoDocumentoEdital?.nome ?? '',
+					versao: d.versao,
+					atual: d.atual,
+					nomeArquivoOriginal: d.nomeArquivoOriginal,
+					mimeType: d.mimeType,
+					tamanhoBytes: d.tamanhoBytes,
+					enviadoEm: d.enviadoEm,
+				}),
+			),
+		};
+	}
+
+	async downloadConsulta(
+		cpf: string,
+		idInscricao: number,
+		idTipo: number,
+		versao?: number,
+		inline = false,
+	): Promise<{
+		documento: Documento;
+		caminho: string;
+		inline: boolean;
+	}> {
+		const inscricao =
+			await this.inscricaoRepository.obterPorIdSimples(idInscricao);
+		if (!inscricao || inscricao.cpf !== cpf) {
+			throw new NotFoundException('Inscrição não encontrada.');
+		}
+
+		const documento =
+			versao !== undefined
+				? await this.documentoRepository.obterVersaoEspecifica(
+						idInscricao,
+						idTipo,
+						versao,
+					)
+				: await this.documentoRepository.obterAtual(idInscricao, idTipo);
+
+		if (!documento) {
+			throw new NotFoundException('Documento não encontrado.');
+		}
+
+		if (!fs.existsSync(documento.caminhoArmazenamento)) {
+			throw new NotFoundException('Arquivo não encontrado no servidor.');
+		}
+
+		return {
+			documento,
+			caminho: path.resolve(documento.caminhoArmazenamento),
+			inline,
+		};
 	}
 }

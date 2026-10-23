@@ -8,6 +8,7 @@ import {
 	Param,
 	ParseIntPipe,
 	Post,
+	Query,
 	Res,
 	UploadedFile,
 	UseInterceptors,
@@ -21,6 +22,46 @@ import { DocumentoService } from './documento.service';
 @Controller('documentos')
 export class DocumentoController {
 	constructor(private readonly documentoService: DocumentoService) {}
+
+	@Get('consulta')
+	consultar(
+		@Query('cpf') cpf: string,
+		@Query('idInscricao', ParseIntPipe) idInscricao: number,
+	) {
+		return this.documentoService.consultar(cpf, idInscricao);
+	}
+
+	@Get('consulta/download')
+	async downloadConsulta(
+		@Query('cpf') cpf: string,
+		@Query('idInscricao', ParseIntPipe) idInscricao: number,
+		@Query('idTipo', ParseIntPipe) idTipo: number,
+		@Query('versao') versaoStr: string | undefined,
+		@Query('inline') inlineStr: string | undefined,
+		@Res() res: Response,
+	) {
+		const versao =
+			versaoStr !== undefined ? parseInt(versaoStr, 10) : undefined;
+		const inline = inlineStr === 'true';
+
+		const { documento, caminho } =
+			await this.documentoService.downloadConsulta(
+				cpf,
+				idInscricao,
+				idTipo,
+				versao,
+				inline,
+			);
+
+		const disposition = inline ? 'inline' : 'attachment';
+		const encodedName = encodeURIComponent(documento.nomeArquivoOriginal);
+		res.setHeader('Content-Type', documento.mimeType);
+		res.setHeader(
+			'Content-Disposition',
+			`${disposition}; filename*=UTF-8''${encodedName}`,
+		);
+		res.sendFile(caminho);
+	}
 
 	@Get('inscricao/:idInscricao')
 	obterPorInscricao(@Param('idInscricao', ParseIntPipe) idInscricao: number) {

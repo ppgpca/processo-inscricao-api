@@ -77,4 +77,29 @@ export class DocumentoRepository {
 	): Promise<void> {
 		await this.repo.delete({ idInscricao, idTipoDocumentoEdital });
 	}
+
+	/** Todas as versões de documentos de inscrição (excluindo tipos de recurso). */
+	async obterTodasVersoesSemRecurso(
+		idInscricao: number,
+	): Promise<Documento[]> {
+		return this.repo
+			.createQueryBuilder('d')
+			.innerJoinAndSelect('d.tipoDocumentoEdital', 'tipo')
+			.where('d.idInscricao = :idInscricao', { idInscricao })
+			.andWhere('tipo.recurso = false')
+			.orderBy('d.idTipoDocumentoEdital', 'ASC')
+			.addOrderBy('d.versao', 'DESC')
+			.getMany();
+	}
+
+	/** Versão específica de um documento. */
+	async obterVersaoEspecifica(
+		idInscricao: number,
+		idTipoDocumentoEdital: number,
+		versao: number,
+	): Promise<Documento | null> {
+		return this.repo.findOne({
+			where: { idInscricao, idTipoDocumentoEdital, versao },
+		});
+	}
 }
