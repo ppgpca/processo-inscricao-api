@@ -91,32 +91,60 @@ export class AuthService implements OnModuleInit {
 	): Promise<{ token: string; usuario: object }> {
 		const ldapEnabled = this.isLdapEnabled();
 
+		if (!senha) throw new Error('Senha é obrigatória');
+
 		if (ldapEnabled) {
-			if (!senha) throw new Error('Senha é obrigatória');
+			try {
+				// Tenta autenticar via LDAP
+				const dadosLdap = await this.autenticarLdap(userId, senha);
+				const usuario = await this.authRepository.buscarUsuarioPorId(
+					dadosLdap.id,
+				);
 
-			const dadosLdap = await this.autenticarLdap(userId, senha);
-			const usuario = await this.authRepository.buscarUsuarioPorId(
-				dadosLdap.id,
-			);
+				if (!usuario) throw new Error('Usuário não encontrado');
 
-			if (!usuario) throw new Error('Usuário não encontrado');
+				return {
+					token: this.gerarToken(usuario),
+					usuario: {
+						id: usuario.id,
+						nome: usuario.nome,
+						email: usuario.email,
+						grupos: (usuario.usuarioGrupos ?? []).map((ug) => ({
+							id: ug.grupo.id,
+							nome: ug.grupo.nome,
+							descricao: ug.grupo.descricao,
+						})),
+					},
+				};
+			} catch (error) {
+				// Se falhar no LDAP, tenta autenticar via base local
+				this.logger.warn(
+					`Falha na autenticação LDAP para o usuário ${userId}, tentando autenticação local...`,
+				);
 
-			return {
-				token: this.gerarToken(usuario),
-				usuario: {
-					id: usuario.id,
-					nome: usuario.nome,
-					email: usuario.email,
-					grupos: (usuario.usuarioGrupos ?? []).map((ug) => ({
-						id: ug.grupo.id,
-						nome: ug.grupo.nome,
-						descricao: ug.grupo.descricao,
-					})),
-				},
-			};
+				try {
+					const usuario = await this.localStrategy.validate(userId, senha);
+
+					return {
+						token: this.gerarToken(usuario),
+						usuario: {
+							id: usuario.id,
+							nome: usuario.nome,
+							email: usuario.email,
+							grupos: (usuario.usuarioGrupos ?? []).map((ug) => ({
+								id: ug.grupo.id,
+								nome: ug.grupo.nome,
+								descricao: ug.grupo.descricao,
+							})),
+						},
+					};
+				} catch (localError) {
+					// Se ambos falharem, lança o erro original do LDAP
+					throw error;
+				}
+			}
 		} else {
-			if (!senha) throw new Error('Senha é obrigatória');
-
+			// LDAP desabilitado, autentica direto via base local
 			const usuario = await this.localStrategy.validate(userId, senha);
 
 			return {
