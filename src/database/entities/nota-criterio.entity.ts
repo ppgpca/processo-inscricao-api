@@ -26,6 +26,9 @@ export class NotaCriterio {
 	@Column({ type: 'text', nullable: true })
 	comentario: string | null;
 
+	@Column({ name: 'expertise_assunto', type: 'smallint', nullable: true })
+	expertiseAssunto: number | null;
+
 	@Column({ type: 'decimal', nullable: true })
 	nota: number | null;
 

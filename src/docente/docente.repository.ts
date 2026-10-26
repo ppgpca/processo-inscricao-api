@@ -51,15 +51,42 @@ export class DocenteRepository {
 			idInscricao: number;
 			idCriterioAvaliacao: number;
 			nota: number;
+			comentario?: string | null;
+			expertiseAssunto?: number | null;
 		}[],
 	): Promise<void> {
 		await this.notaCriterioRepo.upsert(
-			notas.map((n) => ({
-				idInscricao: n.idInscricao,
-				idCriterioAvaliacao: n.idCriterioAvaliacao,
-				codigoDocente,
-				nota: n.nota,
-			})),
+			notas.map((n) => {
+				const base = {
+					idInscricao: n.idInscricao,
+					idCriterioAvaliacao: n.idCriterioAvaliacao,
+					codigoDocente,
+					nota: n.nota,
+				};
+				
+				const updates: Record<string, any> = {};
+				
+				// Só inclui comentario quando a chave vier definida (mesmo que null),
+				// para que salvar subcritérios (sem comentario) não apague observações existentes
+				if (n.comentario !== undefined) {
+					const comentarioNormalizado =
+						typeof n.comentario === 'string' && n.comentario.trim()
+							? n.comentario.trim()
+							: null;
+					updates.comentario = comentarioNormalizado;
+				}
+				
+				// Mesma lógica para expertiseAssunto
+				if (n.expertiseAssunto !== undefined) {
+					const expertiseValida = 
+						typeof n.expertiseAssunto === 'number' && 
+						n.expertiseAssunto >= 1 && 
+						n.expertiseAssunto <= 5;
+					updates.expertiseAssunto = expertiseValida ? n.expertiseAssunto : null;
+				}
+				
+				return { ...base, ...updates };
+			}),
 			{
 				conflictPaths: [
 					'idInscricao',

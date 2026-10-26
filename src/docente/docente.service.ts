@@ -26,6 +26,8 @@ export class DocenteService {
 			idInscricao: number;
 			idCriterioAvaliacao: number;
 			nota: number;
+			comentario?: string | null;
+			expertiseAssunto?: number | null;
 		}[],
 		codigoDocenteAlvo?: string,
 	): Promise<void> {
@@ -98,6 +100,7 @@ export class DocenteService {
 			idCriterioAvaliacao: nc.idCriterioAvaliacao,
 			nota: nc.nota !== null ? Number(nc.nota) : null,
 			comentario: nc.comentario,
+			expertiseAssunto: nc.expertiseAssunto,
 		}));
 	}
 
