@@ -1,12 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import {
-	DataSource,
-	EntityManager,
-	In,
-	IsNull,
-	Repository,
-} from 'typeorm';
+import { DataSource, EntityManager, In, IsNull, Repository } from 'typeorm';
 import { CriterioAvaliacao } from '../database/entities/criterio-avaliacao.entity';
 import { DocenteEdital } from '../database/entities/docente-edital.entity';
 import { Inscricao } from '../database/entities/inscricao.entity';
@@ -38,6 +32,11 @@ export class DistribuicaoRepository {
 		private readonly dataSource: DataSource,
 	) {}
 
+	/** Wraps `dataSource.query` com tipo de retorno explícito para evitar `any`. */
+	private async queryTyped<T>(sql: string, params: unknown[]): Promise<T[]> {
+		return this.dataSource.query(sql, params);
+	}
+
 	async obterCriterioPaiPorEtapa(
 		idEdital: number,
 		nomeEtapa: EtapaDistribuicaoNome,
@@ -51,7 +50,9 @@ export class DistribuicaoRepository {
 		});
 	}
 
-	async obterSubCriterios(idCriterioPai: number): Promise<CriterioAvaliacao[]> {
+	async obterSubCriterios(
+		idCriterioPai: number,
+	): Promise<CriterioAvaliacao[]> {
 		return this.criterioRepo.find({ where: { idCriterioPai } });
 	}
 
@@ -165,7 +166,9 @@ export class DistribuicaoRepository {
 				inscricao.inscricoesPalavraChave?.map(
 					(ipk) => ipk.palavraChave?.palavra ?? '',
 				) ?? [],
-			docentesAtribuidos: [...(porInscricao.get(inscricao.id)?.values() ?? [])],
+			docentesAtribuidos: [
+				...(porInscricao.get(inscricao.id)?.values() ?? []),
+			],
 			dataBanca: dataBancaPorInscricao.get(inscricao.id) ?? null,
 		}));
 	}
@@ -189,8 +192,9 @@ export class DistribuicaoRepository {
 			idInscricao: inscricao.id,
 			idLinhaPesquisa: inscricao.idLinhaPesquisa,
 			idsPalavraChave: new Set(
-				inscricao.inscricoesPalavraChave?.map((ipk) => ipk.idPalavraChave) ??
-					[],
+				inscricao.inscricoesPalavraChave?.map(
+					(ipk) => ipk.idPalavraChave,
+				) ?? [],
 			),
 			codigosJaAtribuidos: atribuidosPorInscricao.get(inscricao.id) ?? [],
 		}));
@@ -222,7 +226,8 @@ export class DistribuicaoRepository {
 				},
 			},
 		});
-		const cargaPorDocente = await this.carregarCargaPorDocente(idCriterioPai);
+		const cargaPorDocente =
+			await this.carregarCargaPorDocente(idCriterioPai);
 
 		return vinculos
 			.filter((v) => !!v.docente)
@@ -253,7 +258,8 @@ export class DistribuicaoRepository {
 				docente: { docentesPalavraChave: true, linhasPesquisa: true },
 			},
 		});
-		const cargaPorDocente = await this.carregarCargaPorDocente(idCriterioPai);
+		const cargaPorDocente =
+			await this.carregarCargaPorDocente(idCriterioPai);
 
 		return vinculos
 			.filter((v) => !!v.docente)
@@ -261,11 +267,13 @@ export class DistribuicaoRepository {
 			.map((docente) => ({
 				codigo: docente.codigo,
 				idsPalavraChave: new Set(
-					docente.docentesPalavraChave?.map((dpk) => dpk.idPalavraChave) ??
-						[],
+					docente.docentesPalavraChave?.map(
+						(dpk) => dpk.idPalavraChave,
+					) ?? [],
 				),
 				idsLinhaPesquisa: new Set(
-					docente.linhasPesquisa?.map((dlp) => dlp.idLinhaPesquisa) ?? [],
+					docente.linhasPesquisa?.map((dlp) => dlp.idLinhaPesquisa) ??
+						[],
 				),
 				cargaAtual: cargaPorDocente.get(docente.codigo) ?? 0,
 			}));
@@ -307,7 +315,9 @@ export class DistribuicaoRepository {
 			.addSelect('candidato.nome', 'nomeCandidato')
 			.addSelect('nc.dataBanca', 'dataBanca')
 			.distinct(true)
-			.where('nc.idCriterioAvaliacao IN (:...idsCriterio)', { idsCriterio })
+			.where('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
+				idsCriterio,
+			})
 			.andWhere('nc.codigoDocente IN (:...codigosDocentes)', {
 				codigosDocentes,
 			})
@@ -315,10 +325,9 @@ export class DistribuicaoRepository {
 			.andWhere('nc.dataBanca IS NOT NULL')
 			// Overlap: startA < endB AND startB < endA
 			.andWhere('nc.dataBanca < :fimMs', { fimMs: new Date(fimMs) })
-			.andWhere(
-				`nc.dataBanca + INTERVAL '30 minutes' > :inicioMs`,
-				{ inicioMs: inicioSlot },
-			)
+			.andWhere(`nc.dataBanca + INTERVAL '30 minutes' > :inicioMs`, {
+				inicioMs: inicioSlot,
+			})
 			.getRawMany<{
 				codigoDocente: string;
 				nomeDocente: string;
@@ -341,6 +350,99 @@ export class DistribuicaoRepository {
 				`Choque de horário: ${choque.nomeDocente} já está em entrevista com ` +
 				`${choque.nomeCandidato} em ${dataFmt}.`,
 		};
+	}
+
+	async obterNotasAnteprojetoDocente(
+		idEdital: number,
+		idInscricao: number,
+		codigoDocente: string,
+	): Promise<{ criterio: string; isPai: boolean; nota: number | null }[]> {
+		const sql = `
+WITH pai AS (
+  SELECT id FROM criterio_avaliacao
+  WHERE id_edital = $1 AND nome = 'Anteprojeto' AND id_criterio_pai IS NULL
+),
+criterios AS (
+  SELECT ca.id, ca.nome, ca.id_criterio_pai, ca.ordem
+  FROM criterio_avaliacao ca JOIN pai ON ca.id = pai.id OR ca.id_criterio_pai = pai.id
+)
+SELECT c.nome AS criterio,
+       (c.id_criterio_pai IS NULL) AS is_pai,
+       nc.nota
+FROM criterios c
+LEFT JOIN nota_criterio nc
+  ON nc.id_criterio_avaliacao = c.id
+ AND nc.id_inscricao = $2
+ AND nc.codigo_docente = $3
+ORDER BY (c.id_criterio_pai IS NULL), c.ordem;
+		`;
+		const rows = await this.queryTyped<{
+			criterio: string;
+			is_pai: boolean;
+			nota: string | null;
+		}>(sql, [idEdital, idInscricao, codigoDocente]);
+		return rows.map((r) => ({
+			criterio: r.criterio,
+			isPai: r.is_pai,
+			nota: r.nota !== null ? Number(r.nota) : null,
+		}));
+	}
+
+	async obterRelatorioAnteprojeto(
+		idEdital: number,
+	): Promise<Record<string, unknown>[]> {
+		const sql = `
+WITH pai AS (
+  SELECT id FROM criterio_avaliacao
+  WHERE id_edital = $1 AND nome = 'Anteprojeto' AND id_criterio_pai IS NULL
+),
+criterios AS (
+  SELECT ca.id, ca.id_criterio_pai, ca.ordem
+  FROM criterio_avaliacao ca JOIN pai ON ca.id = pai.id OR ca.id_criterio_pai = pai.id
+),
+notas AS (
+  SELECT nc.id_inscricao, nc.codigo_docente,
+    MAX(nc.nota) FILTER (WHERE c.id_criterio_pai IS NOT NULL AND c.ordem = 1) AS sistematizacao,
+    MAX(nc.nota) FILTER (WHERE c.id_criterio_pai IS NOT NULL AND c.ordem = 2) AS sintese,
+    MAX(nc.nota) FILTER (WHERE c.id_criterio_pai IS NOT NULL AND c.ordem = 3) AS capacidade,
+    MAX(nc.nota) FILTER (WHERE c.id_criterio_pai IS NOT NULL AND c.ordem = 4) AS linguagem,
+    COALESCE(MAX(nc.nota) FILTER (WHERE c.id_criterio_pai IS NULL),
+             SUM(nc.nota) FILTER (WHERE c.id_criterio_pai IS NOT NULL)) AS nota,
+    MAX(nc.comentario) FILTER (WHERE c.id_criterio_pai IS NULL) AS comentario
+  FROM nota_criterio nc JOIN criterios c ON c.id = nc.id_criterio_avaliacao
+  GROUP BY nc.id_inscricao, nc.codigo_docente
+),
+avaliacoes AS (
+  SELECT n.*, d.nome,
+    row_number() OVER (PARTITION BY n.id_inscricao ORDER BY d.nome, d.codigo) AS pos
+  FROM notas n JOIN docente d ON d.codigo = n.codigo_docente
+),
+palavras AS (
+  SELECT ipc.id_inscricao, string_agg(pk.palavra, ', ' ORDER BY pk.palavra) AS palavras
+  FROM inscricao_palavra_chave ipc
+  JOIN palavra_chave pk ON pk.id = ipc.id_palavra_chave
+  JOIN inscricao i ON i.id = ipc.id_inscricao AND i.id_edital = $1
+  GROUP BY ipc.id_inscricao
+)
+SELECT i.id, i.cpf, i.deficiente, i.indigena, i.preto_pardo, i.projeto_pesquisa,
+       lp.nome AS linha_pesquisa, pc.palavras,
+       a1.nome AS av1_nome,
+       a1.sistematizacao AS av1_sistematizacao, a1.sintese AS av1_sintese,
+       a1.capacidade AS av1_capacidade, a1.linguagem AS av1_linguagem,
+       a1.nota AS av1_nota, a1.comentario AS av1_comentario,
+       a2.nome AS av2_nome,
+       a2.sistematizacao AS av2_sistematizacao, a2.sintese AS av2_sintese,
+       a2.capacidade AS av2_capacidade, a2.linguagem AS av2_linguagem,
+       a2.nota AS av2_nota, a2.comentario AS av2_comentario
+FROM inscricao i
+LEFT JOIN linha_pesquisa lp ON lp.id = i.id_linha_pesquisa
+LEFT JOIN palavras pc ON pc.id_inscricao = i.id
+LEFT JOIN avaliacoes a1 ON a1.id_inscricao = i.id AND a1.pos = 1
+LEFT JOIN avaliacoes a2 ON a2.id_inscricao = i.id AND a2.pos = 2
+WHERE i.id_edital = $1 AND i.ativa AND i.deferida
+ORDER BY i.id;
+		`;
+		return this.dataSource.query(sql, [idEdital]);
 	}
 
 	async substituirAtribuicoes(
@@ -413,7 +515,9 @@ export class DistribuicaoRepository {
 					.createQueryBuilder(NotaCriterio, 'nc')
 					.select('DISTINCT nc.codigoDocente', 'codigoDocente')
 					.where('nc.idInscricao = :idInscricao', { idInscricao })
-					.andWhere('nc.codigoDocente IN (:...paraRemover)', { paraRemover })
+					.andWhere('nc.codigoDocente IN (:...paraRemover)', {
+						paraRemover,
+					})
 					.andWhere('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
 						idsCriterio,
 					})
@@ -470,8 +574,7 @@ export class DistribuicaoRepository {
 					// Mantém a pendência no cliente até haver avaliadores.
 					return {
 						ok: false,
-						motivo:
-							'Não é possível gravar o horário do slot sem avaliadores atribuídos. Atribua a banca e sincronize novamente.',
+						motivo: 'Não é possível gravar o horário do slot sem avaliadores atribuídos. Atribua a banca e sincronize novamente.',
 					};
 				}
 			}

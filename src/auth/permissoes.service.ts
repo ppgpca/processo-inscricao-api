@@ -31,7 +31,7 @@ export class PermissoesService {
 		for (const ug of usuario.usuarioGrupos ?? []) {
 			const grupo = ug.grupo;
 			for (const gp of grupo?.grupoPermissoes ?? []) {
-				const permissao = gp.permissao as Permissao;
+				const permissao = gp.permissao;
 				if (!consolidadas.has(permissao.id)) {
 					consolidadas.set(permissao.id, {
 						id: permissao.id,

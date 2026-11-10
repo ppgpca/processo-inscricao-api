@@ -104,10 +104,7 @@ export class DocenteService {
 		}));
 	}
 
-	async baixarAnteprojeto(
-		codigoDocenteLogado: string,
-		idInscricao: number,
-	) {
+	async baixarAnteprojeto(codigoDocenteLogado: string, idInscricao: number) {
 		const vinculado =
 			await this.docenteRepository.verificarVinculoComCandidato(
 				codigoDocenteLogado,
@@ -133,7 +130,7 @@ export class DocenteService {
 
 		return this.documentoService.obterArquivoAnteprojetoPorPadraoNome(
 			idInscricao,
-			'anteprojeto',  // padraoNome usado também na composição do nomeDownload
+			'anteprojeto', // padraoNome usado também na composição do nomeDownload
 		);
 	}
 

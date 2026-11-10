@@ -263,7 +263,9 @@ export class RecursoService {
 		return recursos.map((r) => {
 			const documentoPorTipo = new Map<number, Documento>();
 			for (const tipo of tipos) {
-				const doc = docsPorInscricaoTipo.get(`${r.idInscricao}:${tipo.id}`);
+				const doc = docsPorInscricaoTipo.get(
+					`${r.idInscricao}:${tipo.id}`,
+				);
 				if (doc) documentoPorTipo.set(tipo.id, doc);
 			}
 			const slotsDocumento = this.montarSlots(

@@ -1,9 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
-export class CreateDocenteLinhaPesquisa20260709000900
-	implements MigrationInterface
-{
+export class CreateDocenteLinhaPesquisa20260709000900 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(`
       CREATE TABLE public.docente_linha_pesquisa (

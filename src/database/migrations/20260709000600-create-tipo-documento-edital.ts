@@ -1,9 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
-export class CreateTipoDocumentoEdital20260709000600
-	implements MigrationInterface
-{
+export class CreateTipoDocumentoEdital20260709000600 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(`
       CREATE TABLE public.tipo_documento_edital (

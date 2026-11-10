@@ -108,7 +108,7 @@ export class InscricaoRepository {
 			projetoPesquisa: dados.projetoPesquisa ?? null,
 			idEtapaAtual: dados.idEtapaAtual,
 		});
-		const inscricaoSalva = (await this.repo.save(inscricao)) as Inscricao;
+		const inscricaoSalva = await this.repo.save(inscricao);
 
 		if (dados.idsPalavrasChave?.length) {
 			await this.sincronizarPalavrasChave(
@@ -126,7 +126,7 @@ export class InscricaoRepository {
 	): Promise<Inscricao> {
 		const { idsPalavrasChave, ...dadosSemPalavrasChave } = dados;
 		Object.assign(inscricao, dadosSemPalavrasChave);
-		const inscricaoSalva = (await this.repo.save(inscricao)) as Inscricao;
+		const inscricaoSalva = await this.repo.save(inscricao);
 
 		if (idsPalavrasChave !== undefined) {
 			await this.sincronizarPalavrasChave(

@@ -70,9 +70,7 @@ export class DocumentoService {
 			);
 		}
 
-		const mimeTypes = somentePdf
-			? ['application/pdf']
-			: ALLOWED_MIME_TYPES;
+		const mimeTypes = somentePdf ? ['application/pdf'] : ALLOWED_MIME_TYPES;
 		const formatos = somentePdf ? 'PDF' : 'PDF, JPG, PNG ou WEBP';
 
 		if (!mimeTypes.includes(file.mimetype)) {
@@ -198,18 +196,16 @@ export class DocumentoService {
 			linhaPesquisa: inscricao.linhaPesquisa?.nome ?? null,
 			finalizada: inscricao.finalizada,
 			deferida: inscricao.deferida,
-			documentos: documentos.map(
-				(d): DocumentoCandidatoDto => ({
-					idTipoDocumentoEdital: d.idTipoDocumentoEdital,
-					nomeTipo: d.tipoDocumentoEdital?.nome ?? '',
-					versao: d.versao,
-					atual: d.atual,
-					nomeArquivoOriginal: d.nomeArquivoOriginal,
-					mimeType: d.mimeType,
-					tamanhoBytes: d.tamanhoBytes,
-					enviadoEm: d.enviadoEm,
-				}),
-			),
+			documentos: documentos.map((d): DocumentoCandidatoDto => ({
+				idTipoDocumentoEdital: d.idTipoDocumentoEdital,
+				nomeTipo: d.tipoDocumentoEdital?.nome ?? '',
+				versao: d.versao,
+				atual: d.atual,
+				nomeArquivoOriginal: d.nomeArquivoOriginal,
+				mimeType: d.mimeType,
+				tamanhoBytes: d.tamanhoBytes,
+				enviadoEm: d.enviadoEm,
+			})),
 		};
 	}
 
@@ -221,7 +217,11 @@ export class DocumentoService {
 	async obterArquivoAnteprojetoPorPadraoNome(
 		idInscricao: number,
 		padraoNome: string,
-	): Promise<{ documento: Documento; caminho: string; nomeDownload: string }> {
+	): Promise<{
+		documento: Documento;
+		caminho: string;
+		nomeDownload: string;
+	}> {
 		const inscricao =
 			await this.inscricaoRepository.obterPorIdSimples(idInscricao);
 		if (!inscricao) {
@@ -294,7 +294,10 @@ export class DocumentoService {
 						idTipo,
 						versao,
 					)
-				: await this.documentoRepository.obterAtual(idInscricao, idTipo);
+				: await this.documentoRepository.obterAtual(
+						idInscricao,
+						idTipo,
+					);
 
 		if (!documento) {
 			throw new NotFoundException('Documento não encontrado.');

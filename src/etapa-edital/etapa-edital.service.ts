@@ -11,9 +11,15 @@ const NOMES: { nome: string; label: string }[] = [
 	{ nome: 'ANTEPROJETO', label: 'Avaliação de anteprojeto' },
 	{ nome: 'RECURSO_ANTEPROJETO', label: 'Recurso da etapa de anteprojetos' },
 	{ nome: 'ENTREVISTA', label: 'Entrevistas' },
-	{ nome: 'RECURSO_ENTREVISTA', label: 'Recurso da etapa de entrevista e prova de títulos' },
+	{
+		nome: 'RECURSO_ENTREVISTA',
+		label: 'Recurso da etapa de entrevista e prova de títulos',
+	},
 	{ nome: 'RESULTADO_PARCIAL', label: 'Resultado parcial' },
-	{ nome: 'RECURSO_RESULTADO_PARCIAL', label: 'Recurso do resultado parcial' },
+	{
+		nome: 'RECURSO_RESULTADO_PARCIAL',
+		label: 'Recurso do resultado parcial',
+	},
 	{ nome: 'RESULTADO_FINAL', label: 'Resultado final' },
 ];
 

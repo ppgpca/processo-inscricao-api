@@ -1,9 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 import { ensureUpdatedAtTrigger } from './helpers/updated-at';
 
-export class CreateAlocacaoOrientador20260709001200
-	implements MigrationInterface
-{
+export class CreateAlocacaoOrientador20260709001200 implements MigrationInterface {
 	async up(queryRunner: QueryRunner): Promise<void> {
 		await queryRunner.query(`
       CREATE TABLE public.alocacao_orientador (

@@ -35,8 +35,7 @@ export class Edital {
 	/** Derivado da etapa INSCRICAO: início da etapa de inscrições. */
 	get dataInicioInscricao(): Date | null {
 		return (
-			this.etapas?.find((e) => e.nome === 'INSCRICAO')?.dataInicio ??
-			null
+			this.etapas?.find((e) => e.nome === 'INSCRICAO')?.dataInicio ?? null
 		);
 	}
 

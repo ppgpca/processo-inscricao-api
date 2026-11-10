@@ -63,9 +63,9 @@ export class DocenteRepository {
 					codigoDocente,
 					nota: n.nota,
 				};
-				
+
 				const updates: Record<string, any> = {};
-				
+
 				// Só inclui comentario quando a chave vier definida (mesmo que null),
 				// para que salvar subcritérios (sem comentario) não apague observações existentes
 				if (n.comentario !== undefined) {
@@ -75,16 +75,18 @@ export class DocenteRepository {
 							: null;
 					updates.comentario = comentarioNormalizado;
 				}
-				
+
 				// Mesma lógica para expertiseAssunto
 				if (n.expertiseAssunto !== undefined) {
-					const expertiseValida = 
-						typeof n.expertiseAssunto === 'number' && 
-						n.expertiseAssunto >= 1 && 
+					const expertiseValida =
+						typeof n.expertiseAssunto === 'number' &&
+						n.expertiseAssunto >= 1 &&
 						n.expertiseAssunto <= 5;
-					updates.expertiseAssunto = expertiseValida ? n.expertiseAssunto : null;
+					updates.expertiseAssunto = expertiseValida
+						? n.expertiseAssunto
+						: null;
 				}
-				
+
 				return { ...base, ...updates };
 			}),
 			{

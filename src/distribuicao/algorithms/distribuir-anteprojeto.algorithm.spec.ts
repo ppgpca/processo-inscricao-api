@@ -54,7 +54,10 @@ describe('distribuirAnteprojetos', () => {
 			docente('D3', { idsLinhaPesquisa: new Set([1]) }),
 		];
 		const inscricoes = [
-			inscricao(1, { idsPalavraChave: new Set([10]), idLinhaPesquisa: 1 }),
+			inscricao(1, {
+				idsPalavraChave: new Set([10]),
+				idLinhaPesquisa: 1,
+			}),
 		];
 
 		const [resultado] = distribuirAnteprojetos(

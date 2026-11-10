@@ -52,7 +52,10 @@ export function distribuirAnteprojetos(
 			if (!escolhido) break;
 			jaSelecionados.add(escolhido);
 			novos.push(escolhido);
-			cargaPorDocente.set(escolhido, (cargaPorDocente.get(escolhido) ?? 0) + 1);
+			cargaPorDocente.set(
+				escolhido,
+				(cargaPorDocente.get(escolhido) ?? 0) + 1,
+			);
 		}
 
 		return {
@@ -89,7 +92,9 @@ function selecionarDocente(
 
 		// 1.1 + 1.2 — palavra-chave em comum, com carga < cap
 		const porKeyword = elegiveis.filter((d) =>
-			[...d.idsPalavraChave].some((id) => inscricao.idsPalavraChave.has(id)),
+			[...d.idsPalavraChave].some((id) =>
+				inscricao.idsPalavraChave.has(id),
+			),
 		);
 		if (porKeyword.length > 0) return sortear(porKeyword, random);
 
@@ -107,6 +112,9 @@ function selecionarDocente(
 }
 
 function sortear(lista: DocenteParaDistribuir[], random: () => number): string {
-	const indice = Math.min(lista.length - 1, Math.floor(random() * lista.length));
+	const indice = Math.min(
+		lista.length - 1,
+		Math.floor(random() * lista.length),
+	);
 	return lista[indice].codigo;
 }

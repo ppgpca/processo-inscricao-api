@@ -123,7 +123,10 @@ export class AuthService implements OnModuleInit {
 				);
 
 				try {
-					const usuario = await this.localStrategy.validate(userId, senha);
+					const usuario = await this.localStrategy.validate(
+						userId,
+						senha,
+					);
 
 					return {
 						token: this.gerarToken(usuario),
