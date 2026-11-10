@@ -30,6 +30,10 @@ export interface CandidatoDistribuicao {
 	docentesAtribuidos: DocenteAtribuido[];
 	/** Início do slot da banca, quando houver. */
 	dataBanca: string | null;
+	/** Média das notas já lançadas pelos avaliadores (null se nenhuma nota). */
+	mediaNota: number | null;
+	/** Quantidade de avaliadores que já lançaram nota. */
+	avaliacoesFeitas: number;
 }
 
 export interface DocenteDistribuicao {

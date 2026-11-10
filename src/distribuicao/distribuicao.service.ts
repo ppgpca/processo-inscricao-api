@@ -244,6 +244,38 @@ export class DistribuicaoService {
 				style: { numFmt: '0.00' },
 			},
 			{ header: 'Av2 Comentário', key: 'av2_comentario', width: 40 },
+			{ header: 'Avaliador 3', key: 'av3_nome', width: 30 },
+			{
+				header: 'Av3 Sistematização',
+				key: 'av3_sistematizacao',
+				width: 20,
+				style: { numFmt: '0.00' },
+			},
+			{
+				header: 'Av3 Síntese',
+				key: 'av3_sintese',
+				width: 14,
+				style: { numFmt: '0.00' },
+			},
+			{
+				header: 'Av3 Capacidade',
+				key: 'av3_capacidade',
+				width: 16,
+				style: { numFmt: '0.00' },
+			},
+			{
+				header: 'Av3 Linguagem',
+				key: 'av3_linguagem',
+				width: 16,
+				style: { numFmt: '0.00' },
+			},
+			{
+				header: 'Av3 Nota',
+				key: 'av3_nota',
+				width: 12,
+				style: { numFmt: '0.00' },
+			},
+			{ header: 'Av3 Comentário', key: 'av3_comentario', width: 40 },
 			{
 				header: 'Média',
 				key: 'media',
@@ -265,7 +297,8 @@ export class DistribuicaoService {
 		for (const row of rows) {
 			const av1Nota = toNum(row['av1_nota']);
 			const av2Nota = toNum(row['av2_nota']);
-			const mediaVal = media(av1Nota, av2Nota);
+			const av3Nota = toNum(row['av3_nota']);
+			const mediaVal = media(av1Nota, av2Nota, av3Nota);
 
 			const addedRow = sheet.addRow({
 				id: row['id'],
@@ -290,14 +323,23 @@ export class DistribuicaoService {
 				av2_linguagem: toNum(row['av2_linguagem']),
 				av2_nota: av2Nota,
 				av2_comentario: colapsarEspacos(row['av2_comentario']),
+				av3_nome: row['av3_nome'] ?? null,
+				av3_sistematizacao: toNum(row['av3_sistematizacao']),
+				av3_sintese: toNum(row['av3_sintese']),
+				av3_capacidade: toNum(row['av3_capacidade']),
+				av3_linguagem: toNum(row['av3_linguagem']),
+				av3_nota: av3Nota,
+				av3_comentario: colapsarEspacos(row['av3_comentario']),
 				media: mediaVal,
 			});
 
 			// wrapText nas colunas de comentário
 			const colComentario1 = addedRow.getCell('av1_comentario');
 			const colComentario2 = addedRow.getCell('av2_comentario');
+			const colComentario3 = addedRow.getCell('av3_comentario');
 			colComentario1.alignment = { wrapText: true, vertical: 'top' };
 			colComentario2.alignment = { wrapText: true, vertical: 'top' };
+			colComentario3.alignment = { wrapText: true, vertical: 'top' };
 		}
 
 		const buffer = await workbook.xlsx.writeBuffer();

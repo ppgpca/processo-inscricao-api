@@ -105,27 +105,30 @@ export class DistribuicaoRepository {
 		if (inscricoes.length === 0) return [];
 
 		const idsCriterio = [idCriterioPai, ...idsSubCriterios];
-		const notas = await this.notaCriterioRepo
-			.createQueryBuilder('nc')
-			.innerJoin('nc.docente', 'docente')
-			.select('nc.idInscricao', 'idInscricao')
-			.addSelect('nc.codigoDocente', 'codigoDocente')
-			.addSelect('docente.nome', 'nome')
-			.addSelect('nc.nota', 'nota')
-			.addSelect('nc.dataBanca', 'dataBanca')
-			.where('nc.idInscricao IN (:...idsInscricao)', {
-				idsInscricao: inscricoes.map((i) => i.id),
-			})
-			.andWhere('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
-				idsCriterio,
-			})
-			.getRawMany<{
-				idInscricao: number;
-				codigoDocente: string;
-				nome: string;
-				nota: string | null;
-				dataBanca: Date | string | null;
-			}>();
+		const [notas, mediasPorInscricao] = await Promise.all([
+			this.notaCriterioRepo
+				.createQueryBuilder('nc')
+				.innerJoin('nc.docente', 'docente')
+				.select('nc.idInscricao', 'idInscricao')
+				.addSelect('nc.codigoDocente', 'codigoDocente')
+				.addSelect('docente.nome', 'nome')
+				.addSelect('nc.nota', 'nota')
+				.addSelect('nc.dataBanca', 'dataBanca')
+				.where('nc.idInscricao IN (:...idsInscricao)', {
+					idsInscricao: inscricoes.map((i) => i.id),
+				})
+				.andWhere('nc.idCriterioAvaliacao IN (:...idsCriterio)', {
+					idsCriterio,
+				})
+				.getRawMany<{
+					idInscricao: number;
+					codigoDocente: string;
+					nome: string;
+					nota: string | null;
+					dataBanca: Date | string | null;
+				}>(),
+			this.obterMediasCandidatos(idEdital, idCriterioPai),
+		]);
 
 		const porInscricao = new Map<number, Map<string, DocenteAtribuido>>();
 		const dataBancaPorInscricao = new Map<number, string>();
@@ -155,22 +158,27 @@ export class DistribuicaoRepository {
 			}
 		}
 
-		return inscricoes.map((inscricao) => ({
-			idInscricao: inscricao.id,
-			cpf: inscricao.cpf,
-			nome: inscricao.candidato?.nome ?? '',
-			idLinhaPesquisa: inscricao.idLinhaPesquisa,
-			linhaPesquisa: inscricao.linhaPesquisa?.nome ?? '',
-			projetoPesquisa: inscricao.projetoPesquisa ?? '',
-			palavrasChave:
-				inscricao.inscricoesPalavraChave?.map(
-					(ipk) => ipk.palavraChave?.palavra ?? '',
-				) ?? [],
-			docentesAtribuidos: [
-				...(porInscricao.get(inscricao.id)?.values() ?? []),
-			],
-			dataBanca: dataBancaPorInscricao.get(inscricao.id) ?? null,
-		}));
+		return inscricoes.map((inscricao) => {
+			const medias = mediasPorInscricao.get(inscricao.id);
+			return {
+				idInscricao: inscricao.id,
+				cpf: inscricao.cpf,
+				nome: inscricao.candidato?.nome ?? '',
+				idLinhaPesquisa: inscricao.idLinhaPesquisa,
+				linhaPesquisa: inscricao.linhaPesquisa?.nome ?? '',
+				projetoPesquisa: inscricao.projetoPesquisa ?? '',
+				palavrasChave:
+					inscricao.inscricoesPalavraChave?.map(
+						(ipk) => ipk.palavraChave?.palavra ?? '',
+					) ?? [],
+				docentesAtribuidos: [
+					...(porInscricao.get(inscricao.id)?.values() ?? []),
+				],
+				dataBanca: dataBancaPorInscricao.get(inscricao.id) ?? null,
+				mediaNota: medias?.mediaNota ?? null,
+				avaliacoesFeitas: medias?.avaliacoesFeitas ?? 0,
+			};
+		});
 	}
 
 	async obterInscricoesParaAlgoritmo(
@@ -352,6 +360,61 @@ export class DistribuicaoRepository {
 		};
 	}
 
+	/**
+	 * Retorna, por inscrição, a média das notas já lançadas e quantos avaliadores
+	 * já completaram a avaliação. Usa a mesma lógica de nota do relatório:
+	 * nota do critério pai quando disponível, senão soma dos subcritérios.
+	 */
+	async obterMediasCandidatos(
+		idEdital: number,
+		idCriterioPai: number,
+	): Promise<
+		Map<number, { mediaNota: number | null; avaliacoesFeitas: number }>
+	> {
+		const sql = `
+WITH criterios AS (
+  SELECT ca.id, ca.id_criterio_pai
+  FROM criterio_avaliacao ca
+  WHERE ca.id = $2 OR ca.id_criterio_pai = $2
+),
+notas_docente AS (
+  SELECT nc.id_inscricao, nc.codigo_docente,
+    COALESCE(
+      MAX(nc.nota) FILTER (WHERE c.id_criterio_pai IS NULL),
+      SUM(nc.nota)  FILTER (WHERE c.id_criterio_pai IS NOT NULL)
+    ) AS nota
+  FROM nota_criterio nc
+  JOIN criterios c ON c.id = nc.id_criterio_avaliacao
+  JOIN inscricao i ON i.id = nc.id_inscricao AND i.id_edital = $1 AND i.ativa AND i.deferida
+  GROUP BY nc.id_inscricao, nc.codigo_docente
+)
+SELECT
+  id_inscricao,
+  COUNT(*) FILTER (WHERE nota IS NOT NULL)::int AS avaliacoes_feitas,
+  AVG(nota) FILTER (WHERE nota IS NOT NULL)      AS media_nota
+FROM notas_docente
+GROUP BY id_inscricao;
+		`;
+		const rows = await this.queryTyped<{
+			id_inscricao: number;
+			avaliacoes_feitas: number;
+			media_nota: string | null;
+		}>(sql, [idEdital, idCriterioPai]);
+
+		return new Map(
+			rows.map((r) => [
+				r.id_inscricao,
+				{
+					mediaNota:
+						r.media_nota !== null
+							? Math.round(Number(r.media_nota) * 100) / 100
+							: null,
+					avaliacoesFeitas: Number(r.avaliacoes_feitas),
+				},
+			]),
+		);
+	}
+
 	async obterNotasAnteprojetoDocente(
 		idEdital: number,
 		idInscricao: number,
@@ -433,12 +496,17 @@ SELECT i.id, i.cpf, i.deficiente, i.indigena, i.preto_pardo, i.projeto_pesquisa,
        a2.nome AS av2_nome,
        a2.sistematizacao AS av2_sistematizacao, a2.sintese AS av2_sintese,
        a2.capacidade AS av2_capacidade, a2.linguagem AS av2_linguagem,
-       a2.nota AS av2_nota, a2.comentario AS av2_comentario
+       a2.nota AS av2_nota, a2.comentario AS av2_comentario,
+       a3.nome AS av3_nome,
+       a3.sistematizacao AS av3_sistematizacao, a3.sintese AS av3_sintese,
+       a3.capacidade AS av3_capacidade, a3.linguagem AS av3_linguagem,
+       a3.nota AS av3_nota, a3.comentario AS av3_comentario
 FROM inscricao i
 LEFT JOIN linha_pesquisa lp ON lp.id = i.id_linha_pesquisa
 LEFT JOIN palavras pc ON pc.id_inscricao = i.id
 LEFT JOIN avaliacoes a1 ON a1.id_inscricao = i.id AND a1.pos = 1
 LEFT JOIN avaliacoes a2 ON a2.id_inscricao = i.id AND a2.pos = 2
+LEFT JOIN avaliacoes a3 ON a3.id_inscricao = i.id AND a3.pos = 3
 WHERE i.id_edital = $1 AND i.ativa AND i.deferida
 ORDER BY i.id;
 		`;
